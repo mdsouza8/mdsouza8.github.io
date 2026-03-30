@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>OPTION Trial — Extended Window TNK</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f0f4f8;--card:#fff;--navy:#0f1f35;--navy-mid:#1a3050;
+  --teal:#0284c7;--teal-d:#0369a1;--teal-l:#e0f2fe;--teal-m:#bae6fd;
+  --green:#047857;--green-l:#d1fae5;--green-m:#a7f3d0;
+  --red:#b91c1c;--red-l:#fee2e2;--red-m:#fecaca;
+  --amber:#b45309;--amber-l:#fef3c7;--amber-m:#fde68a;
+  --purple:#6d28d9;--purple-l:#ede9fe;--purple-m:#c4b5fd;
+  --text:#0f1f35;--muted:#5c6f84;--light:#9aafc3;
+  --border:#dde4ec;--border-l:#eef1f5;
+  --sh:0 1px 2px rgba(15,31,53,.04),0 4px 16px rgba(15,31,53,.06);
+  --sh-h:0 2px 4px rgba(15,31,53,.06),0 8px 24px rgba(15,31,53,.1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+.page{max-width:940px;margin:0 auto;padding:28px 20px 52px}
+
+/* ===================== HERO HEADER ===================== */
+.header{background:linear-gradient(145deg,#0f2744,#0c3a6b 55%,#0b4a7a);border-radius:20px;padding:24px 26px 22px;margin-bottom:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(15,31,53,.25)}
+.header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.022'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.hdr-title-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:18px;position:relative}
+.trial-badge{background:rgba(125,211,252,.18);color:#7dd3fc;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:8px;border:1px solid rgba(125,211,252,.25)}
+.header h1{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;line-height:1.1}
+.header h1 span{color:#7dd3fc}
+.header-sub{font-size:12px;color:#93c5fd;margin-top:4px;font-style:italic}
+/* Dose — small inline pill */
+.dose-inline{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 12px;flex-shrink:0;white-space:nowrap}
+.dose-inline .d-lbl{font-size:9px;color:#93c5fd;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.dose-inline .d-val{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700}
+.dose-inline .d-max{font-size:10.5px;color:#bae6fd}
+
+/* Eligibility grid inside header */
+.hdr-elig{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.he-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 13px;display:flex;align-items:center;gap:10px}
+.he-icon{width:28px;height:28px;border-radius:7px;background:rgba(125,211,252,.15);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.he-content{flex:1;min-width:0}
+.he-label{font-size:9.5px;color:#7dd3fc;text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:2px}
+.he-val{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700;line-height:1.2}
+.he-sub{font-size:10.5px;color:#93c5fd;margin-top:1px;line-height:1.3}
+/* EVT exclusion — red accent */
+.he-box.he-excl{background:rgba(185,28,28,.15);border-color:rgba(252,165,165,.25)}
+.he-box.he-excl .he-icon{background:rgba(252,165,165,.2)}
+.he-box.he-excl .he-label{color:#fca5a5}
+.he-box.he-excl .he-val{color:#fecaca}
+
+/* CTP thresholds row in header */
+.hdr-ctp{margin-bottom:16px}
+.hdr-ctp-lbl{font-size:10px;font-weight:700;color:#7dd3fc;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.hdr-ctp-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.hctp{background:rgba(125,211,252,.1);border:1px solid rgba(125,211,252,.2);border-radius:9px;padding:10px 8px;text-align:center}
+.hctp-n{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#e0f2fe;line-height:1.1}
+.hctp-l{font-size:9.5px;color:#7dd3fc;margin-top:3px;line-height:1.3}
+
+/* Trial medians row */
+.hdr-medians{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1)}
+.hmed{text-align:center;padding:6px 4px}
+.hmed-v{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;line-height:1.1}
+.hmed-l{font-size:9.5px;color:#7dd3fc;margin-top:3px;line-height:1.25}
+
+/* ===================== SECTION ===================== */
+.slbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:22px 0 10px;padding-left:2px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gout{display:grid;grid-template-columns:1.65fr 1fr;gap:14px}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--sh);transition:box-shadow .2s}
+.card:hover{box-shadow:var(--sh-h)}
+.card-hdr{display:flex;align-items:center;gap:9px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border-l)}
+.card-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.card-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.ig{background:var(--green-l)} .ir{background:var(--red-l)} .it{background:var(--teal-l)} .ia{background:var(--amber-l)} .ip{background:var(--purple-l)}
+.tg{color:var(--green)} .tr{color:var(--red)} .tt{color:var(--teal)} .ta{color:var(--amber)} .tp{color:var(--purple)}
+
+/* CRITERIA (used in exclusion dropdown) */
+.ci{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--border-l);font-size:13px}
+.ci:last-child{border-bottom:none;padding-bottom:0}
+.ci:first-child{padding-top:0}
+.ck{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;margin-top:2px}
+.cy{background:var(--green-l);color:var(--green)} .cn{background:var(--red-l);color:var(--red)}
+.cl{font-size:10.5px;color:var(--muted);font-weight:600;min-width:82px;flex-shrink:0;padding-top:1px}
+.cv{color:var(--text);flex:1;font-size:13px}
+.cs{font-size:11px;color:var(--light);margin-top:3px}
+
+/* TAGS */
+.twrap{display:flex;flex-wrap:wrap;gap:5px}
+.vtag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600}
+.vy{background:var(--teal-l);color:var(--teal-d);border:1px solid var(--teal-m)}
+.vn{background:var(--red-l);color:var(--red);border:1px solid var(--red-m)}
+.vnote{margin-top:10px;font-size:11.5px;color:var(--amber);background:var(--amber-l);border-radius:8px;padding:7px 11px;font-weight:500;border:1px solid var(--amber-m);line-height:1.5}
+
+/* ARMS */
+.arms{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:14px 0}
+.arm{border-radius:12px;padding:15px 12px;text-align:center}
+.arm-t{background:var(--green-l);border:1.5px solid var(--green-m)}
+.arm-s{background:#f8fafc;border:1.5px solid var(--border)}
+.arm-n{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+.arm-t .arm-n{color:var(--green)} .arm-s .arm-n{color:var(--muted)}
+.arm-p{font-family:'Bricolage Grotesque',sans-serif;font-size:40px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.arm-t .arm-p{color:#065f46} .arm-s .arm-p{color:var(--muted)}
+.arm-sub{font-size:11px;margin-top:4px}
+.arm-t .arm-sub{color:var(--green)} .arm-s .arm-sub{color:var(--light)}
+.vs{width:34px;height:34px;border-radius:50%;background:#fff;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+
+.srow{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.schip{background:var(--green-l);color:var(--green);border:1px solid var(--green-m);border-radius:20px;padding:5px 13px;font-size:12px;font-weight:600}
+.pb{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600}
+.pb::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.pb-s{background:var(--green-l);color:var(--green);border:1px solid var(--green-m)}.pb-s::before{background:var(--green)}
+.pb-d{background:var(--red-l);color:var(--red);border:1px solid var(--red-m)}.pb-d::before{background:var(--red)}
+.pb-n{background:#f1f5f9;color:var(--muted);border:1px solid var(--border)}.pb-n::before{background:var(--light)}
+
+/* SAFETY */
+.sfgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sfbox{border-radius:11px;padding:14px}
+.sf-i{background:var(--red-l);border:1px solid var(--red-m)} .sf-m{background:#f8fafc;border:1px solid var(--border)}
+.sf-t{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px}
+.sf-i .sf-t{color:var(--red)} .sf-m .sf-t{color:var(--muted)}
+.sfnums{display:flex;align-items:baseline;gap:7px;margin-bottom:5px}
+.sfbig{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800}
+.sf-i .sfbig{color:var(--red)} .sf-m .sfbig{color:var(--text)}
+.sfvs{font-size:11px;color:var(--muted)}
+.sfsmall{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;color:var(--muted)}
+
+/* BASELINE */
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.bs{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 12px;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.bs-l{font-size:11px;color:var(--muted)}
+.bs-v{font-family:'Bricolage Grotesque',sans-serif;font-size:14.5px;font-weight:700}
+.or{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.or:last-child{margin-bottom:0}
+.ol{font-size:11px;color:var(--muted);width:112px;flex-shrink:0}
+.otr{flex:1;height:7px;background:var(--teal-l);border-radius:4px;overflow:hidden}
+.of{height:100%;border-radius:4px;background:var(--teal)}
+.op{font-size:11.5px;font-weight:700;width:36px;text-align:right;font-family:'Bricolage Grotesque',sans-serif}
+
+/* WARNINGS */
+.wbox{background:#fffdf0;border:1px solid var(--amber-m);border-left:3px solid var(--amber);border-radius:9px;padding:11px 13px;margin-bottom:9px}
+.wbox:last-child{margin-bottom:0}
+.wt{font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px}
+.wb{font-size:12px;color:#78350f;line-height:1.55}
+
+/* TAKEAWAY */
+.takeaway{background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1px solid var(--teal-m);border-top:3px solid var(--teal);border-radius:14px;padding:20px 22px;margin-top:20px;display:flex;gap:16px;align-items:flex-start;box-shadow:0 2px 12px rgba(2,132,199,.08)}
+.ta-i{font-size:28px;flex-shrink:0;margin-top:1px}
+.ta-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:6px}
+.ta-txt{font-size:13px;color:#0c4a6e;line-height:1.65}
+.ta-txt strong{color:var(--navy)}
+.ta-txt .dng{color:var(--red);font-weight:600}
+
+footer{text-align:center;font-size:10.5px;color:var(--light);margin-top:28px;padding-top:16px;border-top:1px solid var(--border-l)}
+
+/* EXPAND BUTTON */
+.ebtn{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:10px 16px;min-height:44px;border-radius:22px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;user-select:none;font-family:'DM Sans',sans-serif;letter-spacing:.01em;-webkit-tap-highlight-color:transparent}
+.ebtn:hover{filter:brightness(.93);transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.1)}
+.ebtn:active{transform:scale(.97);box-shadow:none}
+.ebtn .arr{transition:transform .22s ease;font-size:9px;opacity:.65}
+.ebtn.open .arr{transform:rotate(180deg)}
+.eg{background:var(--green-l);color:var(--green);border:1px solid var(--green-m)}
+.er{background:var(--red-l);color:var(--red);border:1px solid var(--red-m)}
+.et{background:var(--teal-l);color:var(--teal-d);border:1px solid var(--teal-m)}
+.ep{background:var(--purple-l);color:var(--purple);border:1px solid var(--purple-m)}
+.ea{background:var(--amber-l);color:var(--amber);border:1px solid var(--amber-m)}
+.ebtn-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+
+/* DRAWER */
+.drawer{overflow:hidden;max-height:0;transition:max-height .45s ease,opacity .3s ease;opacity:0}
+.drawer.open{max-height:6000px;opacity:1}
+.drawer-inner{border-top:1px solid var(--border-l);margin-top:14px;padding-top:16px}
+
+/* CHART SECTIONS */
+.chart-section{margin-bottom:18px}
+.chart-section:last-child{margin-bottom:0}
+.chart-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.etag{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:10px;color:var(--light);font-weight:600;text-transform:none;letter-spacing:.03em}
+.chart-wrap{position:relative;width:100%}
+.chart-note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.55;font-style:italic}
+
+/* LEGEND */
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted)}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* STAT PILLS */
+.stat-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.spill{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 13px;flex:1;min-width:140px}
+.spill-lbl{font-size:10px;color:var(--muted);margin-bottom:3px;line-height:1.4}
+.spill-v{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700}
+.spill-v.g{color:var(--green)} .spill-v.r{color:var(--red)} .spill-v.m{color:var(--muted)}
+.prow{display:flex;align-items:center;gap:6px;font-size:11.5px;margin-top:4px}
+.psig{color:var(--green);font-weight:700} .pns{color:var(--muted)}
+
+/* TABLES */
+.stbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.stbl th{background:var(--bg);border:1px solid var(--border);padding:7px 10px;text-align:left;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.stbl th.sort{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.stbl th.sort:hover{color:var(--teal)}
+.stbl td{border:1px solid var(--border);padding:7px 10px;vertical-align:top}
+.stbl tr:nth-child(even) td{background:#fafbfd}
+.stbl .hi{color:var(--red);font-weight:600} .stbl .sig{color:var(--green);font-weight:600} .stbl .ns{color:var(--muted)}
+.stbl .tnk-cell{color:var(--teal-d);font-weight:600}
+.stbl .diff-pos{color:var(--green);font-weight:600}
+.stbl .diff-neg{color:var(--red);font-weight:600}
+
+/* FILTER ROW */
+.filter-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.filter-row select{font-family:'DM Sans',sans-serif;font-size:14px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);outline:none;min-height:40px}
+.filter-row select:focus{border-color:var(--teal);box-shadow:0 0 0 2px rgba(2,132,199,.15)}
+.filter-row label{font-size:11px;font-weight:600;color:var(--muted)}
+.result-count{font-size:11px;color:var(--muted);margin-left:auto}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
+.tab{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--muted);transition:all .15s;min-height:40px;display:flex;align-items:center;-webkit-tap-highlight-color:transparent}
+.tab:hover{border-color:var(--teal);color:var(--teal)}
+.tab.active{background:var(--teal);color:#fff;border-color:var(--teal);box-shadow:0 2px 8px rgba(2,132,199,.3)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* TOGGLE SWITCH */
+.toggle-wrap{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.toggle{position:relative;width:42px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#dde4ec;border-radius:11px;cursor:pointer;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle input:checked+.toggle-slider{background:var(--teal)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px)}
+.toggle-lbl{font-size:12px;color:var(--muted);font-weight:500}
+
+/* KM CHART */
+.km-wrap{position:relative;padding:12px;background:var(--bg);border-radius:10px;border:1px solid var(--border)}
+
+/* SCROLLABLE TABLE */
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl-scroll::-webkit-scrollbar{height:4px}
+.tbl-scroll::-webkit-scrollbar-track{background:transparent}
+.tbl-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* HIGHLIGHT ROW */
+.stbl tr.tnk-row td{background:#f0f9ff}
+.stbl tr.tnk-row:hover td{background:#e0f2fe}
+
+/* SUBGROUP GRID */
+.sg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.sg-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px 13px}
+.sg-t{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.sg-nums{display:flex;align-items:baseline;gap:6px}
+.sg-big{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:var(--navy)}
+.sg-vs{font-size:11px;color:var(--muted)}
+
+/* BADGE */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600}
+.badge-r{background:var(--red-l);color:var(--red);border:1px solid var(--red-m)}
+.badge-g{background:var(--green-l);color:var(--green);border:1px solid var(--green-m)}
+.badge-t{background:var(--teal-l);color:var(--teal-d);border:1px solid var(--teal-m)}
+.badge-a{background:var(--amber-l);color:var(--amber);border:1px solid var(--amber-m)}
+.badge-p{background:var(--purple-l);color:var(--purple);border:1px solid var(--purple-m)}
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:700px){
+  .page{padding:14px 12px 36px}
+  .header{padding:18px 16px 16px;border-radius:14px}
+  .header h1{font-size:20px}
+  .hdr-title-row{flex-direction:column;gap:8px}
+  .hdr-elig{grid-template-columns:1fr 1fr;gap:8px}
+  .he-val{font-size:13px}
+  .he-icon{width:24px;height:24px;font-size:11px}
+  .hdr-ctp-g{gap:6px}
+  .hctp{padding:8px 6px}
+  .hctp-n{font-size:17px}
+  .hdr-medians{grid-template-columns:repeat(5,1fr);gap:4px}
+  .hmed-v{font-size:12px}
+  .hmed-l{font-size:8.5px}
+  .g2,.gout,.sg-grid{grid-template-columns:1fr}
+  .arm-p{font-size:32px}
+  .arms{gap:6px}
+  .vs{width:28px;height:28px;font-size:10px}
+  .sfgrid{grid-template-columns:1fr 1fr}
+  .bgrid{grid-template-columns:1fr 1fr}
+  .ebtn{padding:12px 18px;font-size:13px;min-height:48px;width:100%;justify-content:center}
+  .ebtn-row{flex-direction:column}
+  .takeaway{flex-direction:column;gap:10px;padding:16px}
+  .ta-txt{font-size:12.5px}
+  .stat-pills{flex-direction:column}
+  .spill{min-width:0;width:100%}
+  .tab{font-size:12px;padding:8px 12px;min-height:42px}
+  .card{padding:16px 14px}
+  .vnote{font-size:11px}
+  .vtag{font-size:11px;padding:4px 8px}
+  .filter-row select{min-width:80px}
+  #deathPieGrid{grid-template-columns:1fr!important}
+}
+@media(max-width:440px){
+  .header h1{font-size:17px}
+  .hdr-elig{grid-template-columns:1fr}
+  .hdr-ctp-g{grid-template-columns:1fr 1fr 1fr}
+  .hdr-medians{grid-template-columns:repeat(3,1fr);gap:6px}
+  .sfgrid{grid-template-columns:1fr}
+  .bgrid{grid-template-columns:1fr}
+  .arm-p{font-size:26px}
+  .header{padding:16px 14px 14px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ==================== HERO HEADER ==================== -->
+<div class="header">
+  <div class="hdr-title-row">
+    <div>
+      <div class="trial-badge">OPTION Trial · N = 566 · JAMA 2026</div>
+      <h1>Extended-Window <span>Tenecteplase</span></h1>
+      <div class="header-sub">Non-LVO Ischemic Stroke · 4.5–24 hrs · Interactive Clinical Decision Aid</div>
+    </div>
+    <div class="dose-inline">
+      <div><div class="d-lbl">Dose</div><div class="d-val">0.25 mg/kg IV</div></div>
+      <div class="d-max">Max 25 mg · Single bolus</div>
+    </div>
+  </div>
+
+  <!-- Key Eligibility — at a glance -->
+  <div class="hdr-elig">
+    <div class="he-box">
+      <div class="he-icon">⏱</div>
+      <div class="he-content">
+        <div class="he-label">Time Window</div>
+        <div class="he-val">4.5 – 24 hrs</div>
+        <div class="he-sub">from last known well</div>
+      </div>
+    </div>
+    <div class="he-box">
+      <div class="he-icon">👤</div>
+      <div class="he-content">
+        <div class="he-label">Age &amp; Pre-stroke</div>
+        <div class="he-val">≥ 18 yrs · mRS 0–1</div>
+      </div>
+    </div>
+    <div class="he-box">
+      <div class="he-icon">📊</div>
+      <div class="he-content">
+        <div class="he-label">NIHSS Criteria</div>
+        <div class="he-val">6–25</div>
+        <div class="he-sub">or 4–5 w/ disabling deficit<br><span style="font-size:9.5px;opacity:.75">hemianopia · aphasia · hand loss</span></div>
+      </div>
+    </div>
+    <div class="he-box he-excl">
+      <div class="he-icon">✕</div>
+      <div class="he-content">
+        <div class="he-label">EVT Exclusion</div>
+        <div class="he-val">No planned/anticipated EVT</div>
+        <div class="he-sub">No LVO on CTA/MRA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTP Thresholds -->
+  <div class="hdr-ctp">
+    <div class="hdr-ctp-lbl">🧠 CT Perfusion — ALL 3 Required</div>
+    <div class="hdr-ctp-g">
+      <div class="hctp"><div class="hctp-n">&lt;50 mL</div><div class="hctp-l">Core (rCBF &lt;30%)</div></div>
+      <div class="hctp"><div class="hctp-n">≥1.2</div><div class="hctp-l">Mismatch Ratio<br>(Tmax&gt;6s ÷ core)</div></div>
+      <div class="hctp"><div class="hctp-n">≥10 mL</div><div class="hctp-l">Abs. Mismatch<br>(Tmax&gt;6s − core)</div></div>
+    </div>
+  </div>
+
+  <!-- Trial Population Medians -->
+  <div class="hdr-medians">
+    <div class="hmed"><div class="hmed-v">7</div><div class="hmed-l">Median NIHSS<br>IQR 5–9</div></div>
+    <div class="hmed"><div class="hmed-v">12 hrs</div><div class="hmed-l">Median Rx Time<br>IQR 8.6–16.7</div></div>
+    <div class="hmed"><div class="hmed-v">6 mL</div><div class="hmed-l">Median Core</div></div>
+    <div class="hmed"><div class="hmed-v">5.3</div><div class="hmed-l">Median MMR</div></div>
+    <div class="hmed"><div class="hmed-v">~32 mL</div><div class="hmed-l">Median Mismatch<br>Volume</div></div>
+  </div>
+</div>
+
+<!-- ==================== ELIGIBILITY DETAILS (cards) ==================== -->
+<div class="slbl">Eligibility Details</div>
+<div class="g2">
+  <!-- Exclusion criteria dropdown card -->
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon ir">✕</div><div class="card-title tr">Full Exclusion Criteria</div></div>
+    <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:4px">Standard thrombolysis contraindications plus trial-specific imaging exclusions. Tap to expand full list (eMethod 1).</div>
+    <button class="ebtn er" onclick="tog('excl_detail',this)"><span>All 21 exclusion criteria</span><span class="arr">▼</span></button>
+    <div class="drawer" id="excl_detail">
+      <div class="drawer-inner">
+        <div class="tbl-scroll">
+        <table class="stbl">
+          <tr><th>#</th><th>Exclusion</th></tr>
+          <tr><td>1</td><td>Thrombolytic within 72h or planned IVT</td></tr>
+          <tr><td>2</td><td>Contraindication to thrombolysis</td></tr>
+          <tr><td>3</td><td><strong>Planned/anticipated EVT</strong></td></tr>
+          <tr><td>4</td><td>Rapidly improving symptoms likely → NIHSS &lt;4</td></tr>
+          <tr><td>5</td><td>Pregnancy or lactating</td></tr>
+          <tr><td>6</td><td>Cerebral neoplasm with mass effect</td></tr>
+          <tr><td>7</td><td>Hemorrhagic diathesis or coagulation factor deficiency</td></tr>
+          <tr><td>8</td><td>Warfarin INR &gt;1.7 or PT &gt;15s; DOAC within 48h; heparin within 24h</td></tr>
+          <tr><td>9</td><td>GPIIb-IIIa inhibitors within 72h</td></tr>
+          <tr><td>10</td><td>Platelets &lt;100,000/μL</td></tr>
+          <tr><td>11</td><td>Hemodialysis; GFR &lt;30 mL/min; creatinine &gt;220 mmol/L</td></tr>
+          <tr><td>12</td><td>Suspected aortic dissection</td></tr>
+          <tr><td>13</td><td>Major surgery or biopsy within 1 month</td></tr>
+          <tr><td>14</td><td>Active or recent bleeding within 1 month</td></tr>
+          <tr><td>15</td><td>Severe allergy to contrast agents</td></tr>
+          <tr><td>16</td><td>SBP &gt;185 or DBP &gt;110 mmHg</td></tr>
+          <tr><td>17</td><td>Terminal illness (life expectancy &lt;6 months)</td></tr>
+          <tr><td>18</td><td>Active participation in confounding trial</td></tr>
+          <tr><td>19</td><td>Unable to comply (mental/cognitive/emotional disorders)</td></tr>
+          <tr><td>IMG1</td><td>Acute intracranial hemorrhage on imaging</td></tr>
+          <tr><td>IMG2</td><td><strong>LVO on CTA/MRA: ICA, MCA-M1, vertebral artery, basilar artery</strong></td></tr>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vessel / Imaging eligibility card -->
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon it">🩻</div><div class="card-title tt">Imaging &amp; Vessel Eligibility</div></div>
+    <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:7px">✓ Include</div>
+    <div class="twrap" style="margin-bottom:12px">
+      <span class="vtag vy">M2/M3/M4</span><span class="vtag vy">ACA (A2/A3)</span><span class="vtag vy">PCA (P1/P2)</span><span class="vtag vy">Stenosis (no occ.)</span><span class="vtag vy">PICA · SCA</span>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--red);margin-bottom:7px">✕ Exclude (LVOs)</div>
+    <div class="twrap">
+      <span class="vtag vn">ICA</span><span class="vtag vn">MCA-M1</span><span class="vtag vn">Vertebral</span><span class="vtag vn">Basilar</span>
+    </div>
+    <div class="vnote">⚑ All LVOs excluded regardless of EVT · Dominant M2 was NOT excluded · Note 3 M1 occlusions in standard care arm (randomization error)</div>
+    <button class="ebtn et" onclick="tog('vessels',this)" style="margin-top:10px"><span>Full vessel breakdown by segment</span><span class="arr">▼</span></button>
+    <div class="drawer" id="vessels">
+      <div class="drawer-inner">
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab('v','occ',this)">Occlusion</div>
+          <div class="tab" onclick="switchTab('v','sten',this)">Stenosis</div>
+        </div>
+        <div id="v-occ" class="tab-panel active">
+          <div class="chart-section">
+            <div class="chart-title"><span class="etag">eTable 2</span> Occlusion by Segment</div>
+            <div class="leg"><span class="leg-item"><span class="leg-dot" style="background:#0284c7"></span>Tenecteplase</span><span class="leg-item"><span class="leg-dot" style="background:#94a3b8"></span>Standard Care</span></div>
+            <div class="chart-wrap" style="height:280px"><canvas id="vesselOccChart"></canvas></div>
+            <div class="chart-note">M2 percentages are within M2 subgroup (n=86 TNK, n=93 Std). All others are % of arm.</div>
+          </div>
+          <div class="tbl-scroll" style="margin-top:12px">
+          <table class="stbl">
+            <tr><th>Segment</th><th>TNK n(%)</th><th>Std n(%)</th></tr>
+            <tr><td>M2 Dominant</td><td class="tnk-cell">8 (9.3%)</td><td>19 (20.4%)</td></tr>
+            <tr><td>M2 Codominant</td><td class="tnk-cell">8 (9.3%)</td><td>4 (4.3%)</td></tr>
+            <tr><td>M2 Nondominant</td><td class="tnk-cell">70 (81.4%)</td><td>70 (75.3%)</td></tr>
+            <tr><td>M3</td><td class="tnk-cell">23 (8.2%)</td><td>18 (6.3%)</td></tr>
+            <tr><td>M4</td><td class="tnk-cell">1 (0.4%)</td><td>1 (0.4%)</td></tr>
+            <tr><td>A1</td><td class="tnk-cell">3 (1.1%)</td><td>1 (0.4%)</td></tr>
+            <tr><td>A2</td><td class="tnk-cell">36 (12.8%)</td><td>29 (10.2%)</td></tr>
+            <tr><td>A3</td><td class="tnk-cell">9 (3.2%)</td><td>8 (2.8%)</td></tr>
+            <tr><td>P1</td><td class="tnk-cell">20 (7.1%)</td><td>18 (6.3%)</td></tr>
+            <tr><td>P2</td><td class="tnk-cell">13 (4.6%)</td><td>19 (6.7%)</td></tr>
+            <tr><td>P3</td><td class="tnk-cell">4 (1.4%)</td><td>4 (1.4%)</td></tr>
+            <tr><td>AICA</td><td class="tnk-cell">6 (2.1%)</td><td>6 (2.1%)</td></tr>
+            <tr><td>PICA</td><td class="tnk-cell">7 (2.5%)</td><td>3 (1.1%)</td></tr>
+            <tr><td>SCA</td><td class="tnk-cell">5 (1.8%)</td><td>2 (0.7%)</td></tr>
+          </table>
+          </div>
+        </div>
+        <div id="v-sten" class="tab-panel">
+          <div class="chart-section">
+            <div class="chart-title"><span class="etag">eTable 2</span> Stenosis (Without Occlusion) by Segment</div>
+            <div class="chart-wrap" style="height:220px"><canvas id="vesselStenChart"></canvas></div>
+            <div class="chart-note">23.3% of cohort had stenosis without occlusion as qualifying lesion — included per protocol.</div>
+          </div>
+          <div class="tbl-scroll" style="margin-top:12px">
+          <table class="stbl">
+            <tr><th>Segment</th><th>TNK n(%)</th><th>Std n(%)</th></tr>
+            <tr><td>M1</td><td class="tnk-cell">15 (5.3%)</td><td>12 (4.2%)</td></tr>
+            <tr><td>M2</td><td class="tnk-cell">29 (10.3%)</td><td>31 (10.9%)</td></tr>
+            <tr><td>M3</td><td class="tnk-cell">2 (0.7%)</td><td>2 (0.7%)</td></tr>
+            <tr><td>A1</td><td class="tnk-cell">1 (0.4%)</td><td>0</td></tr>
+            <tr><td>A2</td><td class="tnk-cell">5 (1.8%)</td><td>7 (2.5%)</td></tr>
+            <tr><td>A3</td><td class="tnk-cell">2 (0.7%)</td><td>1 (0.4%)</td></tr>
+            <tr><td>P1</td><td class="tnk-cell">4 (1.4%)</td><td>5 (1.8%)</td></tr>
+            <tr><td>P2</td><td class="tnk-cell">1 (0.4%)</td><td>1 (0.4%)</td></tr>
+            <tr><td>P3</td><td class="tnk-cell">1 (0.4%)</td><td>0</td></tr>
+            <tr><td>ICA (extracranial)</td><td class="tnk-cell">5 (1.8%)</td><td>7 (2.5%)</td></tr>
+            <tr><td>Basilar</td><td class="tnk-cell">0</td><td>1 (0.4%)</td></tr>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TRIAL POPULATION ==================== -->
+<div class="slbl">Trial Population &amp; Imaging</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon ip">📋</div><div class="card-title tp">Trial Population</div></div>
+    <div class="bgrid">
+      <div class="bs"><span class="bs-l">Median age</span><span class="bs-v">68 yrs</span></div>
+      <div class="bs"><span class="bs-l">Female</span><span class="bs-v">34.6%</span></div>
+      <div class="bs"><span class="bs-l">Median NIHSS</span><span class="bs-v">7</span></div>
+      <div class="bs"><span class="bs-l">Median Rx time</span><span class="bs-v">12.0 hrs</span></div>
+      <div class="bs"><span class="bs-l">Median core</span><span class="bs-v">6.0 mL</span></div>
+      <div class="bs"><span class="bs-l">Mismatch ratio</span><span class="bs-v">5.3</span></div>
+      <div class="bs"><span class="bs-l">Mismatch vol.</span><span class="bs-v">~32 mL</span></div>
+      <div class="bs"><span class="bs-l">Ethnicity</span><span class="bs-v">~99% Han</span></div>
+    </div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:10px">Qualifying Occlusion Distribution</div>
+    <div class="or"><span class="ol">M2–M4</span><div class="otr"><div class="of" style="width:39.2%"></div></div><span class="op">39.2%</span></div>
+    <div class="or"><span class="ol">Stenosis only</span><div class="otr"><div class="of" style="width:23.3%"></div></div><span class="op">23.3%</span></div>
+    <div class="or"><span class="ol">ACA (A2/A3)</span><div class="otr"><div class="of" style="width:15.2%"></div></div><span class="op">15.2%</span></div>
+    <div class="or"><span class="ol">PCA (P1/P2)</span><div class="otr"><div class="of" style="width:13.8%"></div></div><span class="op">13.8%</span></div>
+    <div class="or"><span class="ol">Cerebellar</span><div class="otr"><div class="of" style="width:4.4%"></div></div><span class="op">4.4%</span></div>
+
+    <button class="ebtn ep" onclick="tog('baseline',this)" style="margin-top:12px"><span>Medical history + logistics (eTable 2)</span><span class="arr">▼</span></button>
+    <div class="drawer" id="baseline">
+      <div class="drawer-inner">
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 2</span> Additional Clinical Characteristics</div>
+          <div class="tbl-scroll">
+          <table class="stbl">
+            <tr><th>Characteristic</th><th>TNK (N=282)</th><th>Std (N=284)</th></tr>
+            <tr><td>Previous stroke</td><td>20.6%</td><td>21.8%</td></tr>
+            <tr><td>Coronary heart disease</td><td>9.9%</td><td>12.3%</td></tr>
+            <tr><td>Time LKW→treatment (median)</td><td>12.8h (9.0–17.0)</td><td>11.8h (8.7–16.9)</td></tr>
+            <tr><td>Mismatch volume (median)</td><td>31.2 mL</td><td>33.9 mL</td></tr>
+            <tr><td>Door-to-needle (median)</td><td class="tnk-cell">97.5 min (69–141)</td><td>—</td></tr>
+            <tr><td>Rescue EVT</td><td class="hi">6 (2.1%)</td><td>1 (0.4%)</td></tr>
+            <tr><td>Han Chinese ethnicity</td><td>277 (98.2%)</td><td>283 (99.7%)</td></tr>
+          </table>
+          </div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 1</span> Representativeness Notes</div>
+          <div class="wbox" style="margin-bottom:0">
+            <div class="wt">⚠ Generalizability Considerations</div>
+            <div class="wb">All sites in China; ~99% Han Chinese. Male overrepresentation common in Chinese stroke trials. Asian patients have higher rates of large artery atherosclerosis vs cardioembolic etiology compared to Western populations. Non-LVO represents 54–76% of all ischemic stroke patients globally.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="ebtn et" onclick="tog('enrollment',this)" style="margin-top:6px"><span>Enrollment by center (eFigure 1)</span><span class="arr">▼</span></button>
+    <div class="drawer" id="enrollment">
+      <div class="drawer-inner">
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eFigure 1</span> Patients Enrolled per Center — Top 20</div>
+          <div class="chart-wrap" style="height:300px"><canvas id="centerChart"></canvas></div>
+          <div class="chart-note">50 centers total. Top 2 centers (Linyi 112, Chenzhou 80) contributed 34% of all patients. Trial ran June 2023 – August 2025.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon ia">⚠️</div><div class="card-title ta">Critical Imaging Considerations</div></div>
+    <div class="wbox"><div class="wt">⚠ NCCT Hypodensity</div><div class="wb">21 patients had CT hypodensities <strong>larger than CTP-defined core</strong> — 2 developed sICH. Careful NCCT evaluation is essential before proceeding.</div></div>
+    <div class="wbox"><div class="wt">⚠ Posterior Circulation</div><div class="wb">CTP thresholds <strong>less well validated</strong> posteriorly. Trial showed homogeneous benefit in both circulations — apply clinical judgment for PCA/cerebellar territory.</div></div>
+    <div class="wbox"><div class="wt">⚠ Stenosis Without Occlusion</div><div class="wb">~23% of trial had stenosis (no occlusion) as qualifying lesion. <strong>This population drove much of the positive result</strong> — degree of stenosis not reported; unclear applicability to mild stenosis.</div></div>
+    <button class="ebtn ea" onclick="tog('imaging',this)" style="margin-top:12px"><span>Heidelberg classification + M2 dominance</span><span class="arr">▼</span></button>
+    <div class="drawer" id="imaging">
+      <div class="drawer-inner">
+        <div class="chart-section">
+          <div class="chart-title">Heidelberg Bleeding Classification Spectrum</div>
+          <div class="chart-wrap" style="height:180px"><canvas id="heidelbergChart"></canvas></div>
+          <div class="chart-note">Definite + Probable → Symptomatic. Possible + Unlikely → Asymptomatic. Primary sICH definition used Heidelberg.</div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title">M2 Dominance Classification (eMethod 2)</div>
+          <div class="tbl-scroll">
+          <table class="stbl">
+            <tr><th>Category</th><th>Tissue at Risk</th><th>TNK %</th><th>Std %</th></tr>
+            <tr><td>Dominant M2</td><td>&gt;100 mL</td><td class="tnk-cell">9.3%</td><td class="hi">20.4%</td></tr>
+            <tr><td>Codominant M2</td><td>90–100 mL</td><td class="tnk-cell">9.3%</td><td>4.3%</td></tr>
+            <tr><td>Nondominant M2</td><td>&lt;90 mL</td><td class="tnk-cell">81.4%</td><td>75.3%</td></tr>
+          </table>
+          </div>
+          <div class="chart-note">Dominant M2 NOT excluded. Imbalance (9.3% vs 20.4%) is a randomization artifact — not a stratification failure.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== OUTCOMES ==================== -->
+<div class="slbl">Outcomes</div>
+<div class="gout">
+  <!-- PRIMARY -->
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon ig">🎯</div><div><div class="card-title tg">Primary Outcome</div><div style="font-size:11.5px;color:var(--muted);margin-top:2px">mRS 0–1 at 90 days · Excellent functional recovery</div></div></div>
+    <div class="toggle-wrap" style="margin-bottom:8px">
+      <label class="toggle"><input type="checkbox" id="ppToggle" onchange="togglePP()"><span class="toggle-slider"></span></label>
+      <span class="toggle-lbl" id="ppLbl">Showing: <strong>ITT Population</strong> (N=566)</span>
+    </div>
+    <div class="arms">
+      <div class="arm arm-t"><div class="arm-n">Tenecteplase</div><div class="arm-p" id="arm-tnk">43.6%</div><div class="arm-sub" id="arm-tnk-n">N=282 · 123 pts</div></div>
+      <div class="vs">vs</div>
+      <div class="arm arm-s"><div class="arm-n">Std. Care</div><div class="arm-p" id="arm-std">34.2%</div><div class="arm-sub" id="arm-std-n">N=284 · 97 pts</div></div>
+    </div>
+    <div class="srow">
+      <span class="schip" id="rr-chip">RR 1.28 (1.04–1.57)</span>
+      <span class="schip">NNT = 11</span>
+      <span class="pb pb-s" id="p-chip">p = 0.02 · Significant</span>
+    </div>
+
+    <button class="ebtn eg" onclick="tog('primary',this)" style="margin-top:12px"><span>mRS distribution + sensitivity analyses</span><span class="arr">▼</span></button>
+    <div class="drawer" id="primary">
+      <div class="drawer-inner">
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eFigure 3</span> mRS Score Distribution at 90 Days (Per-Protocol)</div>
+          <div class="chart-wrap" style="height:130px"><canvas id="mrsChart"></canvas></div>
+          <div class="chart-note">Shift left = better outcomes. TNK: 43.5% mRS 0–1 vs 33.5% standard care (per-protocol).</div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 3</span> Secondary Outcomes — Adjusted Effect Sizes</div>
+          <div class="chart-wrap" style="height:240px"><canvas id="secChart"></canvas></div>
+          <div class="chart-note">Adjusted for age, NIHSS, circulation, and time from onset. Green = p&lt;0.05.</div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 5</span> Sensitivity Analyses — Primary Outcome (ITT)</div>
+          <div class="stat-pills">
+            <div class="spill"><div class="spill-lbl">GEE model (center clustering)</div><div class="spill-v g">RR 1.29 (1.06–1.56)</div><div class="prow"><span class="psig">● p = 0.01</span></div></div>
+            <div class="spill"><div class="spill-lbl">Excluding EVT rescue effect</div><div class="spill-v g">RR 1.27 (1.03–1.56)</div><div class="prow"><span class="psig">● p = 0.03</span></div></div>
+            <div class="spill"><div class="spill-lbl">Adjusted (age, NIHSS, time, circ.)</div><div class="spill-v g">RR 1.32 (1.08–1.61)</div><div class="prow"><span class="psig">● p = 0.006</span></div></div>
+          </div>
+          <div class="chart-note" style="margin-top:8px">Per-protocol (N=553): RR 1.30 (1.05–1.61), p=0.02.</div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 6</span> MeVO Subgroup (ESCAPE-MeVO / DISTAL)</div>
+          <div class="sg-grid">
+            <div class="sg-box"><div class="sg-t">TNK (N=195)</div><div class="sg-nums"><span class="sg-big">42.6%</span><span class="sg-vs">mRS 0–1</span></div></div>
+            <div class="sg-box"><div class="sg-t">Std. Care (N=191)</div><div class="sg-nums"><span class="sg-big" style="color:var(--muted)">33.0%</span><span class="sg-vs">mRS 0–1</span></div></div>
+          </div>
+          <div class="stat-pills" style="margin-top:8px">
+            <div class="spill"><div class="spill-lbl">RR (95% CI)</div><div class="spill-v m">1.29 (0.995–1.67)</div><div class="prow"><span class="pns">○ p = 0.054 · Not significant</span></div></div>
+          </div>
+          <div class="chart-note">MVO subgroup just missed significance. Full ITT (including stenosis-only ~23%) drove the positive primary result.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAFETY -->
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon ir">⚠️</div><div class="card-title tr">Safety Outcomes</div></div>
+    <div class="sfgrid">
+      <div class="sfbox sf-i">
+        <div class="sf-t">sICH ≤36 hrs</div>
+        <div class="sfnums"><span class="sfbig">2.8%</span><span class="sfvs">TNK</span></div>
+        <div class="sfnums" style="margin-bottom:8px"><span class="sfsmall">0%</span><span class="sfvs">Std.</span></div>
+        <span class="pb pb-d" style="font-size:11px;padding:4px 10px">p=0.004 ⚠</span>
+      </div>
+      <div class="sfbox sf-m">
+        <div class="sf-t">90-day Mortality</div>
+        <div class="sfnums"><span class="sfbig">5.0%</span><span class="sfvs">TNK</span></div>
+        <div class="sfnums" style="margin-bottom:8px"><span class="sfsmall">3.2%</span><span class="sfvs">Std.</span></div>
+        <span class="pb pb-n" style="font-size:11px;padding:4px 10px">p=0.28 · NS</span>
+      </div>
+    </div>
+    <div class="ebtn-row">
+      <button class="ebtn er" onclick="tog('ich',this)"><span>ICH breakdown + definitions</span><span class="arr">▼</span></button>
+      <button class="ebtn ea" onclick="tog('mortality',this)"><span>All 23 deaths — sortable table</span><span class="arr">▼</span></button>
+      <button class="ebtn ep" onclick="tog('aes',this)"><span>All AEs &amp; SAEs by organ system</span><span class="arr">▼</span></button>
+    </div>
+
+    <div class="drawer" id="ich">
+      <div class="drawer-inner">
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 7</span> ICH Types — Heidelberg Classification</div>
+          <div class="leg"><span class="leg-item"><span class="leg-dot" style="background:#b91c1c"></span>Tenecteplase</span><span class="leg-item"><span class="leg-dot" style="background:#94a3b8"></span>Standard Care</span></div>
+          <div class="chart-wrap" style="height:220px"><canvas id="ichTypeChart"></canvas></div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 8</span> sICH Rate by Definition</div>
+          <div class="chart-wrap" style="height:200px"><canvas id="ichDefChart"></canvas></div>
+          <div class="chart-note">Heidelberg (primary): 8 definite/probable sICH in TNK, 0 in standard care.</div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 9</span> Individual sICH Cases — TNK Arm (N=8)</div>
+          <div class="tbl-scroll">
+          <table class="stbl">
+            <tr><th>#</th><th>Grade</th><th>Hemorrhage Type(s)</th></tr>
+            <tr><td>1</td><td><span class="badge badge-r">Definite</span></td><td>Subdural + Remote IPH</td></tr>
+            <tr><td>2</td><td><span class="badge badge-r">Definite</span></td><td>Remote IPH</td></tr>
+            <tr><td>3</td><td><span class="badge badge-a">Probable</span></td><td>PH2 + SAH</td></tr>
+            <tr><td>4</td><td><span class="badge badge-r">Definite</span></td><td>SAH + PH1 + IVH</td></tr>
+            <tr><td>5</td><td><span class="badge badge-r">Definite</span></td><td>PH2 + IVH</td></tr>
+            <tr><td>6</td><td><span class="badge badge-r">Definite</span></td><td>Remote IPH + SAH</td></tr>
+            <tr><td>7</td><td><span class="badge badge-a">Probable</span></td><td>PH2 + Remote IPH + SAH + IVH</td></tr>
+            <tr><td>8</td><td><span class="badge badge-r">Definite</span></td><td>PH2</td></tr>
+          </table>
+          </div>
+          <div class="chart-note">6 Definite + 2 Probable = 8 sICH (Heidelberg). All in TNK arm.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer" id="mortality">
+      <div class="drawer-inner">
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eFigure 4</span> Kaplan-Meier Survival Summary</div>
+          <div class="km-wrap">
+            <div class="chart-wrap" style="height:180px"><canvas id="kmChart"></canvas></div>
+          </div>
+          <div class="stat-pills" style="margin-top:10px">
+            <div class="spill"><div class="spill-lbl">Hazard Ratio</div><div class="spill-v m">1.59</div></div>
+            <div class="spill"><div class="spill-lbl">95% CI</div><div class="spill-v m">0.69 – 3.67</div></div>
+            <div class="spill"><div class="spill-lbl">P value</div><div class="spill-v m">NS (log-rank 0.28)</div></div>
+          </div>
+          <div class="chart-note">CI crosses 1.0; trial underpowered for mortality. TNK 5.0% vs Std 3.2%.</div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title"><span class="etag">eTable 10</span> All 23 Deaths <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--muted)">Tap headers to sort</span></div>
+          <div class="filter-row">
+            <label>Arm:</label>
+            <select id="deathArmFilter" onchange="filterDeaths()">
+              <option value="">All</option>
+              <option value="TNK">TNK</option>
+              <option value="Std">Standard Care</option>
+            </select>
+            <label>Cause:</label>
+            <select id="deathCauseFilter" onchange="filterDeaths()">
+              <option value="">All</option>
+              <option value="ICH">ICH</option>
+              <option value="Stroke">Stroke</option>
+              <option value="Cardiac">Cardiac</option>
+              <option value="Other">Other</option>
+            </select>
+            <span class="result-count" id="deathCount">23 of 23</span>
+          </div>
+          <div class="tbl-scroll">
+          <table class="stbl" id="deathTable">
+            <tr>
+              <th class="sort" onclick="sortDeaths('age')">Age ↕</th>
+              <th>Sex</th>
+              <th class="sort" onclick="sortDeaths('nihss')">NIHSS ↕</th>
+              <th>Arm</th>
+              <th class="sort" onclick="sortDeaths('days')">Days ↕</th>
+              <th>Cause</th>
+            </tr>
+          </table>
+          </div>
+          <div class="chart-note">5/14 TNK deaths from ICH (36%) vs 0/9 standard care.</div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title">Cause of Death — Side by Side</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" id="deathPieGrid">
+            <div><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:7px;text-align:center">TNK (n=14)</div><div class="chart-wrap" style="height:160px"><canvas id="deathTNK"></canvas></div></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:7px;text-align:center">Standard Care (n=9)</div><div class="chart-wrap" style="height:160px"><canvas id="deathSTD"></canvas></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer" id="aes">
+      <div class="drawer-inner">
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab('ae','chart',this)">Chart View</div>
+          <div class="tab" onclick="switchTab('ae','table',this)">Full Table (AE)</div>
+          <div class="tab" onclick="switchTab('ae','sae',this)">Full Table (SAE)</div>
+        </div>
+        <div id="ae-chart" class="tab-panel active">
+          <div class="chart-section">
+            <div class="chart-title"><span class="etag">eTables 11–12</span> Key AEs &amp; SAEs</div>
+            <div class="leg">
+              <span class="leg-item"><span class="leg-dot" style="background:#0284c7"></span>TNK — AE</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#0369a1"></span>TNK — SAE</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#94a3b8"></span>Std. — AE</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#64748b"></span>Std. — SAE</span>
+            </div>
+            <div class="chart-wrap" style="height:250px"><canvas id="aeChart"></canvas></div>
+            <div class="chart-note">Overall AE: 62.6% TNK vs 60.9% Std (NS). SAE: 24.6% TNK vs 18.7% Std.</div>
+          </div>
+        </div>
+        <div id="ae-table" class="tab-panel">
+          <div class="chart-title"><span class="etag">eTable 11</span> All AEs by System Organ Class</div>
+          <div class="tbl-scroll">
+          <table class="stbl">
+            <tr><th>System Organ Class</th><th>TNK N=281</th><th>Std N=284</th><th>Diff</th></tr>
+            <tr><td><strong>Overall</strong></td><td class="tnk-cell">176 (62.6%)</td><td>173 (60.9%)</td><td class="ns">+1.7%</td></tr>
+            <tr><td>Nervous system</td><td class="tnk-cell">77 (27.4%)</td><td>54 (19.0%)</td><td class="diff-pos">+8.4%</td></tr>
+            <tr><td>Investigations</td><td class="tnk-cell">77 (27.4%)</td><td>79 (27.8%)</td><td class="ns">−0.4%</td></tr>
+            <tr><td>Respiratory</td><td class="tnk-cell">41 (14.6%)</td><td>41 (14.4%)</td><td class="ns">+0.2%</td></tr>
+            <tr><td>Metabolism/nutrition</td><td class="tnk-cell">29 (10.3%)</td><td>27 (9.5%)</td><td class="ns">+0.8%</td></tr>
+            <tr><td>GI</td><td class="tnk-cell">28 (10.0%)</td><td>25 (8.8%)</td><td class="ns">+1.2%</td></tr>
+            <tr><td>Vascular</td><td class="tnk-cell">17 (6.1%)</td><td>5 (1.8%)</td><td class="diff-pos">+4.3%</td></tr>
+            <tr><td>Cardiac</td><td class="tnk-cell">11 (3.9%)</td><td>9 (3.2%)</td><td class="ns">+0.7%</td></tr>
+          </table>
+          </div>
+        </div>
+        <div id="ae-sae" class="tab-panel">
+          <div class="chart-title"><span class="etag">eTable 12</span> All SAEs by System Organ Class</div>
+          <div class="tbl-scroll">
+          <table class="stbl">
+            <tr><th>System Organ Class</th><th>TNK N=281</th><th>Std N=284</th><th>Diff</th></tr>
+            <tr><td><strong>Overall</strong></td><td class="tnk-cell">69 (24.6%)</td><td>53 (18.7%)</td><td class="diff-pos">+5.9%</td></tr>
+            <tr><td>Nervous system</td><td class="tnk-cell">41 (14.6%)</td><td>32 (11.3%)</td><td class="diff-pos">+3.3%</td></tr>
+            <tr><td>Cardiac</td><td class="tnk-cell">13 (4.6%)</td><td>5 (1.8%)</td><td class="diff-pos">+2.8%</td></tr>
+            <tr><td>Respiratory</td><td class="tnk-cell">11 (3.9%)</td><td>14 (4.9%)</td><td class="ns">−1.0%</td></tr>
+            <tr><td>General</td><td class="tnk-cell">4 (1.4%)</td><td>1 (0.4%)</td><td class="ns">+1.0%</td></tr>
+            <tr><td>Renal/urinary</td><td class="tnk-cell">3 (1.1%)</td><td>2 (0.7%)</td><td class="ns">+0.4%</td></tr>
+            <tr><td>GI</td><td class="tnk-cell">2 (0.7%)</td><td>2 (0.7%)</td><td class="ns">0%</td></tr>
+            <tr><td>Infections</td><td class="tnk-cell">2 (0.7%)</td><td>3 (1.1%)</td><td class="ns">−0.4%</td></tr>
+          </table>
+          </div>
+          <div class="chart-note">SAE excess in TNK driven by nervous system (ICH) and cardiac events.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAKEAWAY -->
+<div class="takeaway">
+  <div class="ta-i">🧠</div>
+  <div>
+    <div class="ta-lbl">Key Takeaway</div>
+    <div class="ta-txt">Extended-window TNK <strong>(4.5–24 hrs)</strong> significantly improved excellent functional outcomes (mRS 0–1) with <strong>RR 1.28, NNT = 11 (p = 0.02)</strong> in patients with <strong>non-LVO stroke, favorable CTP mismatch, and no EVT eligibility.</strong> The ~23% of patients with stenosis (no occlusion) were included and likely contributed to the positive ITT result — the MVO-only subgroup just missed significance (p=0.054). &nbsp;<span class="dng">⚠ Significantly increased sICH: 2.8% vs 0% (p=0.004). Any ICH 14.6% vs 9.5%.</span> &nbsp;90-day mortality was not significantly different (5.0% vs 3.2%, HR 1.59, CI 0.69–3.67, p=0.28), but 5 of 14 TNK deaths were from ICH versus 0 of 9 in standard care.</div>
+  </div>
+</div>
+<footer>OPTION Trial · Ma G et al · JAMA Feb 2026 · doi:10.1001/jama.2026.0210 · For Educational Use Only</footer>
+</div>
+
+<script>
+const rendered = new Set();
+function tog(id, btn) {
+  const d = document.getElementById(id);
+  const open = d.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  if (open && !rendered.has(id)) {
+    rendered.add(id);
+    setTimeout(() => initChart(id), 60);
+  }
+}
+function switchTab(group, panel, btn) {
+  document.querySelectorAll(`[id^="${group}-"]`).forEach(p => p.classList.remove('active'));
+  btn.closest('.card, .drawer-inner').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`${group}-${panel}`).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById(`${group}-${panel}`).querySelectorAll('canvas').forEach(c => {
+    if (!rendered.has(c.id)) { rendered.add(c.id); setTimeout(() => makeSingleChart(c.id), 60); }
+  });
+}
+function togglePP() {
+  const pp = document.getElementById('ppToggle').checked;
+  document.getElementById('ppLbl').innerHTML = pp ? 'Showing: <strong>Per-Protocol Population</strong> (N=553)' : 'Showing: <strong>ITT Population</strong> (N=566)';
+  document.getElementById('arm-tnk').textContent = pp ? '43.5%' : '43.6%';
+  document.getElementById('arm-std').textContent = pp ? '33.5%' : '34.2%';
+  document.getElementById('arm-tnk-n').textContent = pp ? 'N=278 · 121 pts' : 'N=282 · 123 pts';
+  document.getElementById('arm-std-n').textContent = pp ? 'N=275 · 92 pts' : 'N=284 · 97 pts';
+  document.getElementById('rr-chip').textContent = pp ? 'RR 1.30 (1.05–1.61)' : 'RR 1.28 (1.04–1.57)';
+  document.getElementById('p-chip').textContent = 'p = 0.02 · Significant';
+}
+
+const deathsData = [
+  {age:60,sex:'M',nihss:4,arm:'TNK',days:17,cause:'Lung infection',causeGroup:'Other'},
+  {age:69,sex:'M',nihss:7,arm:'Std',days:4,cause:'Cardiac arrest',causeGroup:'Cardiac'},
+  {age:88,sex:'M',nihss:5,arm:'TNK',days:72,cause:'Encephalopathy',causeGroup:'Other'},
+  {age:84,sex:'F',nihss:7,arm:'TNK',days:29,cause:'Stroke',causeGroup:'Stroke'},
+  {age:72,sex:'F',nihss:11,arm:'Std',days:60,cause:'Stroke',causeGroup:'Stroke'},
+  {age:88,sex:'M',nihss:5,arm:'TNK',days:11,cause:'Lung infection',causeGroup:'Other'},
+  {age:75,sex:'M',nihss:9,arm:'TNK',days:0,cause:'Intracranial hemorrhage',causeGroup:'ICH'},
+  {age:61,sex:'M',nihss:6,arm:'TNK',days:61,cause:'Bile duct cancer',causeGroup:'Other'},
+  {age:75,sex:'M',nihss:6,arm:'Std',days:13,cause:'Heart failure',causeGroup:'Cardiac'},
+  {age:75,sex:'M',nihss:6,arm:'TNK',days:65,cause:'Other cerebrovascular disease',causeGroup:'Stroke'},
+  {age:75,sex:'M',nihss:10,arm:'TNK',days:11,cause:'Intracranial hemorrhage',causeGroup:'ICH'},
+  {age:63,sex:'M',nihss:6,arm:'TNK',days:1,cause:'Intracranial hemorrhage',causeGroup:'ICH'},
+  {age:61,sex:'M',nihss:4,arm:'Std',days:73,cause:'Diabetic nephropathy',causeGroup:'Other'},
+  {age:79,sex:'F',nihss:7,arm:'Std',days:11,cause:'Stroke',causeGroup:'Stroke'},
+  {age:65,sex:'M',nihss:6,arm:'TNK',days:0,cause:'Intracranial hemorrhage',causeGroup:'ICH'},
+  {age:76,sex:'M',nihss:8,arm:'TNK',days:4,cause:'Brainstem stroke / shock',causeGroup:'Stroke'},
+  {age:60,sex:'M',nihss:10,arm:'TNK',days:17,cause:'Intracranial hemorrhage',causeGroup:'ICH'},
+  {age:81,sex:'F',nihss:22,arm:'Std',days:18,cause:'Stroke',causeGroup:'Stroke'},
+  {age:76,sex:'M',nihss:11,arm:'Std',days:11,cause:'Cerebral herniation',causeGroup:'Stroke'},
+  {age:70,sex:'M',nihss:9,arm:'Std',days:35,cause:'Stroke',causeGroup:'Stroke'},
+  {age:73,sex:'M',nihss:10,arm:'TNK',days:13,cause:'Stroke',causeGroup:'Stroke'},
+  {age:48,sex:'M',nihss:7,arm:'Std',days:26,cause:'Stroke',causeGroup:'Stroke'},
+  {age:94,sex:'F',nihss:11,arm:'TNK',days:7,cause:'Stroke',causeGroup:'Stroke'},
+];
+let deathSort = {col:'days', dir:1};
+function renderDeathTable(data) {
+  const tbody = document.getElementById('deathTable');
+  const header = tbody.querySelector('tr');
+  const rows = data.map(d => {
+    const rowClass = d.arm === 'TNK' ? 'tnk-row' : '';
+    const causeBadge = d.causeGroup === 'ICH' ? `<span class="badge badge-r">${d.cause}</span>`
+      : d.causeGroup === 'Stroke' ? `<span class="badge badge-t">${d.cause}</span>`
+      : d.causeGroup === 'Cardiac' ? `<span class="badge badge-a">${d.cause}</span>`
+      : `<span class="badge" style="background:#f1f5f9;color:#5c6f84;border:1px solid #dde4ec">${d.cause}</span>`;
+    return `<tr class="${rowClass}"><td>${d.age}</td><td>${d.sex}</td><td>${d.nihss}</td><td>${d.arm==='TNK'?'<span class="badge badge-t">TNK</span>':'<span class="badge" style="background:#f1f5f9;color:#5c6f84;border:1px solid #dde4ec">Std</span>'}</td><td>${d.days}</td><td>${causeBadge}</td></tr>`;
+  }).join('');
+  tbody.innerHTML = '';
+  tbody.appendChild(header);
+  tbody.insertAdjacentHTML('beforeend', rows);
+  document.getElementById('deathCount').textContent = `${data.length} of 23`;
+}
+function filterDeaths() {
+  const arm = document.getElementById('deathArmFilter').value;
+  const cause = document.getElementById('deathCauseFilter').value;
+  let filtered = deathsData.filter(d => {
+    if (arm && d.arm !== arm) return false;
+    if (cause && d.causeGroup !== cause) return false;
+    return true;
+  });
+  filtered.sort((a,b) => (a[deathSort.col] - b[deathSort.col]) * deathSort.dir);
+  renderDeathTable(filtered);
+}
+function sortDeaths(col) {
+  if (deathSort.col === col) deathSort.dir *= -1;
+  else { deathSort.col = col; deathSort.dir = 1; }
+  filterDeaths();
+}
+
+function initChart(id) {
+  if (id==='vessels')   { makeSingleChart('vesselOccChart'); }
+  if (id==='primary')   { makeSingleChart('mrsChart'); makeSingleChart('secChart'); }
+  if (id==='ich')       { makeSingleChart('ichTypeChart'); makeSingleChart('ichDefChart'); }
+  if (id==='mortality') { renderDeathTable(deathsData); makeSingleChart('kmChart'); makeSingleChart('deathTNK'); makeSingleChart('deathSTD'); }
+  if (id==='aes')       { makeSingleChart('aeChart'); }
+  if (id==='imaging')   { makeSingleChart('heidelbergChart'); }
+  if (id==='enrollment'){ makeSingleChart('centerChart'); }
+}
+
+const BF = {family:"'DM Sans', sans-serif",size:11};
+const MC = '#5c6f84';
+const TT = {backgroundColor:'#0f1f35',titleColor:'#e0f2fe',bodyColor:'#bae6fd',padding:10,cornerRadius:8};
+const GC = '#eef1f5';
+
+function makeSingleChart(id) {
+  if (rendered.has('chart_'+id)) return;
+  rendered.add('chart_'+id);
+  const el = document.getElementById(id);
+  if (!el) return;
+  const ctx = el.getContext('2d');
+
+  if (id==='mrsChart') {
+    const colors = ['#047857','#34d399','#6ee7b7','#fbbf24','#f97316','#ef4444','#7f1d1d'];
+    const tnk=[25.9,17.6,19.4,18.4,10.1,4.0,4.7], std=[16.4,17.1,21.1,24.0,12.4,5.8,3.3];
+    new Chart(ctx,{type:'bar',data:{labels:['TNK (N=275)','Std (N=278)'],datasets:['mRS 0','mRS 1','mRS 2','mRS 3','mRS 4','mRS 5','mRS 6'].map((l,i)=>({label:l,data:[tnk[i],std[i]],backgroundColor:colors[i],borderWidth:0,borderRadius:i===0?{topLeft:3,bottomLeft:3}:i===6?{topRight:3,bottomRight:3}:0}))},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{...BF,size:10},color:MC,padding:7}},tooltip:{...TT,callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x}%`}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%',font:{...BF,size:10},color:'#9aafc3'},grid:{color:GC}},y:{stacked:true,ticks:{font:{...BF,size:11,weight:'600'},color:'#0f1f35'},grid:{display:false}}}}});
+  }
+  else if (id==='secChart') {
+    const labs=['mRS 0–1 (adj.)','mRS 0–2','mRS shift (ord.)','Reperfusion 24h','Early response 24h','NIHSS Δ at 7d','Infarct vol. 24h','EQ-5D-5L'];
+    const rrs=[1.32,1.16,1.47,1.31,2.29,1.14,1.03,1.06];
+    const sig=[true,true,true,true,true,false,false,false];
+    new Chart(ctx,{type:'bar',data:{labels:labs,datasets:[{data:rrs,backgroundColor:rrs.map((_,i)=>sig[i]?'rgba(4,120,87,0.72)':'rgba(148,163,184,0.45)'),borderColor:rrs.map((_,i)=>sig[i]?'#047857':'#94a3b8'),borderWidth:1.5,borderRadius:4,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>` RR/OR ${c.parsed.x.toFixed(2)} — ${sig[c.dataIndex]?'✓ Sig':'○ NS'}`}}},scales:{x:{min:0.8,max:2.65,ticks:{font:{...BF,size:10},color:MC},grid:{color:GC}},y:{ticks:{font:{...BF,size:10.5},color:'#0f1f35'},grid:{display:false}}}},plugins:[{id:'rl',afterDraw(c){if(c.canvas.id!=='secChart')return;const{ctx:x,scales:{x:sx,y:sy}}=c;const p=sx.getPixelForValue(1.0);x.save();x.strokeStyle='#cbd5e1';x.lineWidth=1.5;x.setLineDash([5,3]);x.beginPath();x.moveTo(p,sy.top);x.lineTo(p,sy.bottom);x.stroke();x.restore();}}]});
+  }
+  else if (id==='ichTypeChart') {
+    new Chart(ctx,{type:'bar',data:{labels:['HI1','HI2','PH1','PH2','Remote IPH','IVH','SAH','Subdural','Any ICH'],datasets:[{label:'TNK',data:[2.5,2.8,2.8,2.1,3.2,2.1,2.8,0.7,14.6],backgroundColor:'rgba(185,28,28,0.72)',borderRadius:3},{label:'Std',data:[0,5.6,2.5,0,0,0,1.4,0,9.5],backgroundColor:'rgba(148,163,184,0.55)',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:BF,color:MC}},tooltip:{...TT,callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}%`}}},scales:{x:{ticks:{font:{...BF,size:10},color:MC},grid:{display:false}},y:{ticks:{callback:v=>v+'%',font:BF},grid:{color:GC}}}}});
+  }
+  else if (id==='ichDefChart') {
+    new Chart(ctx,{type:'bar',data:{labels:['Heidelberg','SITS-MOST','ECASS III','IST-3','ECASS II','NINDS'],datasets:[{label:'TNK',data:[2.8,2.5,2.8,2.8,5.3,6.1],backgroundColor:'rgba(185,28,28,0.72)',borderRadius:3},{label:'Std',data:[0,0,0,0.4,1.8,1.8],backgroundColor:'rgba(148,163,184,0.55)',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:BF,color:MC}},tooltip:{...TT,callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}%`}}},scales:{x:{ticks:{font:{...BF,size:10.5},color:MC},grid:{display:false}},y:{ticks:{callback:v=>v+'%',font:BF},grid:{color:GC},max:8}}}});
+  }
+  else if (id==='kmChart') {
+    const days=[0,10,20,30,40,50,60,70,80,90];
+    const tnkNAR=[282,277,272,271,271,271,271,269,268,24];
+    const stdNAR=[284,283,279,278,277,277,277,276,275,25];
+    new Chart(ctx,{type:'line',data:{labels:days,datasets:[{label:'TNK',data:tnkNAR.map((n,i)=>i===0?1.0:+(n/tnkNAR[0]).toFixed(4)),borderColor:'#b91c1c',backgroundColor:'rgba(185,28,28,0.08)',fill:true,borderWidth:2,pointRadius:3,tension:0.3},{label:'Std',data:stdNAR.map((n,i)=>i===0?1.0:+(n/stdNAR[0]).toFixed(4)),borderColor:'#94a3b8',backgroundColor:'rgba(148,163,184,0.08)',fill:true,borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:BF,color:MC}},tooltip:{...TT,callbacks:{label:c=>` ${c.dataset.label}: ${(c.parsed.y*100).toFixed(1)}%`}}},scales:{x:{title:{display:true,text:'Days',font:{...BF,size:10}},ticks:{font:{...BF,size:10}},grid:{color:GC}},y:{min:0.92,max:1.005,ticks:{callback:v=>(v*100).toFixed(1)+'%',font:{...BF,size:10}},grid:{color:GC}}}}});
+  }
+  else if (id==='deathTNK') {
+    new Chart(ctx,{type:'doughnut',data:{labels:['ICH (5)','Stroke/CVD (4)','Lung infxn (2)','Encephalopathy (1)','Cancer (1)','Brainstem/shock (1)'],datasets:[{data:[5,4,2,1,1,1],backgroundColor:['#b91c1c','#f97316','#fbbf24','#34d399','#a78bfa','#60a5fa'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{...BF,size:9.5},color:MC,padding:5}},tooltip:{...TT}}}});
+  }
+  else if (id==='deathSTD') {
+    new Chart(ctx,{type:'doughnut',data:{labels:['Stroke/herniation (6)','Cardiac (2)','Diabetic nephropathy (1)'],datasets:[{data:[6,2,1],backgroundColor:['#64748b','#94a3b8','#475569'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,font:{...BF,size:9.5},color:MC,padding:5}},tooltip:{...TT}}}});
+  }
+  else if (id==='aeChart') {
+    new Chart(ctx,{type:'bar',data:{labels:['Nervous','Respiratory','GI','Vascular','Cardiac','Renal'],datasets:[{label:'TNK AE',data:[27.4,14.6,10.0,6.1,3.9,4.3],backgroundColor:'rgba(2,132,199,0.75)',borderRadius:3},{label:'TNK SAE',data:[14.6,3.9,0.7,0,4.6,1.1],backgroundColor:'rgba(3,105,161,0.9)',borderRadius:3},{label:'Std AE',data:[19.0,14.4,8.8,1.8,3.2,3.5],backgroundColor:'rgba(148,163,184,0.55)',borderRadius:3},{label:'Std SAE',data:[11.3,4.9,0.7,0,1.8,0.7],backgroundColor:'rgba(100,116,139,0.72)',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{...BF,size:10},color:MC,padding:6}},tooltip:{...TT,callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}%`}}},scales:{x:{ticks:{font:{...BF,size:10},color:MC},grid:{display:false}},y:{ticks:{callback:v=>v+'%',font:BF},grid:{color:GC}}}}});
+  }
+  else if (id==='vesselOccChart') {
+    new Chart(ctx,{type:'bar',data:{labels:['M2 Dom.','M2 Codom.','M2 Nondom.','M3','A2','P1','P2','A3','PICA','SCA','AICA'],datasets:[{label:'TNK',data:[9.3,9.3,81.4,8.2,12.8,7.1,4.6,3.2,2.5,1.8,2.1],backgroundColor:'rgba(2,132,199,0.78)',borderRadius:3},{label:'Std',data:[20.4,4.3,75.3,6.3,10.2,6.3,6.7,2.8,1.1,0.7,2.1],backgroundColor:'rgba(148,163,184,0.6)',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:BF,color:MC}},tooltip:{...TT,callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x}%`}}},scales:{x:{ticks:{callback:v=>v+'%',font:{...BF,size:10}},grid:{color:GC}},y:{ticks:{font:{...BF,size:10.5},color:'#0f1f35'},grid:{display:false}}}}});
+  }
+  else if (id==='vesselStenChart') {
+    new Chart(ctx,{type:'bar',data:{labels:['M2','M1','ICA (ext.)','A2','P1','A3','P2','P3','A1'],datasets:[{label:'TNK',data:[10.3,5.3,1.8,1.8,1.4,0.7,0.4,0.4,0.4],backgroundColor:'rgba(2,132,199,0.78)',borderRadius:3},{label:'Std',data:[10.9,4.2,2.5,2.5,1.8,0.4,0.4,0,0],backgroundColor:'rgba(148,163,184,0.6)',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:BF,color:MC}},tooltip:{...TT,callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x}%`}}},scales:{x:{ticks:{callback:v=>v+'%',font:{...BF,size:10}},grid:{color:GC}},y:{ticks:{font:{...BF,size:10.5},color:'#0f1f35'},grid:{display:false}}}}});
+  }
+  else if (id==='heidelbergChart') {
+    new Chart(ctx,{type:'bar',data:{labels:['HI1','HI2','PH1','Remote/IVH/SAH/SDH','PH2'],datasets:[{data:[1,2,3,3,5],backgroundColor:['#d1fae5','#fef3c7','#fed7aa','#fecaca','#b91c1c'],borderColor:['#6ee7b7','#fde68a','#fdba74','#fca5a5','#7f1d1d'],borderWidth:1.5,borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>{const l=['Unlikely','Possible','Possible','Possible','Probable/Definite'];return` ${l[c.dataIndex]}`;}}}},scales:{x:{ticks:{font:{...BF,size:10},color:MC},grid:{display:false}},y:{display:false,max:6}}}});
+  }
+  else if (id==='centerChart') {
+    const centers=['Linyi People\'s','Chenzhou No.1','Changde First','Weifang People\'s','Liuyang Jili','Hainan Med Univ','SW Med Univ','Central Xiangtan','Shandong 2nd Med','Guigang City','Taihe Hospital','Huizhou First','Zhuozhou City','Liaocheng People\'s','Beijing Daxing','Zhangzhou Mun.','Shenyang First','Anshan Changda','Xuanwu Cap. Med.','Shaoxing People\'s'];
+    const vals=[112,80,35,26,24,22,22,19,18,17,16,15,14,13,13,11,10,9,8,8];
+    new Chart(ctx,{type:'bar',data:{labels:centers,datasets:[{data:vals,backgroundColor:vals.map(v=>v>=50?'rgba(2,132,199,0.85)':v>=20?'rgba(2,132,199,0.6)':'rgba(148,163,184,0.5)'),borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>` ${c.parsed.x} pts`}}},scales:{x:{ticks:{font:{...BF,size:10}},grid:{color:GC}},y:{ticks:{font:{...BF,size:9.5},color:'#0f1f35'},grid:{display:false}}}}});
+  }
+}
+</script>
+</body>
+</html>
