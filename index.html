@@ -1,311 +1,809 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<meta name="description" content="Portfolio of Marissa D'Souza featuring design, medical, and technology projects.">
-<meta name="keywords" content="">
-<meta name="author" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marissa D'Souza, M.D.</title>
+<style>
+:root {
+  --bg: #F2F2F5;
+  --surface: #FFFFFF;
+  --surface-2: #F7F7FA;
+  --surface-3: #EAEAEF;
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.14);
+  --text: #1D1D1F;
+  --text-2: #48484A;
+  --text-3: #8A8A8E;
+  --accent: #0071E3;
+  --accent-soft: #E3F0FD;
+  --accent-mid: rgba(0,113,227,0.12);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --nav-h: 52px;
+  --max-w: 880px;
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.09), 0 8px 24px rgba(0,0,0,0.07);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,0.12), 0 12px 36px rgba(0,0,0,0.08);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.62; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
 
-<title>Marissa D'Souza | Portfolio</title>
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(242,242,245,0.9);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid rgba(0,0,0,0.13);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px;
+}
+.nav-name { font-family: var(--font-display); font-size: 0.875rem; font-weight: 600; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a { font-size: 0.76rem; font-weight: 400; color: var(--text-2); text-decoration: none; padding: 5px 10px; border-radius: 7px; transition: background 0.12s, color 0.12s; }
+.nav-links a:hover { background: var(--surface-3); color: var(--text); }
 
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/font-awesome.min.css">
+/* LAYOUT */
+main { max-width: var(--max-w); margin: 0 auto; padding: calc(var(--nav-h) + 52px) 28px 88px; }
+section { margin-bottom: 60px; }
+.section-label { font-size: 0.67rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 0.5px solid var(--border-strong); }
 
-<!-- for FF, Chrome, Opera -->
-<link rel="icon" type="image/png" href="images/icon/brain-16.png" sizes="16x16">
-<link rel="icon" type="image/png" href="images/icon/brain-32.png" sizes="32x32">
+/* HERO — stripped down */
+.hero-kicker { display: inline-flex; align-items: center; gap: 7px; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 100px; padding: 5px 13px; font-size: 0.73rem; font-weight: 500; color: var(--text-2); margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+.live-dot { width: 6px; height: 6px; background: #30D158; border-radius: 50%; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+.hero-name { font-family: var(--font-display); font-size: clamp(2.4rem,5.8vw,3.8rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.04; color: var(--text); margin-bottom: 18px; }
+.hero-thesis { font-size: 1.12rem; font-weight: 400; line-height: 1.58; letter-spacing: -0.02em; color: var(--text-2); max-width: 580px; margin-bottom: 28px; }
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 9px 20px; border-radius: 980px; font-size: 0.84rem; font-weight: 500; font-family: var(--font); cursor: pointer; text-decoration: none; border: none; transition: all 0.14s; letter-spacing: -0.01em; }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(0,113,227,0.3); }
+.btn-primary:hover { background: #0077ED; box-shadow: 0 4px 14px rgba(0,113,227,0.4); }
+.btn-secondary { background: var(--surface); color: var(--text); border: 0.5px solid var(--border-strong); box-shadow: var(--shadow-sm); }
+.btn-secondary:hover { background: var(--surface-2); }
 
-<!-- Main css -->
-<link rel="stylesheet" href="css/style.css">
-<link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+/* CARDS */
+.card { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow-sm); }
 
+/* TIMELINE */
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: grid; grid-template-columns: 108px 1fr; gap: 18px; padding: 14px 0; border-bottom: 0.5px solid var(--border); }
+.tl-item:last-child { border-bottom: none; }
+.tl-date { font-size: 0.75rem; font-weight: 500; color: var(--text-3); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.tl-role { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 2px; letter-spacing: -0.015em; }
+.tl-org { font-size: 0.82rem; color: var(--text-2); }
+.tl-note { font-size: 0.76rem; color: var(--text-3); margin-top: 2px; }
+
+/* SKILLS */
+.skill-grid { display: flex; flex-direction: column; }
+.skill-row { display: grid; grid-template-columns: 175px 1fr; gap: 16px; padding: 12px 0; border-bottom: 0.5px solid var(--border); align-items: start; }
+.skill-row:last-child { border-bottom: none; }
+.skill-label { font-size: 0.79rem; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+.skill-items { font-size: 0.82rem; color: var(--text-2); line-height: 1.55; }
+
+/* PROJECT CARDS */
+.project-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.18s, border-color 0.18s, transform 0.12s;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+.project-card:hover { box-shadow: var(--shadow-hover); border-color: rgba(0,0,0,0.22); transform: translateY(-1px); }
+.project-card:active { transform: translateY(0); }
+
+.project-card.parent {
+  border-color: rgba(0,113,227,0.22);
+  background: linear-gradient(150deg, #ffffff 0%, #F0F6FF 100%);
+}
+.project-card.parent:hover { border-color: rgba(0,113,227,0.4); }
+
+.pc-parent-badge { display: inline-flex; align-items: center; background: var(--accent-soft); border: 0.5px solid rgba(0,113,227,0.25); border-radius: 100px; padding: 3px 10px; font-size: 0.67rem; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 9px; }
+.pc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 5px; }
+.pc-title { font-size: 0.97rem; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
+.pc-chevron { color: var(--text-3); transition: transform 0.18s, color 0.18s; flex-shrink: 0; margin-top: 2px; }
+.project-card:hover .pc-chevron { transform: translateX(2px); color: var(--accent); }
+.pc-meta { font-size: 0.72rem; font-weight: 500; color: var(--text-3); margin-bottom: 9px; font-family: var(--font-mono); }
+.pc-desc { font-size: 0.86rem; color: var(--text-2); line-height: 1.6; letter-spacing: -0.005em; }
+.pc-hint { margin-top: 11px; font-size: 0.72rem; font-weight: 500; color: var(--accent); }
+
+.pc-subprojects { margin-top: 14px; padding-top: 12px; border-top: 0.5px solid rgba(0,113,227,0.15); }
+.pc-subprojects-label { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 8px; }
+.pc-sub-item { display: flex; align-items: flex-start; gap: 9px; padding: 6px 0; border-bottom: 0.5px solid var(--border); font-size: 0.82rem; color: var(--text-2); }
+.pc-sub-item:last-child { border-bottom: none; }
+.pc-sub-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.5; flex-shrink: 0; margin-top: 5px; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.42); opacity: 0; pointer-events: none; transition: opacity 0.26s ease; backdrop-filter: blur(4px); }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 201; width: min(560px, 100vw); background: var(--surface); border-left: 0.5px solid var(--border-strong); transform: translateX(100%); transition: transform 0.34s cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; overflow: hidden; box-shadow: -8px 0 40px rgba(0,0,0,0.12); }
+.modal-drawer.open { transform: translateX(0); }
+.modal-header { padding: 22px 26px 18px; border-bottom: 0.5px solid var(--border); flex-shrink: 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; background: var(--surface-2); }
+.mh-title { font-family: var(--font-display); font-size: 1.28rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); margin-bottom: 4px; }
+.mh-sub { font-size: 0.78rem; font-style: italic; color: var(--text-3); margin-bottom: 4px; }
+.mh-meta { font-size: 0.71rem; font-weight: 500; color: var(--text-3); font-family: var(--font-mono); }
+.modal-close { background: var(--surface-3); border: 0.5px solid var(--border-strong); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 0.85rem; color: var(--text-2); transition: background 0.12s; margin-top: 2px; font-family: var(--font); }
+.modal-close:hover { background: var(--border-strong); }
+.modal-body { flex: 1; overflow-y: auto; padding: 24px 26px 48px; }
+.modal-body::-webkit-scrollbar { width: 4px; }
+.modal-body::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+.modal-narrative { font-size: 0.9rem; line-height: 1.72; color: var(--text-2); margin-bottom: 22px; padding-bottom: 20px; border-bottom: 0.5px solid var(--border); }
+.modal-narrative strong { color: var(--text); font-weight: 600; }
+
+.modal-section { margin-bottom: 20px; }
+.modal-section-title { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+.modal-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.modal-bullets li { font-size: 0.86rem; color: var(--text-2); line-height: 1.62; padding-left: 16px; position: relative; }
+.modal-bullets li::before { content: ''; position: absolute; left: 0; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: var(--border-strong); }
+.modal-bullets li strong { color: var(--text); font-weight: 600; }
+
+/* subproject cards inside modal */
+.modal-subproject { border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 13px 15px; margin-bottom: 9px; }
+.modal-sp-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 7px; }
+.modal-sp-title { font-size: 0.88rem; font-weight: 700; color: var(--text); letter-spacing: -0.015em; }
+.modal-sp-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.modal-sp-bullets li { font-size: 0.83rem; color: var(--text-2); line-height: 1.6; padding-left: 13px; position: relative; }
+.modal-sp-bullets li::before { content: ''; position: absolute; left: 0; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: 0.55; }
+.modal-sp-bullets li strong { color: var(--text); font-weight: 600; }
+
+/* aim cards */
+.aim-card { background: var(--surface-2); border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.aim-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
+.aim-num { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); font-family: var(--font-mono); }
+.aim-title { font-size: 0.87rem; font-weight: 600; color: var(--text); letter-spacing: -0.015em; margin-bottom: 5px; }
+.aim-desc { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; }
+.aim-desc strong { color: var(--text); font-weight: 600; }
+.status-pill { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 100px; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+.s-active { background: #E3F9E5; color: #1B7A2A; }
+.s-planned { background: #FFF3CD; color: #7A5800; }
+.s-progress { background: #EDE9FE; color: #5B21B6; }
+.s-done { background: #DBEAFE; color: #1E40AF; }
+
+/* RESEARCH CARDS */
+.research-card { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius); padding: 18px 22px; margin-bottom: 10px; box-shadow: var(--shadow-sm); }
+.rc-title { font-size: 0.93rem; font-weight: 600; color: var(--text); letter-spacing: -0.018em; margin-bottom: 3px; }
+.rc-meta { font-size: 0.71rem; font-weight: 500; color: var(--text-3); margin-bottom: 8px; font-family: var(--font-mono); }
+.rc-desc { font-size: 0.85rem; color: var(--text-2); line-height: 1.6; }
+
+/* TRIALS */
+.trials-card { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius); padding: 24px 24px; box-shadow: var(--shadow-sm); }
+.trials-role { font-size: 0.69rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 14px; }
+.trials-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+.trial-pill { background: var(--surface-2); border: 0.5px solid var(--border-strong); border-radius: var(--radius-xs); padding: 6px 14px; font-size: 0.82rem; font-weight: 600; color: var(--text); font-family: var(--font-mono); box-shadow: var(--shadow-sm); }
+.trials-desc { font-size: 0.84rem; color: var(--text-2); }
+
+/* PUBLICATIONS */
+.pub-block { margin-bottom: 7px; }
+.pub-btn { width: 100%; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-family: var(--font); transition: background 0.12s; text-align: left; box-shadow: var(--shadow-sm); }
+.pub-btn:hover { background: var(--surface-2); }
+.pub-btn.open { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+.pub-btn-label { font-size: 0.88rem; font-weight: 600; color: var(--text); letter-spacing: -0.015em; }
+.pub-btn-right { display: flex; align-items: center; gap: 8px; }
+.pub-btn-count { font-size: 0.73rem; color: var(--text-3); }
+.pub-btn .parr { transition: transform 0.2s; display: inline-flex; color: var(--text-3); }
+.pub-btn.open .parr { transform: rotate(180deg); }
+.pub-drop { max-height: 0; overflow: hidden; transition: max-height 0.32s ease; }
+.pub-drop.open { max-height: 5000px; }
+.pub-drop-inner { border: 0.5px solid var(--border-strong); border-top: none; border-radius: 0 0 var(--radius-sm) var(--radius-sm); background: var(--surface); }
+.pub-entry { padding: 12px 18px; border-bottom: 0.5px solid var(--border); font-size: 0.82rem; color: var(--text-2); line-height: 1.64; }
+.pub-entry:last-child { border-bottom: none; }
+.pub-entry em { color: var(--text-3); }
+
+/* LECTURES */
+.lecture-block { margin-bottom: 24px; }
+.lecture-toggle-btn { width: 100%; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-family: var(--font); transition: background 0.12s; text-align: left; box-shadow: var(--shadow-sm); }
+.lecture-toggle-btn:hover { background: var(--surface-2); }
+.lecture-toggle-btn.open { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+.lecture-toggle-label { font-size: 0.88rem; font-weight: 600; color: var(--text); letter-spacing: -0.015em; }
+.lecture-toggle-count { font-size: 0.73rem; color: var(--text-3); }
+.lecture-drop { max-height: 0; overflow: hidden; transition: max-height 0.32s ease; }
+.lecture-drop.open { max-height: 3000px; }
+.lecture-drop-inner { border: 0.5px solid var(--border-strong); border-top: none; border-radius: 0 0 var(--radius-sm) var(--radius-sm); background: var(--surface); padding: 0 18px; }
+.lecture-group-title { font-size: 0.66rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; margin: 14px 0 6px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+.lecture-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+.lecture-row:last-child { border-bottom: none; }
+.lecture-title { font-size: 0.85rem; font-weight: 500; color: var(--text); line-height: 1.45; flex: 1; letter-spacing: -0.01em; }
+.lecture-venue { font-size: 0.76rem; color: var(--text-3); margin-top: 2px; }
+.lecture-year { font-size: 0.72rem; font-weight: 500; color: var(--text-3); white-space: nowrap; padding-top: 2px; font-family: var(--font-mono); }
+
+/* COLLAPSIBLE */
+.collap { border-bottom: 0.5px solid var(--border); }
+.collap:last-child { border-bottom: none; }
+.collap-hdr { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; cursor: pointer; gap: 12px; }
+.collap-hdr-title { font-size: 0.9rem; font-weight: 600; color: var(--text); letter-spacing: -0.015em; }
+.collap-hdr-meta { font-size: 0.76rem; color: var(--text-3); margin-top: 1px; }
+.collap-arrow { color: var(--text-3); transition: transform 0.2s; flex-shrink: 0; }
+.collap-arrow.open { transform: rotate(180deg); }
+.collap-body { max-height: 0; overflow: hidden; transition: max-height 0.24s ease; }
+.collap-body.open { max-height: 400px; }
+.collap-body-inner { padding-bottom: 13px; font-size: 0.84rem; color: var(--text-2); line-height: 1.65; }
+
+/* AWARDS */
+.award-row { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 12px 0; border-bottom: 0.5px solid var(--border); align-items: start; }
+.award-row:last-child { border-bottom: none; }
+.award-yr { font-size: 0.72rem; font-weight: 600; color: var(--text-3); padding-top: 3px; font-family: var(--font-mono); }
+.award-name { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 2px; letter-spacing: -0.015em; }
+.award-inst { font-size: 0.78rem; color: var(--text-2); }
+
+/* CERTS */
+.cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cert-card { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); padding: 16px 18px; box-shadow: var(--shadow-sm); }
+.cert-card-title { font-size: 0.66rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+.cert-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.cert-list li { font-size: 0.82rem; color: var(--text-2); }
+
+/* CONTACT */
+.contact-card { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: var(--radius); padding: 40px 36px; text-align: center; box-shadow: var(--shadow-md); }
+.contact-h { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; letter-spacing: -0.035em; color: var(--text); margin-bottom: 10px; }
+.contact-sub { font-size: 0.9rem; color: var(--text-2); margin-bottom: 26px; max-width: 420px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.contact-links { display: flex; gap: 9px; justify-content: center; flex-wrap: wrap; }
+.contact-link { display: inline-flex; align-items: center; gap: 5px; padding: 9px 18px; background: var(--surface-2); border: 0.5px solid var(--border-strong); border-radius: 980px; font-size: 0.83rem; font-weight: 500; color: var(--text-2); text-decoration: none; transition: all 0.12s; box-shadow: var(--shadow-sm); }
+.contact-link:hover { background: var(--surface-3); color: var(--text); }
+
+footer { border-top: 0.5px solid var(--border); padding: 20px; text-align: center; font-size: 0.73rem; color: var(--text-3); max-width: var(--max-w); margin: 0 auto; }
+.hint-text { font-size: 0.78rem; color: var(--text-3); margin-bottom: 12px; }
+
+@media (max-width: 640px) {
+  nav { padding: 0 18px; }
+  .nav-links { display: none; }
+  main { padding: calc(var(--nav-h) + 28px) 18px 56px; }
+  .tl-item { grid-template-columns: 70px 1fr; gap: 12px; }
+  .skill-row { grid-template-columns: 1fr; gap: 4px; }
+  .cert-grid { grid-template-columns: 1fr; }
+  .modal-drawer { width: 100vw; }
+}
+</style>
 </head>
 <body>
 
-<!-- PRE LOADER -->
+<nav>
+  <a href="#hero" class="nav-name">Marissa D'Souza, M.D.</a>
+  <ul class="nav-links">
+    <li><a href="#education">Education</a></li>
+    <li><a href="#stroke">Stroke Projects</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#trials">Trials</a></li>
+    <li><a href="#othertech">Other Work</a></li>
+    <li><a href="#leadership">Leadership</a></li>
+    <li><a href="#awards">Awards</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-<div class="preloader">
-     <!-- <div class="sk-spinner sk-spinner-wordpress">
-          <span class="sk-inner-circle"></span>
-     </div> -->
-     <div class="browser-screen-loading-content">
-       <div class="loading-dots dark-gray">
-         <i></i>
-         <i></i>
-         <i></i>
-         <i></i>
-       </div>
-     </div>
-</div>
-
-<!-- Navigation section  -->
-
-<div class="navbar navbar-default navbar-static-top" role="navigation">
-     <div class="container">
-
-          <div class="navbar-header">
-               <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon icon-bar"></span>
-                    <span class="icon icon-bar"></span>
-                    <span class="icon icon-bar"></span>
-               </button>
-               <a href="index.html" class="navbar-brand">marissa.</a>
-               <!-- <a href="index.html" class="navbar-brand"><i class="fa fa-magnet"></i></a> -->
-          </div>
-          <div class="collapse navbar-collapse">
-               <ul class="nav navbar-nav navbar-right">
-                    <!-- <li><a href="about.html">about me</a></li> -->
-                    <li><a href="education.html">education</a></li>
-                    <li class="active"><a href="index.html">portfolio</a></li>
-                    <li><a href="travel.html">travel</a></li>
-                    <!-- <li><a href="blog.html">blog</a></li> -->
-               </ul>
-          </div>
-
-
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+<div class="modal-drawer" id="modalDrawer">
+  <div class="modal-header">
+    <div style="flex:1"><div class="mh-title" id="mTitle"></div><div class="mh-sub" id="mSub"></div><div class="mh-meta" id="mMeta"></div></div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
   </div>
+  <div class="modal-body" id="mBody"></div>
 </div>
 
-<!-- Home Section -->
+<main>
 
-<section id="home">
-     <div class="container">
-          <div class="row">
-
-               <div class="col-md-12 col-sm-12">
-                  <h3 class = "home-title"> portfolio </h3>
-                    <!-- <h2>I like to create &amp; design things.</h2> -->
-                    <hr>
-                    <!-- <h3>interiors</h3> -->
-               </div>
-
-          </div>
-     </div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-kicker"><span class="live-dot"></span> UC San Diego · Vascular Neurology &amp; NIH StrokeNet Fellow</div>
+  <h1 class="hero-name">Marissa D'Souza, M.D.</h1>
+  <p class="hero-thesis">Vascular neurology and NIH StrokeNet fellow at UC San Diego. I combine stroke research, clinical informatics, and human-centered design to build healthcare systems that work better in real clinical practice.</p>
+  <div class="hero-btns">
+    <a href="#" class="btn btn-primary">Download CV ↓</a>
+    <a href="#stroke" class="btn btn-secondary">Projects</a>
+    <a href="#publications" class="btn btn-secondary">Publications</a>
+    <a href="#contact" class="btn btn-secondary">Contact</a>
+  </div>
 </section>
 
-<!-- Portfolio Section -->
-
-<section id="portfolio">
-     <div class="container">
-          <!-- Row 1 -->
-          <div class="row">
-         <!-- Brain doodle -->
-         <div class="col-md-4 col-sm-6">
-          <a href="images/Portfolio/COW_full.jpg" target="_blank" download>
-               <div class="portfolio-thumb">
-                    <img src="images/Portfolio/COW_thumb.png" class="img-responsive" alt="Circle of Willis Subway Map preview" fetchpriority="high" decoding="async">
-                         <div class="portfolio-overlay">
-                              <div class="portfolio-item">
-                                   <h3>Circle of Willis Subway Map</h3>
-                                   <small>Graphic</small>
-                              </div>
-                         </div>
-               </div>
-          </a>
-     </div>
-            <!--Diplopia Calculator -->
-            <div class="col-md-4 col-sm-6">
-               <a href="http://marissadsouza.com/diplopia-calculator/" target="_blank">
-                    <div class="portfolio-thumb">
-                         <img src="images/Diplopia.jpg" class="img-responsive" alt="Diplopia Calculator preview" fetchpriority="high" decoding="async">
-                              <div class="portfolio-overlay">
-                                   <div class="portfolio-item">
-                                        <h3>Diplopia Calculator</h3>
-                                        <small>Project (In-Process)</small>
-                                   </div>
-                              </div>
-                    </div>
-               </a>
-          </div>             
-            <!--COVID Website -->
-             <div class="col-md-4 col-sm-6">
-                  <a href="https://sites.google.com/view/musmcovid19/home" target="_blank">
-                       <div class="portfolio-thumb">
-                            <img src="images/COVID-Web2.jpg" class="img-responsive" alt="Savannah COVID-19 Resources website preview" loading="lazy" decoding="async">
-                                 <div class="portfolio-overlay">
-                                      <div class="portfolio-item">
-                                           <h3>Savannah COVID-19 Resources</h3>
-                                           <small>Website</small>
-                                      </div>
-                                 </div>
-                       </div>
-                  </a>
-             </div>
-
-
-          </div>
-          <!-- Row 2 -->
-          <div class="row">
-            <!--Remote -->
-            <div class="col-md-4 col-sm-6">
-               <a href="remote.html" target="_blank">
-                    <div class="portfolio-thumb">
-                         <img src="images/Portfolio/remote.jpg" class="img-responsive" alt="Samsung Remote project preview" loading="lazy" decoding="async">
-                              <div class="portfolio-overlay">
-                                   <div class="portfolio-item">
-                                        <h3>Samsung Remote</h3>
-                                        <small>3D Model</small>
-                                   </div>
-                              </div>
-                    </div>
-               </a>
-          </div>
-              <!--Breathe -->
-              <div class="col-md-4 col-sm-6">
-               <a href="https://a2n2eb.axshare.com/breathing2.html" target="_blank">
-                    <div class="portfolio-thumb">
-                         <img src="images/Portfolio/uni.jpg" class="img-responsive" alt="Uni Meditation app preview" loading="lazy" decoding="async">
-                              <div class="portfolio-overlay">
-                                   <div class="portfolio-item">
-                                        <h3>Uni Meditation</h3>
-                                        <small>Android App Prototype</small>
-                                   </div>
-                              </div>
-                    </div>
-               </a>
-          </div>
-
-
-         <!-- Brain doodle -->
-         <div class="col-md-4 col-sm-6">
-              <a href="images/Portfolio/brain-full.jpg" target="_blank" download>
-                   <div class="portfolio-thumb">
-                        <img src="images/Portfolio/brain.jpg" class="img-responsive" alt="We're All Human doodle preview" loading="lazy" decoding="async">
-                             <div class="portfolio-overlay">
-                                  <div class="portfolio-item">
-                                       <h3>We're All Human</h3>
-                                       <small>Doodle</small>
-                                  </div>
-                             </div>
-                   </div>
-              </a>
-         </div>
-
-          </div>
-          <!-- Row 3 -->
-          <div class="row">
-               <!-- Cat -->
-               <div class="col-md-4 col-sm-6">
-                    <a href="CatsHouse.html" target="_blank">
-                         <div class="portfolio-thumb">
-                              <img src="images/Portfolio/CatsHouse/Cats-House-Thumb.jpg" class="img-responsive" alt="Cat's House interior design preview" loading="lazy" decoding="async">
-                                   <div class="portfolio-overlay">
-                                        <div class="portfolio-item">
-                                             <h3>Cat's House</h3>
-                                             <small>Interior Design</small>
-                                        </div>
-                                   </div>
-                         </div>
-                    </a>
-               </div>
-
-                <!--When I Grow Up -->
-                 <div class="col-md-4 col-sm-6">
-                      <a href="https://knlpfz.axshare.com/ipad_body.html" target="_blank">
-                           <div class="portfolio-thumb">
-                                <img src="images/Portfolio/growUp.jpg" class="img-responsive" alt="When I Grow Up app preview" loading="lazy" decoding="async">
-                                     <div class="portfolio-overlay">
-                                          <div class="portfolio-item">
-                                               <h3>When I Grow Up</h3>
-                                               <small>iOS App</small>
-                                          </div>
-                                     </div>
-                           </div>
-                      </a>
-                 </div>
-
-
-
-          </div>
-          <!-- Row 4 -->
-          <div class="row">
-               <!-- Penthouse -->
-               <div class="col-md-4 col-sm-6">
-                    <a href="penthouse.html" target="_blank">
-                         <div class="portfolio-thumb">
-                              <img src="images/Portfolio/Penthouse-LivingRoom/Penthouse-Thumb.jpg" class="img-responsive" alt="Penthouse Living Room preview" loading="lazy" decoding="async">
-                                   <div class="portfolio-overlay">
-                                        <div class="portfolio-item">
-                                             <h3>Penthouse Living Room</h3>
-                                             <small>Interior Design</small>
-                                        </div>
-                                   </div>
-                         </div>
-                    </a>
-               </div>
-                <!-- Lung -->
-                <div class="col-md-4 col-sm-6">
-                    <a href="images/lung.jpg" target="_blank" download>
-                         <div class="portfolio-thumb">
-                              <img src="images/lung-c.jpg" class="img-responsive" alt="The Lung doodle preview" loading="lazy" decoding="async">
-                                   <div class="portfolio-overlay">
-                                        <div class="portfolio-item">
-                                             <h3>The Lung</h3>
-                                             <small>Doodle</small>
-                                        </div>
-                                   </div>
-                         </div>
-                    </a>
-               </div>
-          </div>  
-           <!--Row 5  -->
-          <div class="row">
-                <!-- Cody -->
-                 <div class="col-md-4 col-sm-6">
-                      <a href="images/cody.jpg" target="_blank" download>
-                           <div class="portfolio-thumb">
-                                <img src="images/cody-c.jpg" class="img-responsive" alt="Cody illustration preview" loading="lazy" decoding="async">
-                                     <div class="portfolio-overlay">
-                                          <div class="portfolio-item">
-                                               <h3>Cody!</h3>
-                                               <small>Graphic Art</small>
-                                          </div>
-                                     </div>
-                           </div>
-                      </a>
-                 </div>
-          </div>
-                                        
+<!-- EDUCATION -->
+<section id="education">
+  <p class="section-label">Education</p>
+  <div class="card">
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-date">2025–Now</div><div><div class="tl-role">Vascular Neurology Fellowship &amp; NIH StrokeNet Fellow</div><div class="tl-org">University of California, San Diego</div></div></div>
+      <div class="tl-item"><div class="tl-date">2022–2025</div><div><div class="tl-role">Residency, Neurology</div><div class="tl-org">University of Michigan</div></div></div>
+      <div class="tl-item"><div class="tl-date">2021–2022</div><div><div class="tl-role">Internship, Internal Medicine</div><div class="tl-org">University of Michigan</div></div></div>
+      <div class="tl-item"><div class="tl-date">2017–2021</div><div><div class="tl-role">Doctor of Medicine (M.D.)</div><div class="tl-org">Mercer University School of Medicine</div></div></div>
+      <div class="tl-item"><div class="tl-date">2013–2017</div><div><div class="tl-role">B.S. Computer Science, Human-Computer Interaction Track — magna cum laude</div><div class="tl-org">Georgia Institute of Technology · Certificate in Entrepreneurship</div></div></div>
+    </div>
+  </div>
 </section>
 
-<!-- Footer Section -->
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">Technical Skills</p>
+  <div class="card">
+    <div class="skill-grid">
+      <div class="skill-row"><div class="skill-label">Clinical Informatics &amp; EHR</div><div class="skill-items">Epic · SmartPhrases · SmartLists · SmartLinks · SmartForms · Stroke Navigator · Diagnosis-Aware Notes · NoteWriter · flowsheet design</div></div>
+      <div class="skill-row"><div class="skill-label">Programming</div><div class="skill-items">Python · JavaScript · Java · HTML/CSS · MATLAB · R</div></div>
+      <div class="skill-row"><div class="skill-label">AI / Generative AI / Data</div><div class="skill-items">Generative AI · LLM-based clinical text extraction · NLP · logistic regression · machine learning</div></div>
+      <div class="skill-row"><div class="skill-label">Design</div><div class="skill-items">Figma · Canva · Adobe Creative Suite · HCI methods · user interviews · prototyping</div></div>
+      <div class="skill-row"><div class="skill-label">Quality &amp; Data</div><div class="skill-items">TJC stroke metrics · GWTG-Stroke · eCQM · SlicerDicer</div></div>
+      <div class="skill-row"><div class="skill-label">3D / Modeling</div><div class="skill-items">SolidWorks · Blender</div></div>
+    </div>
+  </div>
+</section>
 
-<footer>
-     <div class="container">
-          <div class="row">
+<!-- STROKE PROJECTS -->
+<section id="stroke">
+  <p class="section-label">Stroke Projects</p>
+  <p class="hint-text">Click any card to explore details →</p>
 
+  <div class="project-card parent" onclick="openModal('navigator')">
+    <div class="pc-parent-badge">5 subprojects</div>
+    <div class="pc-top"><div class="pc-title">UCSD Stroke Workflow Redesign</div><span class="pc-chevron">→</span></div>
+    <div class="pc-meta">UC San Diego Health · 2025–Present</div>
+    <div class="pc-desc">Ground-up redesign of UCSD stroke documentation, workflow, and quality data capture across Epic. Most significant stroke documentation change at UCSD in ~10 years.</div>
+    <div class="pc-subprojects">
+      <div class="pc-subprojects-label">Subprojects</div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Flowsheet Reduction</strong> — 71 rows → 23 neurology-required fields; auto-populate and reassign the rest</div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Stroke Navigator</strong> — single source of truth guiding acute stroke care end-to-end</div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>SmartPhrase / DAN Template</strong> — one-touch note generation eliminating triple-entry</div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Structured Data Elements</strong> — real-time quality capture, reviving dormant GWTG toolkit</div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Order Set Optimization</strong> — TNK, heparin nomogram, admission, discharge (STK measures)</div></div>
+    </div>
+    <div class="pc-hint">View subprojects →</div>
+  </div>
 
-               <!-- <div class="col-md-6 col-sm-6"> -->
-               <ul class="copyright">
-                follow me:
-               </ul>
-                 <ul class="social-icon">
-                   <li><a href="https://twitter.com/_MarissaDSouza_" class="fa fa-twitter"></a></li>
-                   <li><a href="https://pubmed.ncbi.nlm.nih.gov/?term=marissa+d%27souza" class="fa fa-institution"></a></li>
-                      <li><a href="https://github.com/mdsouza8/" class="fa fa-github"></a></li>
-                      <li><a href="https://www.linkedin.com/in/marissadsouza/" class="fa fa-linkedin"></a></li>
-                      <li><a href="https://vsco.co/marissadsouza/gallery" class="fa fa-camera-retro"></a></li>
-                 </ul>
-               <br>
-               
-               <i>designed via template from PixelBuddha.net</i>
+  <div class="project-card parent" onclick="openModal('fasted')">
+    <div class="pc-parent-badge">4 aims</div>
+    <div class="pc-top"><div class="pc-title">FAST-ED Performance Improvement in LVO Triage</div><span class="pc-chevron">→</span></div>
+    <div class="pc-meta">NIH StrokeNet · PI: Thomas Hemmen, M.D., Ph.D. · UC San Diego · 2025–Present</div>
+    <div class="pc-desc">Four-aim program improving prehospital large-vessel occlusion detection through FAST-ED validation, risk-factor augmentation, NLP-based EMS narrative analysis, and EMS education.</div>
+    <div class="pc-subprojects">
+      <div class="pc-subprojects-label">Aims</div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Aim 1</strong> — EMS-documented vs. neurologist-derived FAST-ED for LVO prediction</div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Aim 2</strong> — FAST-ED+ with clinical risk modifiers (AF, OAC, DM, HTN, prior stroke)</div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Aim 3</strong> — NLP/LLM classification of EMS narratives for stroke/LVO triage <span style="font-size:.7rem;color:var(--text-3);margin-left:3px;">planned</span></div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Aim 4</strong> — EMS education and field documentation improvement</div></div>
+    </div>
+    <div class="pc-hint">View full detail →</div>
+  </div>
 
+  <div class="project-card parent" onclick="openModal('stroketrials')">
+    <div class="pc-parent-badge">3 subprojects</div>
+    <div class="pc-top"><div class="pc-title">StrokeTrials — Bedside Trial Screening Tool</div><span class="pc-chevron">→</span></div>
+    <div class="pc-meta">UC San Diego · 2025–Present</div>
+    <div class="pc-desc">Mobile-first decision support for acute stroke trial eligibility and team communication — so clinicians can screen patients during a live stroke code without relying on memory or protocol binders.</div>
+    <div class="pc-subprojects">
+      <div class="pc-subprojects-label">Subprojects</div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Bedside Trial Screener</strong> — real-time eligibility logic for all active UCSD stroke trials</div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>Trial Reference Cards</strong> — standardized bedside cards for eligibility, outcomes, and key takeaways</div></div>
+      <div class="pc-sub-item"><div class="pc-sub-dot"></div><div><strong>DALVO / BEMI Message Generator</strong> — auto-generates standardized LVO team communication</div></div>
+    </div>
+    <div class="pc-hint">View subprojects →</div>
+  </div>
 
+  <div class="project-card" onclick="openModal('strokespeak')">
+    <div class="pc-top"><div class="pc-title">StrokeSpeak / TranslateMD</div><span class="pc-chevron">→</span></div>
+    <div class="pc-meta">Aikens Innovation Academy, U-Michigan · 2024–2025</div>
+    <div class="pc-desc">App designed to support stroke assessment and treatment conversations in patients with language barriers — covering EMS through ED handoff, treatment decision, and consent.</div>
+    <div class="pc-hint">View details →</div>
+  </div>
+</section>
 
+<!-- RESEARCH -->
+<section id="research">
+  <p class="section-label">Research Projects</p>
 
-          </div>
-     </div>
-</footer>
+  <div class="research-card">
+    <div class="rc-title">HoloStroke — Mixed-Reality Platform for Acute Stroke Care</div>
+    <div class="rc-meta">UC San Diego · PI: Brett C. Meyer, M.D. · 2025–Present</div>
+    <div class="rc-desc">Collaborative mixed-reality platform standardizing acute stroke assessment and trainee education through interactive, case-based simulation. Co-authored Holo-Stroke-ii inpatient immersion publication (<em>J Stroke Cerebrovasc Dis</em>, 2026).</div>
+  </div>
 
+  <div class="research-card">
+    <div class="rc-title">Cardiac Abnormalities in Stroke Prevention and Risk of Recurrence (CASPR Registry)</div>
+    <div class="rc-meta">Multi-center · PI: Christina Lineback, M.D. · 2023–Present</div>
+    <div class="rc-desc">Multicenter study exploring cardiac and cervical arterial abnormalities as embolic sources in 2,000–5,000 cryptogenic stroke patients.</div>
+  </div>
 
-<!-- SCRIPTS -->
+  <div class="research-card">
+    <div class="rc-title">Zambian Cohort of Healthy Aging and Dementia</div>
+    <div class="rc-meta">Lusaka, Zambia · PI: Melissa Elafros, M.D., Ph.D. · 2023–2025</div>
+    <div class="rc-desc">Population-based study of dementia and associated risk factors in Lusaka, Zambia. Rotated at University Teaching Hospital under Deanna Saylor, M.D.; performed cognitive evaluations in a Zambian community clinic.</div>
+  </div>
 
-<script defer src="js/jquery.js"></script>
-<script defer src="js/bootstrap.min.js"></script>
-<script defer src="js/custom.js"></script>
+  <div class="research-card">
+    <div class="rc-title">Optimizing Coordinated Reset Within the Nucleus Accumbens to Attenuate Binge Drinking</div>
+    <div class="rc-meta">Stanford University · PI: Casey Halpern, M.D. · NREF Summer Research Fellowship · 2018</div>
+    <div class="rc-desc">Early translational neurotechnology project exploring coordinated reset deep brain stimulation as a potential treatment for binge drinking disorder, bridging neural signal processing, computational modeling, and clinical neurosurgery.</div>
+  </div>
+</section>
 
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <p class="section-label">Publications</p>
+  <div class="pub-block">
+    <button class="pub-btn" onclick="togP(this)">
+      <span class="pub-btn-label">Peer-Reviewed Publications</span>
+      <span class="pub-btn-right"><span class="pub-btn-count">14 — click to expand</span><span class="parr"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+    </button>
+    <div class="pub-drop"><div class="pub-drop-inner">
+      <div class="pub-entry">Siegler JE, <strong>D'Souza M</strong>, et al. Real-World Practice in Secondary Stroke Prevention following Embolic Stroke of Undetermined Source: Secondary Analysis of the CASPR Registry. <em>Neurol Clin Pract.</em> 2026. In press.</div>
+      <div class="pub-entry">Liu W, Shifflett B, McQuaid T, <strong>D'Souza M</strong>, et al. Holo-Stroke-ii: Stroke care through stroke hologram teleportation — inpatient immersion. <em>J Stroke Cerebrovasc Dis.</em> 2026 Jan;35(1):108524.</div>
+      <div class="pub-entry">Pasupuleti D, <strong>D'Souza M</strong>, Ferguson A, et al. 3D-Printed Oral Disintegrating Films of Brain-Targeted Acetyl Salicylic Acid Nanoparticles for Enhanced CNS Delivery in Ischemic Stroke. <em>Pharmaceutics.</em> 2025 Nov 30;17(12):1547.</div>
+      <div class="pub-entry">Smith MM, Brorson JR, et al. (incl. <strong>D'Souza M</strong>). Intracranial Occlusion in Cryptogenic Stroke Is Not Predictive of Recurrent Ischemic Stroke: A Propensity-Score Matched Analysis of the CASPR Study. <em>J Am Heart Assoc.</em> 2025. PMID: 40996035.</div>
+      <div class="pub-entry">Siegler JE, Goicoechea EB, et al. (incl. <strong>D'Souza M</strong>). Outcomes of Patients With Embolic Stroke of Undetermined Source Treated With Antiplatelet Agents or Anticoagulation. <em>Neurology.</em> 2025 Aug 12;105(3):e213876. PMID: 40609061.</div>
+      <div class="pub-entry">Gendreau JL, Kim LH, Prins PN, <strong>D'Souza M</strong>, et al. Outcomes After Cervical Disc Arthroplasty Versus Stand-Alone ACDF: A Meta-Analysis. <em>Global Spine J.</em> 2020 Dec;10(8):1046–1056. PMID: 32875831.</div>
+      <div class="pub-entry">Delaney SL, Gendreau JL, <strong>D'Souza M</strong>, Feng AY, Ho AL. Optogenetic Modulation for the Treatment of Traumatic Brain Injury. <em>Stem Cells Dev.</em> 2020 Feb 15;29(4):187–197. PMID: 31559914.</div>
+      <div class="pub-entry"><strong>D'Souza M</strong>, Chen KS, Rosenberg J, Elias WJ, et al. Impact of skull density ratio on efficacy and safety of MR-guided focused ultrasound treatment of essential tremor. <em>J Neurosurg.</em> 2019;132(5):1392–1397. PMID: 31026836.</div>
+      <div class="pub-entry">Nguyen L, Bowlds S, Juan D, et al. (incl. <strong>D'Souza M</strong>). Predictors of Pneumothorax (POP) Score. <em>Am Surg.</em> 2019 Sep 1;85(9):e470–e472. PMID: 31638542.</div>
+      <div class="pub-entry"><strong>D'Souza M</strong>, Gendreau J, Feng A, Kim LH, Ho AL, Veeravagu A. Robotic-Assisted Spine Surgery: History, Efficacy, Cost, And Future Trends. <em>Robot Surg.</em> 2019;6:9–23. PMID: 31807602.</div>
+      <div class="pub-entry"><strong>D'Souza M</strong>, Macdonald NA, Gendreau JL, et al. Graft Materials and Biologics for Spinal Interbody Fusion. <em>Biomedicines.</em> 2019 Sep 26;7(4):75. PMID: 31561556.</div>
+      <div class="pub-entry">Kim LH, <strong>D'Souza M</strong>, Ho AL, et al. Anterior Techniques in Managing Cervical Disc Disease. <em>Cureus.</em> 2018 Aug 14;10(8):e3146. PMID: 30410821.</div>
+      <div class="pub-entry">Iyer A, <strong>D'Souza M</strong>, Steinberg GK. Embolization before stereotactic radiosurgery for the treatment of brain arteriovenous malformations. <em>J Neurosurg Sci.</em> 2018 Aug;62(4):514–518. PMID: 29582980.</div>
+      <div class="pub-entry">Kolluru LP, Rizvi SA, <strong>D'Souza M</strong>, D'Souza MJ. Formulation development of albumin based theragnostic nanoparticles as a potential delivery system for tumor targeting. <em>J Drug Target.</em> 2013 Jan;21(1):77–86. PMID: 23036042.</div>
+    </div></div>
+  </div>
+  <div class="pub-block" style="margin-top:7px;">
+    <button class="pub-btn" onclick="togP(this)"><span class="pub-btn-label">Manuscripts Under Review</span><span class="pub-btn-right"><span class="pub-btn-count">3 submissions</span><span class="parr"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></button>
+    <div class="pub-drop"><div class="pub-drop-inner">
+      <div class="pub-entry">Ravichandran S, Phan CN, <strong>D'Souza M</strong>, et al. Unilateral Cerebral Microbleeds: A Narrative Review and Proposed Diagnostic Framework. Submitted to <em>Neurology: Clinical Practice</em> (CPJ-2026-300263; passed initial QC, 2026).</div>
+      <div class="pub-entry">Jazayeri SB, Phan C, Pirahanchi Y, et al. (incl. <strong>D'Souza M</strong>). Association of Early Transcranial Doppler Indices with Outcomes after Successful Endovascular Thrombectomy. Submitted to <em>Stroke</em> (STROKE/2026/055645, 2026).</div>
+      <div class="pub-entry">Additional submissions: <em>Clinical and Applied Thrombosis Hemostasis</em> (CATH-26-04-0159); <em>Journal of Neuroimaging</em>; <em>Journal of Clinical Neuroscience</em>; <em>JSCVD</em> Holo-PACS (2025).</div>
+    </div></div>
+  </div>
+  <div class="pub-block" style="margin-top:7px;">
+    <button class="pub-btn" onclick="togP(this)"><span class="pub-btn-label">Published Abstracts</span><span class="pub-btn-right"><span class="pub-btn-count">1 abstract</span><span class="parr"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></button>
+    <div class="pub-drop"><div class="pub-drop-inner">
+      <div class="pub-entry">Aboul-Nour H, <strong>D'Souza M</strong>, et al. Abstract TP302: Single and combination antithrombotics for secondary prevention in ESUS: Secondary analysis of the CASPR Registry. <em>Stroke.</em> 2025;56(Suppl 1):TP302.</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- LECTURES -->
+<section id="lectures">
+  <p class="section-label">Invited Lectures &amp; Conference Presentations</p>
+  <div class="lecture-block">
+    <button class="lecture-toggle-btn" onclick="togLecture(this)">
+      <span class="lecture-toggle-label">Invited Lectures &amp; Fellowship Teaching</span>
+      <span class="pub-btn-right"><span class="lecture-toggle-count">12 lectures — click to expand</span><span class="parr"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+    </button>
+    <div class="lecture-drop">
+      <div class="lecture-drop-inner">
+        <div class="lecture-group-title">Invited Lectures</div>
+        <div class="lecture-row"><div><div class="lecture-title">"International Stroke Conference Update"</div><div class="lecture-venue">San Diego County Stroke Consortium</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"Improving FAST-ED Performance at UCSD"</div><div class="lecture-venue">NIH StrokeNet Committee</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"RCVS, PRES, and Inflammatory Vasculopathies"</div><div class="lecture-venue">UCSD Vascular Neurology Fellow Board Series</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"Improving FAST-ED Performance at UCSD"</div><div class="lecture-venue">San Diego County Stroke Consortium</div></div><div class="lecture-year">2025</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"CAA-Related Inflammation (CAA-ri)"</div><div class="lecture-venue">UCSD Neurovascular Conference</div></div><div class="lecture-year">2025</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"Beyond Free Will: Neuroscience &amp; the Law"</div><div class="lecture-venue">University of Michigan Neurology Grand Rounds</div></div><div class="lecture-year">2025</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"Neuroradiology Conference" — Conference Leader</div><div class="lecture-venue">U-Michigan Neurology Residency</div></div><div class="lecture-year">2023</div></div>
+        <div class="lecture-group-title" style="margin-top:10px;">Fellowship Didactics</div>
+        <div class="lecture-row"><div><div class="lecture-title">"Advanced Neurovascular Board Review"</div><div class="lecture-venue">UCSD Vascular Neurology Fellowship</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"Endovascular Thrombectomy in Acute Ischemic Stroke"</div><div class="lecture-venue">UCSD Fellowship</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"Tenecteplase (TNK) for Ischemic Stroke Beyond the 4.5-Hour Window"</div><div class="lecture-venue">UCSD Fellowship</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">"Non-Atherosclerotic Intracranial Arteriopathies"</div><div class="lecture-venue">UCSD Fellowship</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row" style="border-bottom:none;"><div><div class="lecture-title">"CTP Core Detection vs MRI-Confirmed Infarction"</div><div class="lecture-venue">UCSD Fellowship</div></div><div class="lecture-year">2026</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="lecture-block">
+    <button class="lecture-toggle-btn" onclick="togLecture(this)">
+      <span class="lecture-toggle-label">Conference Presentations</span>
+      <span class="pub-btn-right"><span class="lecture-toggle-count">9 presentations — click to expand</span><span class="parr"><svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+    </button>
+    <div class="lecture-drop">
+      <div class="lecture-drop-inner">
+        <div class="lecture-row"><div><div class="lecture-title">FAST-ED in LVO Triage: The "Cortical Blind Spot" and How Risk Factors Can Help</div><div class="lecture-venue">D'Souza M, Geib T, Phan C, et al. Poster, ISC 2026</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">Prognostic value of early TCD and MAP after successful EVT in LVO stroke</div><div class="lecture-venue">Phan C, Shifflett B, D'Souza M, et al. ePoster, ISC 2026</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">GULP: Guiding Understanding of Dysphagia and Rehabilitation Planning in acute stroke</div><div class="lecture-venue">Hu T, Meyer DM, D'Souza M, et al. ePoster, ISC 2026</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">White matter disease and recurrent stroke in ESUS: propensity-weighted analysis from CASPR</div><div class="lecture-venue">Khasiyev F, D'Souza M, et al. ePoster, ISC 2026</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">CYP2C19 variability, ADP binding, and clopidogrel efficacy in acute ischemic stroke</div><div class="lecture-venue">Phan C, D'Souza M, et al. ePoster, ISC 2026</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">Comprehensive evaluation in ESUS and stroke recurrence: secondary analysis of CASPR</div><div class="lecture-venue">Khan F, D'Souza M, et al. ePoster, ISC 2026</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">Resource optimization and door-to-puncture improvement through FAST-ED–based team activation</div><div class="lecture-venue">Geib T, Meyer BC, D'Souza M, et al. Accepted, AAN 2026</div></div><div class="lecture-year">2026</div></div>
+        <div class="lecture-row"><div><div class="lecture-title">Impact of skull density ratio on efficacy and safety of MRgFUS for essential tremor</div><div class="lecture-venue">D'Souza M. Oral, AANS Annual Meeting 2019</div></div><div class="lecture-year">2019</div></div>
+        <div class="lecture-row" style="border-bottom:none;"><div><div class="lecture-title">Optimizing coordinated reset within the nucleus accumbens to attenuate binge drinking</div><div class="lecture-venue">D'Souza M. Oral, Medical Association of Georgia 2018</div></div><div class="lecture-year">2018</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRIALS -->
+<section id="trials">
+  <p class="section-label">Clinical Trials</p>
+  <div class="trials-card">
+    <div class="trials-role">UCSD Site Investigator · 2025–Present</div>
+    <div class="trials-pills">
+      <div class="trial-pill">STEP</div><div class="trial-pill">FASTEST</div><div class="trial-pill">DISCOVERY</div>
+      <div class="trial-pill">SLEEPSMART</div><div class="trial-pill">TELEREHAB-2</div><div class="trial-pill">SISTER</div>
+    </div>
+    <div class="trials-desc">Screening, enrollment, and protocol-adherent follow-up for eligible acute stroke patients across active UCSD-site trials.</div>
+  </div>
+</section>
+
+<!-- OTHER TECH -->
+<section id="othertech">
+  <p class="section-label">Other Technical Work</p>
+  <div class="card">
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-date">2022–Now</div><div><div class="tl-role">Neurology Exam Documenter</div><div class="tl-org">Web tool generating structured neurologic exam notes from guided input · marissadsouza.com/neuro-exam-documenter</div></div></div>
+      <div class="tl-item"><div class="tl-date">2022–Now</div><div><div class="tl-role">Diplopia Calculator</div><div class="tl-org">Interactive localization tool for ocular motility findings · marissadsouza.com/diplopia-calculator</div></div></div>
+      <div class="tl-item"><div class="tl-date">2022–Now</div><div><div class="tl-role">neurplexd</div><div class="tl-org">Mobile-first neurology residency protocol reference · neurplexd.com</div></div></div>
+      <div class="tl-item"><div class="tl-date">2017</div><div><div class="tl-role">VADERS — Value Analysis Data Extraction Research System</div><div class="tl-org">Machine-learning system to assess quality of orthopedic fracture reduction · Georgia Tech</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP -->
+<section id="leadership">
+  <p class="section-label">Leadership &amp; Committees</p>
+  <div class="card">
+    <div class="collap"><div class="collap-hdr" onclick="togC(this)"><div><div class="collap-hdr-title">MiChart Clinical Advisory Committee</div><div class="collap-hdr-meta">HOA-Appointed Representative · Michigan Medicine · 2024–2026</div></div><svg class="collap-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="collap-body"><div class="collap-body-inner">Hospital-wide Epic governance committee — advised on clinical workflow, documentation, and EHR usability changes affecting house staff across Michigan Medicine.</div></div></div>
+    <div class="collap"><div class="collap-hdr" onclick="togC(this)"><div><div class="collap-hdr-title">House Officer Quality and Safety Council</div><div class="collap-hdr-meta">HOA-Appointed Representative · Michigan Medicine · 2023–2025</div></div><svg class="collap-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="collap-body"><div class="collap-body-inner">Multidisciplinary hospital-wide quality and safety committee — reviewed patient safety events including EMR-related issues and contributed to implementable solutions.</div></div></div>
+    <div class="collap"><div class="collap-hdr" onclick="togC(this)"><div><div class="collap-hdr-title">Technology Chair, UM Neurology Residency Program</div><div class="collap-hdr-meta">Resident-Elected · University of Michigan · 2023–2025</div></div><svg class="collap-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="collap-body"><div class="collap-body-inner">Oversaw program technology infrastructure, digital workflow tools, and onboarding of new educational software for housestaff.</div></div></div>
+    <div class="collap"><div class="collap-hdr" onclick="togC(this)"><div><div class="collap-hdr-title">Stroke Mortality Task Force</div><div class="collap-hdr-meta">Committee Member · UM Department of Neurology · 2023–2024</div></div><svg class="collap-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="collap-body"><div class="collap-body-inner">Departmental task force reviewing stroke mortality cases and identifying documentation, severity-capture, and process opportunities tied to observed-to-expected outcomes.</div></div></div>
+    <div class="collap"><div class="collap-hdr" onclick="togC(this)"><div><div class="collap-hdr-title">LCME Steering &amp; Independent Student Analysis Committee</div><div class="collap-hdr-meta">Chair / Student Body–Appointed · MUSM · 2019–2021</div></div><svg class="collap-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="collap-body"><div class="collap-body-inner">Led student-facing accreditation work including survey design, data analysis, and report development for MUSM LCME accreditation cycle.</div></div></div>
+    <div class="collap"><div class="collap-hdr" onclick="togC(this)"><div><div class="collap-hdr-title">Student Body President</div><div class="collap-hdr-meta">Mercer University School of Medicine · 2019–2020</div></div><svg class="collap-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="collap-body"><div class="collap-body-inner">Led student advocacy and systems improvement work across the medical school student body.</div></div></div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section id="awards">
+  <p class="section-label">Honors, Awards &amp; Grants</p>
+  <div class="card">
+    <div class="award-row"><div class="award-yr">2025–26</div><div><div class="award-name">NIH StrokeNet Fellow</div><div class="award-inst">UC San Diego · PI: Thomas Hemmen, M.D., Ph.D.</div></div></div>
+    <div class="award-row"><div class="award-yr">2025</div><div><div class="award-name">GME Off-Site Rotation Travel Grant</div><div class="award-inst">University of Michigan · Global neurology elective, Lusaka, Zambia</div></div></div>
+    <div class="award-row"><div class="award-yr">2021</div><div><div class="award-name">Award for Excellence in Service and Advocacy</div><div class="award-inst">Mercer University School of Medicine, Class of 2021</div></div></div>
+    <div class="award-row"><div class="award-yr">2021</div><div><div class="award-name">Award for Student Excellence in Research</div><div class="award-inst">Mercer University School of Medicine</div></div></div>
+    <div class="award-row"><div class="award-yr">2020</div><div><div class="award-name">Alpha Omega Alpha Honor Medical Society</div><div class="award-inst">Medical student honor society</div></div></div>
+    <div class="award-row"><div class="award-yr">2019</div><div><div class="award-name">Jocelyn A. Rankin Excellence in Library Research — Honorable Mention ×2</div><div class="award-inst">MUSM · Robotic Spine Surgery; Cervical Disc Arthroplasty Meta-Analysis</div></div></div>
+    <div class="award-row"><div class="award-yr">2018</div><div><div class="award-name">NREF Summer Research Fellowship</div><div class="award-inst">Stanford University School of Medicine · PI: Casey Halpern, M.D.</div></div></div>
+  </div>
+</section>
+
+<!-- AFFILIATIONS -->
+<section id="certs">
+  <p class="section-label">Certifications, Affiliations &amp; Memberships</p>
+  <div class="cert-grid">
+    <div class="cert-card"><div class="cert-card-title">Certifications &amp; Licensure</div><ul class="cert-list"><li>California Medical License — 2025–Present</li><li>California Controlled Substances License — 2025</li><li>NIHSS Certification — 2025</li><li>MoCA Certification — 2025</li><li>ACLS — 2021–Present</li><li>Michigan Medical License — 2021–2025</li></ul></div>
+    <div class="cert-card"><div class="cert-card-title">Professional Memberships</div><ul class="cert-list"><li>American Heart Association — Stroke Council</li><li>Alpha Omega Alpha Honor Medical Society</li><li>American Academy of Neurology</li><li>American Medical Association</li><li>Phi Delta Epsilon Medical Society</li></ul></div>
+    <div class="cert-card" style="grid-column:1/-1;"><div class="cert-card-title">Hospital Affiliations — Jul 2025–Present</div><ul class="cert-list" style="display:grid;grid-template-columns:1fr 1fr;gap:5px 24px;"><li>UCSD Medical Center – Hillcrest</li><li>UCSD Health La Jolla / Jacobs Medical Center / Sulpizio CV Center</li><li>UCSD East Campus Medical Center</li><li>VA San Diego Healthcare System</li><li>El Centro Regional Medical Center</li><li>Inland Valley Medical Center</li><li>Rancho Springs Regional Medical Center</li></ul></div>
+  </div>
+</section>
+
+<!-- VOLUNTEER -->
+<section id="volunteer">
+  <p class="section-label">Teaching &amp; Volunteer Service</p>
+  <div class="card" style="margin-bottom:10px;">
+    <div style="font-size:.67rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px;">Small Group &amp; Bedside Teaching</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-date">2023–2025</div><div><div class="tl-role">Small Group Leader, UM Medical Student Localization Rounds</div></div></div>
+      <div class="tl-item"><div class="tl-date">2023–2025</div><div><div class="tl-role">UM Neurology Resident Journal Club</div></div></div>
+      <div class="tl-item"><div class="tl-date">2021</div><div><div class="tl-role">Small Group Leader, MUSM Clinical Neurosciences</div></div></div>
+      <div class="tl-item"><div class="tl-date">2020–2021</div><div><div class="tl-role">Peer Tutor, MUSM Pre-Clinical Peer Instructors</div></div></div>
+      <div class="tl-item"><div class="tl-date">2020–2021</div><div><div class="tl-role">Neuroscience Block Review Sessions, MUSM</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="font-size:.67rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px;">Volunteer &amp; Community Outreach</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-date">2017–2020</div><div><div class="tl-role">Special Pops Tennis &amp; Pickleball Coach</div><div class="tl-org">Coached clinics for individuals with intellectual disabilities</div></div></div>
+      <div class="tl-item"><div class="tl-date">2020</div><div><div class="tl-role">COVID-19 Response Team Founder, Georgia</div><div class="tl-org">Founded statewide initiative: grocery delivery, contact tracing, blood drives, PPE fundraisers</div></div></div>
+      <div class="tl-item"><div class="tl-date">2020</div><div><div class="tl-role">GA Dept. of Public Health COVID-19 Volunteer &amp; Contact Tracer</div></div></div>
+      <div class="tl-item"><div class="tl-date">2018–2019</div><div><div class="tl-role">Rock n' Roll Savannah Half Marathon Fundraiser &amp; Medical Volunteer</div><div class="tl-org">Fundraised $660 for St. Jude Children's Research Hospital</div></div></div>
+      <div class="tl-item"><div class="tl-date">2016–2018</div><div><div class="tl-role">Spinal Cord &amp; Brain Injury Rehab Volunteer &amp; Fitness Coach</div></div></div>
+      <div class="tl-item"><div class="tl-date">2017</div><div><div class="tl-role">Missionaries of the Poor of Manila Volunteer</div><div class="tl-org">Manila, Philippines</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-card">
+    <div class="contact-h">Get in touch</div>
+    <p class="contact-sub">Interested in collaborating on clinical informatics, stroke systems, digital health, or healthcare innovation?</p>
+    <div class="contact-links">
+      <a href="mailto:marissadsouza2021@gmail.com" class="contact-link">✉ marissadsouza2021@gmail.com</a>
+      <a href="#" class="contact-link">↓ Download CV</a>
+    </div>
+    <p style="font-size:.73rem;color:var(--text-3);margin-top:14px;">San Diego, CA</p>
+  </div>
+</section>
+
+</main>
+<footer>Marissa D'Souza, M.D. · Vascular Neurology &amp; NIH StrokeNet Fellow · UC San Diego</footer>
+
+<script>
+const MODALS = {
+  navigator: {
+    title: "UCSD Stroke Workflow Redesign",
+    sub: "Umbrella program redesigning acute stroke documentation, workflow, and quality data capture across Epic",
+    meta: "UC San Diego Health · 2025–Present",
+    narrative: "UCSD's stroke documentation is fragmented across notes, flowsheets, imaging, MAR, nursing documentation, and downstream reporting pipelines. Residents often re-enter data that already exists in Epic. Abstractors manually hunt across chart locations for quality metrics. This is the <strong>most significant stroke documentation change at UCSD in ~10 years</strong> — a ground-up redesign across five linked subprojects.",
+    subprojects: [
+      {
+        title: "1a. Flowsheet Reduction",
+        status: "s-active", sl: "Active",
+        bullets: [
+          "<strong>Problem:</strong> The stroke flowsheet had 71 rows. Most fields didn't require neurology input but still landed on the provider, causing skipped fields, burnt-out residents, and missed TJC/GWTG/eCQM metrics.",
+          "<strong>Fix:</strong> Rebuild the flowsheet around only fields that genuinely need neurology input; auto-populate or reassign everything else.",
+          "Reduced flowsheet from <strong>71 rows → 23</strong> neurology-required fields. Auto-populating from ADT/MAR/PACS/problem list; retiring unnecessary fields.",
+          "Built a <strong>master data dictionary</strong> mapping every Navigator field to Epic flowsheet Row IDs, target input source, and downstream pipelines (Clarity, eCQM/Metasolve, GWTG, internal SQL analytics).",
+          "Met with stakeholders across Epic build team, GWTG abstractors, eCQM/Metasolve abstractors, and Clarity/SQL analytics."
+        ]
+      },
+      {
+        title: "1b. Stroke Navigator",
+        status: "s-progress", sl: "In progress",
+        bullets: [
+          "<strong>Problem:</strong> UCSD has no Stroke Navigator. Current flowsheets are outdated and do not orient providers to time-critical decisions or quality-reporting fields.",
+          "<strong>Fix:</strong> Build a Stroke Navigator from scratch as a single source of truth that orients the provider to the active stroke workflow and surfaces mandatory TJC-relevant fields inline.",
+          "Benchmarking against UM, Stanford, and <strong>100+ Epic stroke templates</strong> from the Epic community library.",
+          "Aligning Navigator sections to the stroke care timeline: prehospital → ED → treatment → admission → discharge.",
+          "Building toward a model where most data auto-populates from existing EMR fields: ADT arrival time, imaging timestamps, MAR medication data."
+        ]
+      },
+      {
+        title: "1c. SmartPhrase / DAN Template Architecture",
+        status: "s-active", sl: "Active",
+        bullets: [
+          "<strong>Problem:</strong> Stroke documentation required triple-entry of the same information across HPI, ED timeline, and A&P. Notes were inconsistent across providers and scenarios.",
+          "<strong>Fix:</strong> Build a master note template that auto-assembles from a single flowsheet entry, parameterized by HPI scenario and treatment combination.",
+          "Designed master template using <strong>SmartList dropdowns</strong> based on scenario (stroke code, consult, transfer), treatment (EVT, IVT), and most likely diagnosis.",
+          "Authored <strong>4 HPI SmartPhrases</strong>, 4 treatment-combination A&P SmartPhrases covering the TNK × Neuro-IR matrix, and 5 diagnosis-specific A&P templates."
+        ]
+      },
+      {
+        title: "1d. Structured Data Elements",
+        status: "s-progress", sl: "In progress",
+        bullets: [
+          "<strong>Problem:</strong> Many stroke quality metrics are captured inconsistently in free text. An Epic GWTG abstraction toolkit has been dormant for 5+ years.",
+          "<strong>Fix:</strong> Convert key quality fields into structured data elements captured at the point of care; revive the dormant GWTG toolkit.",
+          "Embedding TJC stroke metrics into notes so quality gaps surface at the time of entry, not at chart close.",
+          "Designing <strong>pre/post QI study</strong> using SlicerDicer baseline and provider surveys."
+        ]
+      },
+      {
+        title: "1e. Order Set Optimization",
+        status: "s-progress", sl: "In progress",
+        bullets: [
+          "<strong>Problem:</strong> UCSD stroke order sets had redundant BPAs, unsafe defaults, and no clean linkage between TNK administration and post-TNK care. Heparin, admission, and discharge sets were not aligned with the stroke banner or STK measures.",
+          "<strong>TNK order set:</strong> dose automation approved by pharmacy (in progress); 3 confirmatory questions → 1 (pharmacy approved, pending); Lecanemab BPA in development; anticoagulation BPA being presented to CDSO.",
+          "<strong>Heparin nomogram:</strong> building a stroke-specific heparin order to reduce clinician mix-ups between risk-adjusted and high-intensity dosing.",
+          "<strong>Admission/inpatient order set:</strong> in progress; banner-linked bundle to keep admitted stroke patients tracked across services.",
+          "<strong>Discharge order set:</strong> tied to stroke banner; includes the 3 high-stakes STK measures regardless of admitting team — antithrombotic on discharge, statin on discharge, and anticoagulation for atrial fibrillation."
+        ]
+      }
+    ]
+  },
+
+  fasted: {
+    title: "FAST-ED Performance Improvement in LVO Triage",
+    sub: "Four-aim program improving prehospital LVO detection and EMS-to-ED handoff",
+    meta: "NIH StrokeNet Project · PI: Thomas Hemmen, M.D., Ph.D. · UC San Diego · 2025–Present",
+    narrative: "UCSD activates Neuro-IR and anesthesia when EMS-documented FAST-ED crosses defined thresholds — so the accuracy of that field score directly drives downstream resource use and routing. Over-scoring triggers costly activations for non-LVO patients; under-scoring sends true LVOs to the wrong center or fails to pre-activate the thrombectomy team. This <strong>four-aim program</strong> works from retrospective validation through prospective implementation, NLP-based narrative analysis, and EMS education.",
+    aims: [
+      { n:"Aim 1", t:"EMS-Documented vs. Neurologist-Derived FAST-ED", d:"Built retrospective EMS-arriving stroke-code cohort with <strong>&gt;70 patients</strong>, with full EMS narratives and hospital exams. ROC analysis of reconstructed FAST-ED (derived from NIHSS items) for LVO and AIS prediction — quantifying where field FAST-ED diverges from neurologist scoring. Manuscript drafted and presented at <strong>International Stroke Conference 2026</strong>.", s:"s-done", sl:"Published" },
+      { n:"Aim 2", t:"FAST-ED+ with Clinical Risk Modifiers", d:"Augmenting FAST-ED with EMS-obtainable history modifiers (<strong>AF, OAC, HTN, DM, prior stroke/TIA</strong>) to recover sensitivity where the exam misses. Developed and benchmarked logistic-regression risk-augmented FAST-ED models. Prospective validation in SD County EMS planned.", s:"s-active", sl:"Active" },
+      { n:"Aim 3", t:"NLP/LLM Classification of EMS Narratives", d:"Most of what EMS knows about a patient lives in unstructured post-call narrative. Evaluating LLMs to classify EMS narrative for stroke/LVO status and extract structured features (LKW, deficits, anticoagulation, baseline function, contraindications, timestamps) for triage and handoff — testing whether LLM parsing adds usable, clinician-verifiable signal beyond structured fields.", s:"s-planned", sl:"Planned" },
+      { n:"Aim 4", t:"EMS Education &amp; Field Documentation", d:"Built and delivered the <strong>UCSD Neurosciences Field Care Audit</strong> teaching deck to EMS providers. Covered BE-FAST → FAST-ED scoring, SD County Protocol S-144 workflow, motor vs. cortical sign documentation, LKN / anticoagulant documentation, prenotification scripts, and field teaching cases. Easy-to-digest reference resources planned.", s:"s-active", sl:"Active" }
+    ]
+  },
+
+  stroketrials: {
+    title: "StrokeTrials — Bedside Trial Screening Tool",
+    sub: "Mobile-first decision support for acute stroke trial eligibility and team communication",
+    meta: "UC San Diego · 2025–Present",
+    narrative: "During an acute stroke code, eligibility criteria for active UCSD trials live in protocol binders. Fellows and attendings either miss enrollments or waste time during treatment. <strong>StrokeTrials</strong> is a mobile-friendly app that walks through eligibility for all active UCSD stroke trials in real time, with shared patient context across pathways — no backend, no login, no patient data storage, offline-capable on shared clinical devices.",
+    subprojects: [
+      {
+        title: "3a. Bedside Trial Screener",
+        status: "s-active", sl: "Active",
+        bullets: [
+          "Covers <strong>SISTER, STEP LVO, STEP MeVO, TESTED, TELEREHAB-2, DISCOVERY</strong>.",
+          "Encodes screening logic across ischemic, hemorrhagic, in-hospital, and post-stroke pathways.",
+          "Adds treatment pathway checks for TNK, extended-window TNK, and EVT.",
+          "Goal: reduce missed enrollment opportunities during acute codes and standardize trial screening across the stroke team."
+        ]
+      },
+      {
+        title: "3b. Trial Reference Cards",
+        status: "s-progress", sl: "In progress",
+        bullets: [
+          "Stroke trials have heterogeneous designs — clinicians need a consistent way to look up trial details at the bedside.",
+          "Built <strong>OPTION</strong> (extended-window TNK) trial card with mobile-optimized responsive design.",
+          "Card sections: Eligibility · Trial Population &amp; Imaging · Outcomes · Safety · Key Takeaway.",
+          "Planned: <strong>WAKE-UP, DEFUSE-3, ANGEL-ASPECTS</strong> cards."
+        ]
+      },
+      {
+        title: "3c. DALVO / BEMI Message Generator",
+        status: "s-done", sl: "Built",
+        bullets: [
+          "Standardized Viz BlueChat communication for LVO activations (DALVO, BEMI) was defined in protocol but typed manually each time, with variable completeness.",
+          "Auto-generates <strong>DALVO and BEMI Viz BlueChat messages</strong> pre-filled with patient data from the screener.",
+          "Pulls patient data (NIHSS, LKW, vessel, perfusion) entered once into the screener — standardized, complete LVO team communication in one tap."
+        ]
+      }
+    ]
+  },
+
+  strokespeak: {
+    title: "StrokeSpeak / TranslateMD",
+    sub: "Multilingual Acute Stroke Communication App",
+    meta: "Aikens Innovation Academy, U-Michigan FFMI / Frankel CVC · 2024–2025",
+    narrative: "Language discordance in acute stroke is an <strong>equity and safety problem</strong> — interpreter delays affect history-taking, deficit description, treatment eligibility, and consent during time-critical decisions. StrokeSpeak addresses the highest-stakes communication moments across the full stroke pathway, from EMS dispatch through treatment decision and consent. Developed through the competitive <strong>Aikens Innovation Academy</strong> at Michigan.",
+    sections: [
+      { h: "What we built", b: [
+        "Mapped communication needs across the full EMS-to-treatment pathway for patients with limited English proficiency.",
+        "Built prototype screens covering <strong>dispatch, prehospital notification, ED handoff, imaging, treatment decision, and consent</strong>.",
+        "Focused on highest-stakes moments: stroke onset history, deficit description, anticoagulant documentation, and treatment decision-making."
+      ]},
+      { h: "Process", b: [
+        "Applied <strong>design-thinking methodology</strong>: stakeholder interviews, problem framing, iterative prototyping.",
+        "Presented market, regulatory, and implementation strategy to Aikens Innovation Academy faculty and judges.",
+        "Selected from competitive applicant pool for structured education, mentorship, and funding through <strong>U-Michigan FFMI / Frankel Cardiovascular Center</strong>."
+      ]}
+    ]
+  }
+};
+
+function openModal(id) {
+  const d = MODALS[id];
+  if (!d) return;
+  document.getElementById('mTitle').textContent = d.title;
+  document.getElementById('mSub').textContent = d.sub;
+  document.getElementById('mMeta').textContent = d.meta;
+
+  let html = `<p class="modal-narrative">${d.narrative}</p>`;
+
+  if (d.aims) {
+    html += `<div class="modal-section"><div class="modal-section-title">Research Aims</div>`;
+    d.aims.forEach(a => {
+      html += `<div class="aim-card"><div class="aim-header"><div><div class="aim-num">${a.n}</div><div class="aim-title">${a.t}</div></div><span class="status-pill ${a.s}">${a.sl}</span></div><div class="aim-desc">${a.d}</div></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (d.subprojects) {
+    html += `<div class="modal-section"><div class="modal-section-title">Subprojects</div>`;
+    d.subprojects.forEach(sp => {
+      html += `<div class="modal-subproject"><div class="modal-sp-header"><div class="modal-sp-title">${sp.title}</div><span class="status-pill ${sp.status}">${sp.sl}</span></div><ul class="modal-sp-bullets">`;
+      sp.bullets.forEach(b => { html += `<li>${b}</li>`; });
+      html += `</ul></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (d.sections) {
+    d.sections.forEach(s => {
+      html += `<div class="modal-section"><div class="modal-section-title">${s.h}</div><ul class="modal-bullets">`;
+      s.b.forEach(b => { html += `<li>${b}</li>`; });
+      html += `</ul></div>`;
+    });
+  }
+
+  document.getElementById('mBody').innerHTML = html;
+  document.getElementById('mBody').scrollTop = 0;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalDrawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('modalDrawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function togP(btn) { btn.classList.toggle('open'); btn.nextElementSibling.classList.toggle('open'); }
+function togLecture(btn) { btn.classList.toggle('open'); btn.nextElementSibling.classList.toggle('open'); }
+function togC(hdr) { hdr.nextElementSibling.classList.toggle('open'); hdr.querySelector('.collap-arrow').classList.toggle('open'); }
+</script>
 </body>
 </html>

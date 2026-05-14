@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marissa Desktop</title>
+<meta name="description" content="A simple macOS-inspired desktop homepage for Marissa D'Souza.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --text:#f8f8f6;
+  --shadow:0 18px 50px rgba(0,0,0,.2);
+  --glass:rgba(120,120,120,.23);
+  --glass-border:rgba(255,255,255,.2);
+  --mouse-x:50vw;
+  --mouse-y:50vh;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  overflow:hidden;
+  font-family:"Inter",sans-serif;
+  color:var(--text);
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.18)),
+    url("IMG_0177.jpeg") center center / cover no-repeat fixed;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,.04), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.1));
+  pointer-events:none;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,.12), transparent 22%);
+  pointer-events:none;
+  transition:opacity .2s ease;
+  opacity:.55;
+}
+
+.desktop{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+.icon{
+  position:absolute;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  width:120px;
+  text-align:center;
+  color:var(--text);
+  text-decoration:none;
+  text-shadow:0 2px 12px rgba(0,0,0,.28);
+  transition:transform .24s ease, opacity .24s ease, filter .24s ease;
+  animation:iconFloat 4.8s ease-in-out infinite;
+}
+
+.icon:hover{
+  transform:translateY(-6px) scale(1.04);
+  filter:brightness(1.05);
+}
+
+.icon-thumb{
+  width:88px;
+  height:88px;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(8px);
+}
+
+.icon-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.icon-label{
+  font-size:12px;
+  font-weight:500;
+  line-height:1.1;
+  letter-spacing:-.04em;
+}
+
+.icon-1{top:38%;left:50%;transform:translateX(-50%)}
+
+.dock-wrap{
+  position:fixed;
+  left:50%;
+  bottom:54px;
+  transform:translateX(-50%);
+  z-index:10;
+}
+
+.dock{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:13px 16px;
+  border-radius:26px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  box-shadow:0 20px 44px rgba(0,0,0,.2);
+  backdrop-filter:blur(22px) saturate(120%);
+  -webkit-backdrop-filter:blur(22px) saturate(120%);
+}
+
+.dock-divider{
+  width:1px;
+  height:42px;
+  background:rgba(255,255,255,.38);
+  opacity:.8;
+}
+
+.dock-item{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 10px 20px rgba(0,0,0,.14);
+  transition:transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s ease, filter .22s ease, background-color .22s ease;
+  background:rgba(255,255,255,.08);
+  transform-origin:center bottom;
+}
+
+.dock-item:hover{
+  transform:translateY(-6px) scale(1.08);
+  box-shadow:0 16px 28px rgba(0,0,0,.2);
+  filter:brightness(1.05);
+}
+
+.dock-item.press{
+  transform:translateY(-2px) scale(.96) !important;
+  filter:brightness(.98);
+}
+
+.dock-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.dock-text{
+  font-size:22px;
+  font-weight:600;
+  letter-spacing:-.04em;
+  color:#fff;
+  background:linear-gradient(180deg, #6cb4ff, #1d5fff);
+}
+
+.dock-text.resume{
+  background:linear-gradient(180deg, #fff4b8, #ffd852);
+  color:#3c3521;
+}
+
+.dock-text.travel{
+  background:linear-gradient(180deg, #dff6ff, #8bc8ff);
+  color:#15364d;
+}
+
+.dock-text.portfolio{
+  background:linear-gradient(180deg, #ffd9c8, #ff9f7a);
+  color:#4a1e10;
+}
+
+.dock-glyph{
+  position:relative;
+}
+
+.dock-glyph::before,
+.dock-glyph::after{
+  content:"";
+  position:absolute;
+}
+
+.dock-glyph.calculator{
+  background:linear-gradient(180deg, #eff6ff, #b5d2ff);
+}
+
+.dock-glyph.calculator::before{
+  width:26px;
+  height:32px;
+  border-radius:8px;
+  border:2px solid #204a87;
+  top:11px;
+  left:14px;
+  background:
+    linear-gradient(#204a87,#204a87) 50% 8px/14px 4px no-repeat,
+    linear-gradient(#204a87,#204a87) 50% 18px/14px 2px no-repeat,
+    radial-gradient(circle, #204a87 62%, transparent 64%) 10px 24px/8px 8px no-repeat,
+    radial-gradient(circle, #204a87 62%, transparent 64%) 18px 24px/8px 8px no-repeat,
+    radial-gradient(circle, #204a87 62%, transparent 64%) 10px 32px/8px 8px no-repeat,
+    radial-gradient(circle, #204a87 62%, transparent 64%) 18px 32px/8px 8px no-repeat;
+}
+
+.dock-glyph.travel{
+  background:linear-gradient(180deg, #dff6ff, #8bc8ff);
+}
+
+.dock-glyph.travel::before{
+  width:30px;
+  height:30px;
+  left:13px;
+  top:13px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 8px, #0f4c6e 8px, #0f4c6e 10px, transparent 10px),
+    linear-gradient(#0f4c6e,#0f4c6e) 50% 50%/2px 26px no-repeat,
+    linear-gradient(#0f4c6e,#0f4c6e) 50% 50%/26px 2px no-repeat;
+  opacity:.9;
+}
+
+.dock-glyph.portfolio{
+  background:linear-gradient(180deg, #ffd9c8, #ff9f7a);
+}
+
+.dock-glyph.portfolio::before{
+  width:30px;
+  height:22px;
+  left:13px;
+  top:18px;
+  border-radius:6px;
+  background:#5c2410;
+}
+
+.dock-glyph.portfolio::after{
+  width:14px;
+  height:4px;
+  left:21px;
+  top:14px;
+  border-radius:4px 4px 0 0;
+  background:#5c2410;
+}
+
+.dock-glyph.about{
+  background:linear-gradient(180deg, #e8e4ff, #b8a8ff);
+}
+
+.dock-glyph.about::before{
+  width:12px;
+  height:12px;
+  left:22px;
+  top:14px;
+  border-radius:50%;
+  background:#311b6b;
+}
+
+.dock-glyph.about::after{
+  width:24px;
+  height:18px;
+  left:16px;
+  top:28px;
+  border-radius:12px 12px 8px 8px;
+  background:#311b6b;
+}
+
+.dock-glyph.resume{
+  background:linear-gradient(180deg, #fff4b8, #ffd852);
+}
+
+.dock-glyph.resume::before{
+  width:24px;
+  height:30px;
+  left:16px;
+  top:13px;
+  border-radius:8px;
+  background:
+    linear-gradient(#5d4d10,#5d4d10) 50% 8px/14px 2px no-repeat,
+    linear-gradient(#5d4d10,#5d4d10) 50% 15px/14px 2px no-repeat,
+    linear-gradient(#5d4d10,#5d4d10) 50% 22px/10px 2px no-repeat,
+    #fffdf3;
+  box-shadow:inset 0 0 0 2px #5d4d10;
+}
+
+.dock-glyph.github{
+  background:linear-gradient(180deg, #1f2937, #111827);
+}
+
+.dock-glyph.github::before{
+  width:26px;
+  height:26px;
+  left:15px;
+  top:15px;
+  border-radius:50%;
+  background:#fff;
+  clip-path:polygon(50% 0%, 84% 18%, 100% 54%, 86% 100%, 62% 84%, 50% 94%, 38% 84%, 14% 100%, 0% 54%, 16% 18%);
+}
+
+@media (max-width: 1100px){
+  .icon{
+    width:112px;
+    gap:8px;
+  }
+
+  .icon-thumb{
+    width:78px;
+    height:78px;
+  }
+
+  .icon-label{
+    font-size:11px;
+  }
+
+  .icon-1{top:35%;left:50%}
+}
+
+@media (max-width: 720px){
+  body{
+    overflow:auto;
+  }
+
+  .desktop{
+    min-height:100svh;
+    padding:28px 16px 150px;
+  }
+
+  .icon{
+    width:108px;
+    gap:8px;
+    top:28%;
+    left:50%;
+    right:auto;
+    transform:translateX(-50%);
+  }
+
+  .icon-thumb{
+    width:76px;
+    max-width:none;
+    height:76px;
+  }
+
+  .icon-label{
+    font-size:11px;
+  }
+
+  .dock-wrap{
+    bottom:32px;
+    width:100%;
+    padding:0 10px;
+  }
+
+  .dock{
+    width:100%;
+    justify-content:center;
+    gap:10px;
+    padding:10px 12px;
+    overflow-x:auto;
+  }
+
+  .dock-item{
+    width:48px;
+    height:48px;
+    min-width:48px;
+  }
+
+  .dock-divider{
+    height:34px;
+  }
+}
+
+@keyframes iconFloat{
+  0%,100%{margin-top:0}
+  50%{margin-top:-6px}
+}
+
+</style>
+</head>
+<body>
+  <main class="desktop">
+    <a class="icon icon-1" href="http://marissadsouza.com/diplopia-calculator/" target="_blank" rel="noopener noreferrer">
+      <span class="icon-thumb">
+        <img src="images/Diplopia.jpg" alt="Diplopia Calculator">
+      </span>
+      <span class="icon-label">Diplopia Calculator</span>
+    </a>
+  </main>
+
+  <div class="dock-wrap">
+    <nav class="dock" aria-label="Desktop dock">
+      <a class="dock-item dock-glyph about" href="about.html" aria-label="About">
+      </a>
+      <a class="dock-item dock-glyph resume" href="files/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
+      </a>
+      <div class="dock-divider" aria-hidden="true"></div>
+      <a class="dock-item dock-glyph travel" href="travel.html" aria-label="Travel">
+      </a>
+      <a class="dock-item dock-glyph portfolio" href="index.html" aria-label="Portfolio">
+      </a>
+      <a class="dock-item dock-glyph github" href="https://github.com/mdsouza8/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      </a>
+    </nav>
+  </div>
+<script>
+  const root = document.documentElement;
+  const dock = document.querySelector(".dock");
+  const dockItems = [...document.querySelectorAll(".dock-item")];
+
+  function updatePointerGlow(event) {
+    root.style.setProperty("--mouse-x", `${event.clientX}px`);
+    root.style.setProperty("--mouse-y", `${event.clientY}px`);
+  }
+
+  function magnifyDock(event) {
+    if (window.innerWidth <= 720) return;
+    const pointerX = event.clientX;
+    dockItems.forEach((item) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(pointerX - itemCenter);
+      const influence = Math.max(0, 1 - distance / 150);
+      const scale = 1 + influence * 0.28;
+      const lift = influence * -10;
+      item.style.transform = `translateY(${lift}px) scale(${scale})`;
+    });
+  }
+
+  function resetDock() {
+    dockItems.forEach((item) => {
+      item.style.transform = "";
+    });
+  }
+
+  function pressDockItem(event) {
+    const item = event.currentTarget;
+    item.classList.add("press");
+  }
+
+  function releaseDockItem(event) {
+    event.currentTarget.classList.remove("press");
+  }
+
+  window.addEventListener("pointermove", (event) => {
+    updatePointerGlow(event);
+    magnifyDock(event);
+  });
+
+  dock.addEventListener("pointerleave", resetDock);
+
+  dockItems.forEach((item) => {
+    item.addEventListener("pointerdown", pressDockItem);
+    item.addEventListener("pointerup", releaseDockItem);
+    item.addEventListener("pointerleave", releaseDockItem);
+  });
+</script>
+</body>
+</html>
