@@ -1034,38 +1034,6 @@ body { background:#FFFFFF; color:#263238; }
     </div>
   </div>
 
-  <!-- (REQ) Hydrocephalus Assessment — SAH only -->
-  <div class="req-section" data-type="SAH">
-    <div class="req-header" onclick="toggleReq(this)">
-      <span class="req-chevron">▾</span>
-      <span class="req-label"><b>(REQ)</b> Hydrocephalus Assessment</span>
-    </div>
-    <div class="req-body">
-      <div class="frow-label" style="margin-bottom:6px;">Hydrocephalus requiring EVD? <span class="flo-tag tbd">FLO TBD</span></div>
-      <div class="toggle-group" id="tg-evd">
-        <button class="toggle-btn" onclick="selectToggle(this,'tg-evd'); sync()">No</button>
-        <button class="toggle-btn" onclick="selectToggle(this,'tg-evd'); sync()">Yes</button>
-        <span class="doc-icon"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- (REQ) Nimodipine Prescribed — SAH only -->
-  <div class="req-section" data-type="SAH">
-    <div class="req-header" onclick="toggleReq(this)">
-      <span class="req-chevron">▾</span>
-      <span class="req-label"><b>(REQ)</b> Nimodipine Prescribed</span>
-    </div>
-    <div class="req-body">
-      <div class="frow-label" style="margin-bottom:6px;">Nimodipine prescribed? <span class="flo-tag tbd">FLO TBD</span></div>
-      <div class="toggle-group" id="tg-nimodipine">
-        <button class="toggle-btn" onclick="selectToggle(this,'tg-nimodipine'); sync()">Yes</button>
-        <button class="toggle-btn" onclick="selectToggle(this,'tg-nimodipine'); sync()">No — Contraindicated</button>
-        <span class="doc-icon"></span>
-      </div>
-    </div>
-  </div>
-
 
   <!-- (REQ) ED CT Read -->
   <div class="req-section" data-type="Ischemic Non-Stroke">
@@ -1306,17 +1274,6 @@ body { background:#FFFFFF; color:#263238; }
     </div>
   </div>
 
-  <div class="embed-section" id="emb-nimodipine-admin" data-type="SAH">
-    <div class="embed-header">
-      <span class="embed-icon">▦</span>
-      <span class="embed-title">Nimodipine Administered</span>
-      <span class="embed-refresh">&#8635;</span>
-    </div>
-    <div class="embed-body">
-      <span class="embed-add">+ New Reading</span>
-      <div style="margin-top:6px; color:#8A9A9A;">No data found.</div>
-    </div>
-  </div>
 
   <div class="embed-section" id="emb-neuro-hp" data-type="all">
     <div class="embed-header">
