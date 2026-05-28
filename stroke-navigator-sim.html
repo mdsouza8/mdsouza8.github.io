@@ -1016,22 +1016,14 @@ body { background:#FFFFFF; color:#263238; }
     </div>
   </div>
 
-  <!-- (REQ) Stroke Scoring / Scales — SAH only -->
+  <!-- (REQ) Hunt & Hess Score — SAH only -->
   <div class="req-section" data-type="SAH">
     <div class="req-header" onclick="toggleReq(this)">
       <span class="req-chevron">▾</span>
-      <span class="req-label"><b>(REQ)</b> Stroke Scoring / Scales</span>
+      <span class="req-label"><b>(REQ)</b> Hunt &amp; Hess Score</span>
     </div>
     <div class="req-body">
-      <div class="frow-label" style="margin-bottom:5px;">Fisher Grading Score on CT Scan <span class="flo-tag tbd">FLO TBD</span></div>
-      <div class="toggle-group" id="tg-fisher" style="flex-direction:column; align-items:stretch; gap:4px;">
-        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-fisher'); sync()">1 = No hemorrhage evident</button>
-        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-fisher'); sync()">2 = Less than 1 mm thick</button>
-        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-fisher'); sync()">3 = More than 1 mm thick</button>
-        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-fisher'); sync()">4 = Any thickness with IVH or parenchymal extension</button>
-      </div>
-
-      <div class="frow-label" style="margin:14px 0 5px;">Hunt &amp; Hess Score <span class="flo-tag">FLO 3331111300</span></div>
+      <div class="frow-label" style="margin-bottom:5px;">Hunt &amp; Hess Score <span class="flo-tag">FLO 3331111300</span></div>
       <div class="toggle-group" id="tg-hh" style="flex-direction:column; align-items:stretch; gap:4px;">
         <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-hh'); sync()">1 = Asymptomatic, mild headache, slight nuchal rigidity</button>
         <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-hh'); sync()">2 = Moderate–severe headache, nuchal rigidity, no deficit other than CN palsy</button>
@@ -1371,46 +1363,6 @@ body { background:#FFFFFF; color:#263238; }
     <div class="embed-body">
       <span class="embed-add">+New Reading</span>
       <div style="margin-top:6px; color:#8A9A9A;">No data found.</div>
-    </div>
-  </div>
-
-  <!-- ══ Notes for Kim ══ -->
-  <div class="kim-notes">
-    <div class="kim-notes-head">Notes for Kim</div>
-    <div class="kim-notes-body">
-      <h4>Flowsheet Row IDs to confirm (currently marked FLO TBD)</h4>
-      <ul>
-        <li>GCS components — Eye Opening, Best Verbal, Best Motor (ICH &amp; SAH)</li>
-        <li>ICH Score subcomponents — GCS Points, ICH Volume ≥30 mL, Intraventricular Hemorrhage, Infratentorial Origin</li>
-        <li>Fisher Grading Score (SAH)</li>
-        <li>Coagulopathy (ICH &amp; SAH)</li>
-        <li>Hydrocephalus requiring EVD (SAH)</li>
-        <li>Nimodipine prescribed (SAH)</li>
-        <li>Door-to-treatment ≤30 min indicator (currently calculated, not a stored row)</li>
-        <li>Discharge mRS &amp; Rehab Assessed (Discharge Measures)</li>
-      </ul>
-
-      <h4>Row ID to verify</h4>
-      <ul>
-        <li>Time Stroke Provider at Bedside is <code>33311112214</code>.</li>
-      </ul>
-
-      <h4>Source consistency (sim badge vs where Rose abstracts)</h4>
-      <ul>
-        <li>CT/MRI Read — sim shows <code>NAV → 3331111216</code>; Rose takes the <b>earliest of the stroke-flowsheet read time vs. the radiology/PACS report</b>. Flowsheet should reconcile with PACS.</li>
-        <li>Antithrombotic by HD2 &amp; discharge meds (STK-1…5) — the <b>medication</b> comes from the <b>MAR / discharge order set</b>; flowsheet row <code>10733</code> is the attestation only.</li>
-        <li>Thrombolytic drug name, total dose, bolus dose, and administration time — sim shows <b>MAR</b>; matches Rose (MAR / Medication History, earliest documented medication administration).</li>
-        <li>Confirm <code>3334600294</code> ("NIHSS Time Performed") is the intended GWTG "Time Patient Assessed."</li>
-      </ul>
-
-      <h4>Data elements Rose still needs (not yet captured)</h4>
-      <ul>
-        <li>Vascular / perfusion imaging (CTA / MRA / CTP) performed + reported date/time</li>
-        <li>Symptom-discovery time (distinct from Last Known Well)</li>
-        <li>Stroke etiology (TOAST) — ischemic</li>
-        <li>Pre-admission antiplatelet / anticoagulant + last anticoagulant dose</li>
-        <li>Discharge bundle — discharge mRS, VTE prophylaxis (STK-1), Afib med at discharge (STK-3), antithrombotic at discharge, dysphagia/swallow screen</li>
-      </ul>
     </div>
   </div>
 
