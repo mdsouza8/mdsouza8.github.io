@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stroke Navigator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #1A8A7D;
+  --teal-light: #E6F5F3;
+  --teal-header: #0D7A6E;
+  --header-bg: #D4EFED;
+  --bg: #F4F7F6;
+  --white: #FFFFFF;
+  --border: #C8D8D6;
+  --border-light: #E2ECEA;
+  --text: #1A1A1A;
+  --muted: #5A6E6C;
+  --link: #0066AA;
+  --req-blue: #0077BB;
+  --btn-bg: #FFFFFF;
+  --btn-border: #A0B8B6;
+  --btn-selected: #D4EFED;
+  --btn-selected-border: var(--teal);
+  --red: #CC3333;
+  --green: #1B8A2E;
+  --amber: #B07800;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 12px; }
+
+/* ── TOP TITLE BAR ── */
+.titlebar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 6px 14px; display: flex; align-items: center; justify-content: space-between;
+}
+.titlebar-left { display: flex; align-items: center; gap: 8px; }
+.titlebar-name { font-size: 16px; font-weight: 400; color: var(--teal); }
+.titlebar-icons { display: flex; gap: 10px; color: var(--muted); font-size: 14px; }
+
+/* ── TYPE TABS ── */
+.type-tabs {
+  background: var(--white); border-bottom: 1px solid var(--border); padding: 0 14px;
+  display: flex; gap: 0;
+}
+.type-tab {
+  padding: 6px 16px; font-size: 11px; font-weight: 500; color: var(--muted);
+  border: 1px solid var(--border); border-bottom: none; border-radius: 4px 4px 0 0;
+  background: var(--bg); cursor: pointer; margin-right: 2px; position: relative; bottom: -1px;
+}
+.type-tab.active { background: var(--white); color: var(--teal); font-weight: 600; border-bottom-color: var(--white); }
+
+/* ── MAIN LAYOUT ── */
+.main-wrap { display: flex; height: calc(100vh - 66px - 36px); }
+.sidebar {
+  width: 148px; background: var(--white); border-right: 1px solid var(--border);
+  padding: 10px 0; flex-shrink: 0; overflow-y: auto;
+}
+.sidebar-link {
+  display: block; padding: 6px 12px; font-size: 11px; color: var(--link);
+  text-decoration: none; border-left: 3px solid transparent; cursor: pointer;
+}
+.sidebar-link:hover { background: var(--teal-light); }
+.sidebar-link.active { border-left-color: var(--teal); color: var(--teal); font-weight: 600; background: var(--teal-light); }
+
+.content-area { flex: 1; overflow-y: auto; background: var(--white); }
+.content-view { display: none; }
+.content-view.active { display: block; }
+
+/* ── SECTION HEADER BAR ── */
+.section-bar {
+  background: linear-gradient(180deg, #2AAEA0 0%, #1A9488 100%);
+  color: #fff; padding: 6px 14px; font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* Time taken row */
+.time-row {
+  display: flex; align-items: center; gap: 10px; padding: 8px 14px;
+  border-bottom: 1px solid var(--border-light); background: #FAFCFB;
+}
+.time-row label { font-size: 11px; color: var(--muted); }
+.time-row input { font-size: 11px; padding: 3px 6px; border: 1px solid var(--border); border-radius: 2px; width: 90px; }
+.show-options { margin-left: auto; display: flex; gap: 12px; font-size: 10px; color: var(--muted); }
+.show-options label { display: flex; align-items: center; gap: 3px; cursor: pointer; }
+
+/* ── (REQ) SECTIONS ── */
+.req-section { border-bottom: 1px solid var(--border-light); }
+.req-header {
+  padding: 8px 14px; cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 6px; font-size: 12px;
+}
+.req-header:hover { background: #F0F5F4; }
+.req-chevron { font-size: 9px; color: var(--muted); transition: transform 0.15s; width: 12px; }
+.req-chevron.collapsed { transform: rotate(-90deg); }
+.req-label { color: var(--req-blue); font-weight: 400; }
+.req-label b { font-weight: 600; }
+.req-body { padding: 4px 14px 12px 32px; }
+.req-body.collapsed { display: none; }
+
+/* ── FIELD ROWS ── */
+.frow {
+  display: flex; align-items: center; gap: 10px; padding: 4px 0; min-height: 28px;
+}
+.frow-label {
+  font-size: 11px; color: var(--text); min-width: 200px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+}
+.frow-label .nav-icon { color: var(--teal); font-size: 13px; }
+
+/* ── FLO ROW TAGS (in navigator) ── */
+.flo-tag {
+  font-size: 9px; font-family: 'Courier New', monospace;
+  background: #E4EEF0; color: #2A5C6A; border: 1px solid #A8CDD4;
+  border-radius: 3px; padding: 1px 5px; white-space: nowrap;
+  display: inline-block; margin-top: 1px;
+}
+.flo-tag.tbd {
+  background: #F2EEE6; color: #7A6030; border-color: #CCBA90;
+}
+/* legend at top of navigator */
+.flo-legend {
+  display: flex; align-items: center; gap: 14px; padding: 5px 14px;
+  background: #F8FAFA; border-bottom: 1px solid var(--border-light);
+  font-size: 10px; color: var(--muted);
+}
+.flo-legend span { display: flex; align-items: center; gap: 5px; }
+
+/* FLO toggle button */
+.flo-toggle-btn {
+  font-size: 10px; padding: 3px 10px; border-radius: 3px; cursor: pointer;
+  border: 1px solid #A8CDD4; background: #E4EEF0; color: #2A5C6A;
+  font-weight: 600; white-space: nowrap; margin-left: auto;
+  display: flex; align-items: center; gap: 5px;
+}
+.flo-toggle-btn:hover { background: #CDE4E8; }
+.flo-toggle-btn.off { background: #F2EEE6; border-color: #CCBA90; color: #7A6030; }
+
+/* When FLO tags are hidden */
+body.flo-hidden .flo-tag,
+body.flo-hidden .nihss-florow { display: none !important; }
+body.flo-hidden #flo-legend-bar > span { display: none; }
+body.flo-hidden #flo-legend-bar > strong { display: none; }
+
+/* ── TOGGLE BUTTONS ── */
+.toggle-group { display: flex; gap: 0; }
+.toggle-btn {
+  padding: 4px 14px; font-size: 11px; border: 1px solid var(--btn-border);
+  background: var(--btn-bg); cursor: pointer; color: var(--text);
+  transition: all 0.1s; min-width: 40px; text-align: center;
+}
+.toggle-btn:first-child { border-radius: 3px 0 0 3px; }
+.toggle-btn:last-child { border-radius: 0 3px 3px 0; }
+.toggle-btn:not(:first-child) { border-left: none; }
+.toggle-btn:hover { background: #E8F2F0; }
+.toggle-btn.selected {
+  background: var(--btn-selected); border-color: var(--btn-selected-border);
+  color: var(--teal); font-weight: 600;
+}
+.toggle-btn.wide { padding: 4px 10px; min-width: 60px; font-size: 10px; }
+
+/* Simple inputs */
+.epic-input {
+  font-size: 11px; padding: 3px 8px; border: 1px solid var(--btn-border);
+  border-radius: 2px; background: var(--btn-bg); color: var(--text); width: 120px;
+}
+.epic-input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal-light); }
+.epic-input.date { width: 110px; }
+.epic-input.time { width: 80px; }
+
+/* NIHSS */
+.nihss-row {
+  display: flex; align-items: center; gap: 8px; padding: 3px 0;
+  border-bottom: 1px solid #F2F4F3;
+}
+.nihss-row:last-of-type { border-bottom: none; }
+.nihss-label { font-size: 11px; color: var(--text); min-width: 185px; }
+.nihss-btns { display: flex; gap: 0; }
+.nihss-btn {
+  width: 28px; height: 24px; border: 1px solid var(--btn-border);
+  background: var(--btn-bg); font-size: 11px; cursor: pointer;
+  color: var(--text); display: flex; align-items: center; justify-content: center;
+}
+.nihss-btn:first-child { border-radius: 3px 0 0 3px; }
+.nihss-btn:last-child { border-radius: 0 3px 3px 0; }
+.nihss-btn:not(:first-child) { border-left: none; }
+.nihss-btn:hover { background: #E8F2F0; }
+.nihss-btn.selected { background: var(--btn-selected); border-color: var(--teal); color: var(--teal); font-weight: 700; }
+.nihss-florow { font-size: 9px; font-family: 'Courier New', monospace; color: #2A5C6A; background: #E4EEF0; border: 1px solid #A8CDD4; border-radius: 3px; padding: 1px 5px; margin-left: 8px; white-space: nowrap; }
+
+.nihss-total {
+  display: flex; align-items: center; gap: 10px; padding: 8px 0 4px;
+  border-top: 1px solid var(--border); margin-top: 6px;
+}
+.nihss-total-label { font-size: 12px; font-weight: 600; min-width: 185px; }
+.nihss-total-val {
+  font-size: 13px; font-weight: 700; width: 60px; text-align: center;
+  border: 1px solid var(--border); padding: 3px 8px; background: #FAFCFB; border-radius: 2px;
+}
+
+/* ── BOTTOM BAR ── */
+.bottombar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--white); border-top: 1px solid var(--border);
+  padding: 5px 14px; display: flex; align-items: center; justify-content: space-between;
+  z-index: 100; height: 36px;
+}
+.bb-btn {
+  font-size: 11px; padding: 4px 14px; border: 1px solid var(--border);
+  border-radius: 3px; background: var(--bg); cursor: pointer; color: var(--text);
+  display: flex; align-items: center; gap: 4px;
+}
+.bb-btn:hover { background: #E4ECEA; }
+.bb-btn.close-btn { background: var(--teal-light); color: var(--teal); border-color: var(--teal); }
+.bb-btn.cancel-btn { background: #FFF0F0; color: var(--red); border-color: #E8BBBB; }
+.bb-left, .bb-right { display: flex; gap: 6px; }
+.bb-copyright { font-size: 9px; color: var(--muted); }
+
+/* ═══ STROKE SUMMARY ═══ */
+.summary-wrap { padding: 0; }
+.summary-header {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 8px 14px; display: flex; align-items: center; gap: 12px;
+}
+.summary-header input { font-size: 11px; padding: 3px 8px; border: 1px solid var(--border); border-radius: 2px; width: 100px; }
+.summary-header .search-icon { color: var(--muted); }
+.summary-tab-bar { display: flex; gap: 2px; margin-left: 10px; }
+.summary-tab {
+  padding: 4px 12px; font-size: 11px; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 3px; cursor: pointer; background: var(--bg);
+}
+.summary-tab.active { background: var(--teal-light); color: var(--teal); border-color: var(--teal); font-weight: 600; }
+
+/* Source key bar in summary */
+.src-key-bar {
+  display: flex; align-items: center; gap: 12px; padding: 6px 12px;
+  background: #F8FAFA; border-bottom: 1px solid var(--border-light);
+  font-size: 10px; color: var(--muted); flex-wrap: wrap;
+}
+.src-key-bar strong { color: var(--text); margin-right: 4px; }
+
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.summary-col { border-right: 1px solid var(--border-light); padding: 0; }
+.summary-col:last-child { border-right: none; }
+
+.sum-section { margin-bottom: 2px; }
+.sum-section-head {
+  background: #E2ECEA; font-size: 11px; font-weight: 700; color: var(--teal-header);
+  padding: 5px 10px; border-bottom: 1px solid var(--border-light);
+}
+.sum-section-body { padding: 6px 10px; font-size: 11px; background: var(--white); }
+.sum-row { display: flex; gap: 6px; padding: 2px 0; line-height: 1.5; align-items: baseline; }
+.sum-label { color: var(--muted); font-weight: 500; min-width: 155px; flex-shrink: 0; }
+.sum-val { color: var(--text); }
+.sum-val.empty { color: #C0C8C6; font-style: italic; }
+.sum-val.calc { color: var(--teal); font-weight: 600; }
+.sum-val.good { color: var(--green); font-weight: 600; }
+.sum-val.bad { color: var(--red); font-weight: 600; }
+.sum-src { margin-left: auto; flex-shrink: 0; }
+
+.sum-sub-head { font-size: 10px; font-weight: 700; color: var(--teal); margin: 6px 0 3px; text-transform: uppercase; letter-spacing: 0.03em; }
+
+.sum-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.sum-table th { text-align: left; font-size: 10px; font-weight: 700; color: var(--muted);
+  padding: 4px 6px; border-bottom: 1px solid var(--border); background: #F6F9F8; }
+.sum-table td { padding: 3px 6px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+.sum-table td:last-child { color: var(--teal); font-weight: 500; }
+.sum-table td.src-cell { font-size: 9px; white-space: nowrap; }
+
+/* ── SOURCE BADGES ── */
+.sb {
+  font-size: 9px; font-weight: 700; border-radius: 3px;
+  padding: 1px 5px; display: inline-block; white-space: nowrap; line-height: 1.6;
+}
+.sb-nav  { background: #DDE8F6; color: #1A448A; }   /* Navigator-entered */
+.sb-adt  { background: #E8DDF8; color: #5A1888; }   /* ADT system event  */
+.sb-calc { background: #FEF3DA; color: #8A5200; }   /* Calculated        */
+.sb-mar  { background: #DCF4E4; color: #1A5E2A; }   /* MAR               */
+.sb-tbd  { background: #F2EEE6; color: #7A6030; }   /* TBD / confirm     */
+.sb-unknown { background:#ECEFF3; color:#59636E; }   /* Unknown source    */
+
+/* FLO sub-label under badge */
+.flo-sub { font-size: 9px; font-family: 'Courier New', monospace; color: #3A7070; display: block; margin-top: 1px; }
+
+.hidden { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   EPIC-MODERN MATCH  (overrides to mirror real Stroke Navigator)
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --epic-navy:   #0F3D57;
+  --epic-teal:   #1A6E8E;
+  --epic-green:  #1E8E6E;
+  --epic-line:   #DDE5E5;
+  --epic-line2:  #C9D4D4;
+  --epic-hd:     #0E5C6B;
+}
+body { background:#FFFFFF; color:#263238; }
+
+/* Title bar */
+.titlebar { padding:11px 18px; border-bottom:1px solid var(--epic-line); }
+.titlebar-name { font-size:23px; font-weight:600; color:var(--epic-navy); letter-spacing:-0.01em; }
+.titlebar-icons { color:#90A0A0; font-size:15px; letter-spacing:4px; }
+
+/* Type tabs */
+.type-tabs { border-bottom:1px solid var(--epic-line2); padding:0 18px; }
+.type-tab {
+  border:none; border-radius:0; background:none; color:#5E7A7A;
+  font-size:13px; font-weight:500; padding:9px 16px; margin:0; bottom:0;
+  border-bottom:2px solid transparent;
+}
+.type-tab.active {
+  background:none; color:var(--epic-navy); font-weight:600;
+  border-bottom:2px solid var(--epic-green);
+}
+
+/* Layout */
+.main-wrap { height: calc(100vh - 70px - 38px); }
+.sidebar { width:176px; background:#FFFFFF; border-right:1px solid var(--epic-line); padding:6px 0; }
+.content-area { background:#FFFFFF; }
+
+/* Sidebar groups + links */
+.sb-group { font-size:9.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+  color:#9AA8A8; padding:11px 14px 3px; }
+.sidebar-link { color:var(--epic-teal); font-size:12px; padding:5px 14px 5px 16px;
+  border-left:3px solid transparent; }
+.sidebar-link:hover { background:#EFF6F4; }
+.sidebar-link.active { border-left-color:var(--epic-green); color:var(--epic-navy);
+  font-weight:600; background:#E9F5F1; }
+
+/* Green "Initial Assessments" section bar */
+.section-bar {
+  background:linear-gradient(180deg,#26A083 0%,#1A8A6E 100%);
+  padding:7px 16px; font-size:13px; font-weight:600;
+}
+
+/* ── Top action bar (Time taken / Responsible / Create Note / More) ── */
+.epic-actionbar { padding:8px 16px 4px; border-bottom:none; background:#fff;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.epic-actionbar label { font-size:11px; color:#4A5E5E; font-weight:500; }
+.epic-actionbar .epic-input { font-size:11px; }
+.epic-field-icon { position:relative; display:inline-flex; align-items:center; }
+.epic-field-icon .fi { position:absolute; right:6px; color:#7A8A8A; font-size:11px; pointer-events:none; }
+.epic-action-link { font-size:11.5px; color:var(--epic-teal); font-weight:500; cursor:pointer;
+  display:inline-flex; align-items:center; gap:4px; }
+.epic-action-link:hover { text-decoration:underline; }
+.epic-showopts { padding:2px 16px 10px; display:flex; gap:18px; flex-wrap:wrap;
+  border-bottom:1px solid var(--epic-line); }
+.epic-showopts label { display:flex; align-items:center; gap:5px; font-size:11px; color:#4A5E5E; cursor:pointer; }
+
+/* ── (REQ) section → white bordered cards, chevron on right ── */
+.req-section { border:1px solid var(--epic-line2); border-radius:6px; margin:10px 16px; background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,0.02); }
+.req-header { padding:9px 14px; gap:6px; border-radius:6px; }
+.req-header:hover { background:#F6FAF9; }
+.req-label { color:var(--epic-hd); font-weight:600; font-size:13px; }
+.req-label b { font-weight:600; }
+.req-chevron { order:5; margin-left:auto; color:#8A9A9A; font-size:11px; transform:rotate(180deg); }
+.req-chevron.collapsed { transform:rotate(0deg); }
+.req-body { padding:2px 16px 14px 16px; }
+
+/* Field sub-labels in teal */
+.frow-label { color:var(--epic-teal); font-weight:500; }
+.frow-label .nav-icon { display:none; }   /* replaced by doc icons */
+
+/* Document icon (Epic comment/note affordance) */
+.doc-icon { display:inline-flex; width:15px; height:17px; border:1px solid #B8C6C6; border-radius:2px;
+  position:relative; margin-left:8px; vertical-align:middle; cursor:pointer; background:#fff; flex-shrink:0; }
+.doc-icon::before { content:''; position:absolute; top:3px; left:3px; right:3px; height:1.5px; background:#B8C6C6;
+  box-shadow:0 3px 0 #B8C6C6, 0 6px 0 #B8C6C6; }
+.doc-icon:hover { border-color:var(--epic-teal); }
+
+/* Toggle buttons → light Epic style */
+.toggle-btn { border:1px solid var(--epic-line2); background:#fff; color:#37474F; border-radius:4px;
+  margin-right:4px; padding:6px 14px; }
+.toggle-btn:first-child, .toggle-btn:last-child, .toggle-btn:not(:first-child) { border-radius:4px; border-left:1px solid var(--epic-line2); }
+.toggle-btn:hover { background:#EFF6F4; }
+.toggle-btn.selected { background:#E3F0EE; border-color:var(--epic-green); color:var(--epic-navy); font-weight:600; }
+
+/* Checkbox group (Type of Stroke) */
+.epic-check-group { display:flex; gap:26px; align-items:center; }
+.epic-check { display:flex; align-items:center; gap:7px; font-size:12.5px; color:#37474F; cursor:pointer; }
+.epic-check input { width:15px; height:15px; accent-color:var(--epic-green); cursor:pointer; }
+
+/* NIHSS boxed buttons + teal labels */
+.nihss-label { color:var(--epic-teal); font-weight:500; }
+.nihss-btn { border:1px solid var(--epic-line2); border-radius:3px; margin-right:3px; width:30px; }
+.nihss-btn:first-child, .nihss-btn:last-child, .nihss-btn:not(:first-child) { border-radius:3px; border-left:1px solid var(--epic-line2); }
+.nihss-btn.selected { background:#E3F0EE; border-color:var(--epic-green); color:var(--epic-navy); }
+.nihss-row { gap:10px; }
+.nihss-total-label { color:var(--epic-teal); }
+
+/* Inputs */
+.epic-input { border:1px solid var(--epic-line2); border-radius:3px; }
+.epic-input:focus { border-color:var(--epic-green); box-shadow:0 0 0 1px #D6EDE6; }
+
+/* ── Embedded green flowsheet sections (Antithrombotic Check Off, Day 2, etc.) ── */
+.embed-section { border:1px solid #BFE0D6; border-radius:6px; margin:10px 16px; background:#fff; overflow:hidden; }
+.embed-header { background:#EAF6F1; padding:7px 12px; display:flex; align-items:center; gap:8px;
+  border-bottom:1px solid #D2E8DF; }
+.embed-icon { color:var(--epic-green); font-size:13px; }
+.embed-title { font-size:12.5px; font-weight:600; color:var(--epic-hd); }
+.embed-pencil { color:#7AA89A; font-size:11px; cursor:pointer; }
+.embed-refresh { margin-left:auto; color:#7AA89A; font-size:13px; cursor:pointer; }
+.embed-body { padding:9px 12px; font-size:11.5px; color:#4A5E5E; }
+.embed-link { color:var(--epic-teal); font-size:11px; font-weight:500; cursor:pointer; }
+.embed-link:hover { text-decoration:underline; }
+.embed-add { color:var(--epic-teal); font-size:11.5px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:4px; }
+.embed-add:hover { text-decoration:underline; }
+.embed-ack { display:flex; align-items:flex-start; gap:8px; font-size:11.5px; color:#37474F; cursor:pointer; }
+.embed-ack input { width:15px; height:15px; margin-top:1px; accent-color:var(--epic-green); }
+
+/* Bottom bar */
+.bottombar { padding:5px 16px; }
+.bb-btn.addorder { background:#fff; border:1px solid var(--epic-line2); color:var(--epic-navy); font-weight:600; }
+
+/* Notes for Kim block */
+.kim-notes { margin:16px; border:1px solid #E0CDA0; border-radius:6px; background:#FBF7EC; overflow:hidden; }
+.kim-notes-head { background:#F3E9CF; color:#7A5E1A; font-size:12.5px; font-weight:700; padding:8px 14px; border-bottom:1px solid #E6D6A8; }
+.kim-notes-body { padding:12px 16px; font-size:11.5px; color:#5A4E33; line-height:1.55; }
+.kim-notes-body h4 { font-size:11px; font-weight:700; color:#8A6A1A; text-transform:uppercase; letter-spacing:0.04em; margin:12px 0 5px; }
+.kim-notes-body h4:first-child { margin-top:0; }
+.kim-notes-body ul { list-style:none; margin:0; padding:0; }
+.kim-notes-body li { padding:3px 0 3px 16px; position:relative; }
+.kim-notes-body li::before { content:'—'; position:absolute; left:0; color:#B89A4A; }
+.kim-notes-body code { font-family:'Courier New',monospace; font-size:10.5px; background:#F0E6CC; padding:1px 4px; border-radius:3px; color:#6A521A; }
+
+/* ═══════════════════════════════════════════════════════════
+   EPIC SUMMARY REPORT  (print-group aesthetic)
+   ═══════════════════════════════════════════════════════════ */
+:root { --rpt-blue:#004A9F; --rpt-blue2:#0B54A5; --rpt-line:#BFD0E2; --rpt-grp-line:#BFD0E2; --rpt-hair:#E7EDF4; }
+
+#view-summary { background:#FFFFFF; color:#111; font-family:Arial, Helvetica, sans-serif; }
+
+/* Toolbar */
+.rpt-toolbar { position:relative; display:flex; align-items:center; gap:18px; padding:8px 20px 5px;
+  background:linear-gradient(#F7FBFF,#EAF2FA); border:1px solid #C7D3E0; border-bottom-color:#B8C8D8; }
+.rpt-tab { font-size:14px; font-weight:700; color:var(--rpt-blue); }
+.rpt-tool-icon { color:var(--rpt-blue); font-size:16px; cursor:pointer; font-weight:700; }
+.rpt-maintitle { position:absolute; left:0; right:0; text-align:center; font-size:18px;
+  font-weight:700; color:var(--rpt-blue); letter-spacing:0; pointer-events:none; }
+.rpt-actions { margin-left:auto; display:flex; align-items:center; gap:8px; position:relative; z-index:1; }
+.rpt-btn { font-family:inherit; font-size:12px; color:#111; background:linear-gradient(#FFFFFF,#E8EEF5);
+  border:1px solid #AEBCCC; border-radius:2px; padding:4px 12px; cursor:pointer; box-shadow:inset 0 1px 0 #fff; }
+.rpt-btn:hover { background:#F0F4F8; }
+.rpt-select, .rpt-tr-select { font-family:inherit; font-size:11.5px; border:1px solid #B8C2CC;
+  border-radius:3px; padding:4px 8px; color:#2A2E33; background:#fff; }
+.rpt-help { width:20px; height:20px; border-radius:50%; border:1px solid #B8C2CC; color:#5E7FA0;
+  display:inline-flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer; }
+.rpt-timerange { display:flex; align-items:center; gap:10px; padding:5px 20px;
+  background:#FFFFFF; border-left:1px solid #C7D3E0; border-right:1px solid #C7D3E0; border-bottom:1px solid var(--rpt-line);
+  font-size:12px; color:#111; }
+
+.src-key-bar {
+  display:flex; align-items:center; gap:12px; padding:5px 18px;
+  background:#FAFBFC; border-bottom:1px solid var(--rpt-line);
+  font-size:10px; color:#4A5560; flex-wrap:wrap;
+}
+.src-key-bar strong { color:#111; margin-right:4px; }
+
+/* Two-column report body */
+.summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 12px 0; border-left:1px solid #C7D3E0; border-right:1px solid #C7D3E0; }
+.summary-col { border:none; padding:0; min-width:0; }
+
+/* Big column heading (e.g. "Stroke Arrival Measurements") */
+.rpt-bighead { font-family:Georgia, 'Times New Roman', serif; font-size:18px; font-weight:700; color:#003F9E;
+  padding:8px 10px 6px; border:1px solid var(--rpt-line); border-left:4px solid #0054BE; margin:0 0 3px; letter-spacing:0; }
+
+/* Print group box */
+.sum-section { background:#fff; border:1px solid var(--rpt-grp-line); border-left:4px solid #0064C8; border-radius:0;
+  margin:0 0 3px; overflow:hidden; }
+.sum-section-head { background:#fff; color:var(--rpt-blue);
+  font-size:13px; font-weight:700; padding:6px 10px 5px; border-bottom:1px solid var(--rpt-grp-line);
+  letter-spacing:0; }
+.sum-section-body { padding:5px 8px 6px; background:#fff; }
+
+/* Sub-group header inside a print group */
+.sum-sub-head { font-size:11px; font-weight:700; color:var(--rpt-blue2); text-transform:none;
+  letter-spacing:0; margin:11px 0 4px; }
+.sum-sub-head:first-child { margin-top:0; }
+
+/* Rows */
+.sum-row { padding:2px 0; align-items:baseline; border-bottom:1px solid var(--rpt-hair); min-height:17px; }
+.sum-row:last-child { border-bottom:none; }
+.sum-label { color:#111; min-width:220px; font-weight:400; }
+.sum-val { color:#111; font-weight:400; }
+.sum-val.empty { color:#B0B8C0; }
+.sum-val.calc, .sum-val.good { color:#1B7A3E; font-weight:600; }
+.sum-val.bad { color:#C0392B; font-weight:600; }
+.sum-src { margin-left:auto; flex-shrink:0; }
+.sum-src .sb { font-size:8.5px; opacity:0.9; }
+
+/* Tables — clean "Measure | Value" look */
+.sum-table th { background:#fff; color:var(--rpt-blue2); border-bottom:1px solid var(--rpt-grp-line);
+  font-size:10.5px; font-weight:700; padding:4px 6px; }
+.sum-table td { border-bottom:1px solid #EDF0F3; padding:4px 6px; color:#1A1E22; }
+.sum-table td:last-child { color:#1A1E22; }
+.sum-table th:nth-child(2), .sum-table td:nth-child(2) { width:34%; }
+.sum-table th:nth-child(3), .sum-table td:nth-child(3) { text-align:right; }
+.sum-table td.src-cell { color:#5A6470; font-size:9px; white-space:nowrap; }
+
+/* Report footer */
+.rpt-footer { display:flex; justify-content:space-between; align-items:center; gap:16px;
+  margin:8px 0 0; padding:10px 22px; border:1px solid #C7D3E0;
+  font-size:12px; color:#111; background:linear-gradient(#F8FBFF,#EAF2FA); }
+.rpt-footer b { color:var(--rpt-blue); }
+
+.nir-wrap { padding:0 0 28px; background:#fff; }
+.nir-grid { display:grid; grid-template-columns: minmax(360px, 0.95fr) minmax(520px, 1.25fr); gap:12px; padding:12px 16px; }
+.nir-panel { min-width:0; }
+.nir-table { width:100%; border-collapse:collapse; font-size:11px; background:#fff; border:1px solid var(--rpt-grp-line); }
+.nir-table th { text-align:left; color:var(--rpt-blue2); font-size:10.5px; font-weight:700; padding:5px 7px; border-bottom:1px solid var(--rpt-grp-line); background:#fff; }
+.nir-table td { padding:5px 7px; border-bottom:1px solid #EDF0F3; vertical-align:middle; }
+.nir-table td:nth-child(2) { color:#111; }
+.nir-table td:last-child { text-align:right; white-space:nowrap; }
+.nir-table .flo-tag { margin-top:0; }
+
+@media (max-width: 760px) {
+  .summary-grid { grid-template-columns:1fr; }
+  .nir-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ TITLE BAR ═══ -->
+<div class="titlebar">
+  <div class="titlebar-left">
+    <span class="titlebar-name">Stroke Navigator</span>
+  </div>
+  <div class="titlebar-icons">&#9679;&#9679;&#9679;&nbsp;&nbsp;&nbsp;&#10005;</div>
+</div>
+
+<!-- ═══ TYPE TABS ═══ -->
+<div class="type-tabs" style="justify-content: space-between; align-items: center;">
+  <div style="display:flex; gap:0;">
+    <div class="type-tab active" id="typetab-ischemic" onclick="setStrokeType('Ischemic')">Ischemic</div>
+    <div class="type-tab" id="typetab-ich" onclick="setStrokeType('ICH')">ICH</div>
+    <div class="type-tab" id="typetab-sah" onclick="setStrokeType('SAH')">SAH</div>
+    <div class="type-tab" id="typetab-nonstroke" onclick="setStrokeType('Non-Stroke')">NON-STROKE</div>
+    <div class="type-tab" id="viewtab-nir" onclick="showView('nir', event)">NIR</div>
+    <div class="type-tab" id="viewtab-summary" onclick="showView('summary', event)">Summary</div>
+  </div>
+  <div style="display:flex; align-items:center; gap:14px; color:#1A8AC0; font-size:15px; padding-right:6px;">
+    <span style="cursor:pointer;">↓</span><span style="cursor:pointer;">↑</span>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main-wrap">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-group">Problem List</div>
+  <a class="sidebar-link">Problem List</a>
+
+  <div class="sb-group">Initial Evaluation</div>
+  <a class="sidebar-link">Consult Response</a>
+  <a class="sidebar-link">Time Stamp</a>
+  <a class="sidebar-link active" id="nav-link-initial" onclick="showView('navigator', event)">Initial Assessments</a>
+  <a class="sidebar-link" onclick="showView('navigator'); document.getElementById('emb-neuro-hp').scrollIntoView({block:'start'})">Neuro Admission H&amp;P</a>
+
+  <div class="sb-group">Discharge</div>
+  <a class="sidebar-link" onclick="showView('summary', event)">Scores / Summary</a>
+
+  <div class="sb-group">Meds / Orders</div>
+  <a class="sidebar-link">Orders</a>
+</div>
+
+<!-- CONTENT -->
+<div class="content-area">
+
+<!-- ──────── VIEW 1: NAVIGATOR ──────── -->
+<div class="content-view active" id="view-navigator">
+
+  <div class="section-bar">
+    <span style="font-size:14px;">▦</span> <span id="section-type-label">Initial Assessments — Ischemic</span>
+    <span id="section-encounter-label" style="display:none;">Stroke Code</span>
+  </div>
+
+  <!-- Top action bar -->
+  <div class="epic-actionbar">
+    <label>Time taken:</label>
+    <input type="date" class="epic-input" id="f-date-taken" style="width:130px;" onchange="sync()">
+    <input type="time" class="epic-input" id="f-time-taken" style="width:96px;" onchange="sync()">
+    <span class="epic-action-link" style="margin-left:8px;">Responsible</span>
+    <span class="epic-action-link">Create Note</span>
+    <span class="epic-action-link">More &#9662;</span>
+    <span style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <div class="toggle-group" id="tg-encounter">
+        <button class="toggle-btn selected" style="padding:4px 12px;" onclick="selectToggle(this,'tg-encounter'); setEncounterType('Stroke Code')">Stroke Code</button>
+        <button class="toggle-btn" style="padding:4px 12px;" onclick="selectToggle(this,'tg-encounter'); setEncounterType('Consult')">Consult</button>
+      </div>
+      <span id="encounter-badge" style="font-size:10px; font-weight:700; background:#FDECEA; color:#AA2020; border:1px solid #E8BBBB; border-radius:3px; padding:2px 8px;">STROKE CODE</span>
+    </span>
+  </div>
+
+  <!-- Show options row -->
+  <div class="epic-showopts">
+    <label><input type="checkbox"> Show Row Info</label>
+    <label><input type="checkbox"> Show Last Filed Value</label>
+    <label><input type="checkbox"> Show Details</label>
+    <label><input type="checkbox" id="opt-show-flo" onchange="toggleFloIds()" checked> Show Field Mapping (FLO IDs)</label>
+    <button class="flo-toggle-btn" id="flo-toggle-btn" onclick="toggleFloIds()" style="display:none;">toggle</button>
+  </div>
+
+  <!-- (REQ) Type of Stroke -->
+  <div class="req-section">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Type of Stroke</span>
+    </div>
+    <div class="req-body">
+      <div class="frow-label" style="margin-bottom:6px;">Type of Stroke <span class="flo-tag">FLO 3331111225</span></div>
+      <div class="epic-check-group" id="tg-stroke-type">
+        <label class="epic-check"><input type="checkbox" id="chk-ischemic" onclick="pickStrokeType(this,'Ischemic')" checked> Ischemic</label>
+        <label class="epic-check"><input type="checkbox" id="chk-ich" onclick="pickStrokeType(this,'ICH')"> ICH</label>
+        <label class="epic-check"><input type="checkbox" id="chk-sah" onclick="pickStrokeType(this,'SAH')"> SAH</label>
+        <span class="doc-icon"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Stroke Code Response Times -->
+  <div class="req-section" id="sec-code-response" data-type="Ischemic">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Stroke Code Response Times</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">
+          Time Stroke Code Called
+          <span class="flo-tag">FLO 3331111213</span>
+        </div>
+        <input type="time" class="epic-input time" id="f-code-called" onchange="sync()">
+      </div>
+      <div class="frow">
+        <div class="frow-label">
+          Time Stroke Provider Callback
+          <span class="flo-tag">FLO 3334601601</span>
+        </div>
+        <input type="time" class="epic-input time" id="f-provider-callback" onchange="sync()">
+      </div>
+      <div class="frow">
+        <div class="frow-label">
+          Time Stroke Provider at Bedside
+          <span class="flo-tag">FLO 33311112214</span>
+        </div>
+        <input type="time" class="epic-input time" id="f-provider-bedside" onchange="sync()">
+      </div>
+      <div style="font-size:10px; color:var(--muted); margin-top:3px; padding-left:2px;">
+        <b>Note:</b>These timestamps capture stroke code activation → provider response sequence. Code-to-bedside interval auto-calculated in Summary.
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Time NIHSS Performed = Time Patient Assessed -->
+  <div class="req-section">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Time Patient Assessed</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">Date <span class="flo-tag">FLO 3334600294</span></div>
+        <input type="date" class="epic-input date" id="f-assessed-date" onchange="sync()">
+        <span style="margin-left:16px;" class="frow-label">Time <span class="flo-tag">FLO 3334600294</span></span>
+        <input type="time" class="epic-input time" id="f-assessed-time" onchange="sync()">
+      </div>
+      <div style="font-size:10px; color:var(--muted); margin-top:3px; padding-left:2px;">
+        <b>Note:</b>Used as "Time Patient Assessed" in GWTG / TJC reporting — also drives door-to-needle and door-to-puncture calculations in the Summary
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Patient Last Known Well -->
+  <div class="req-section">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Patient Last Known Well (at Neuro Baseline)</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">
+          Patient Last Known Well?
+        </div>
+        <div class="toggle-group" id="tg-lkw-type">
+          <button class="toggle-btn" onclick="selectToggle(this,'tg-lkw-type'); showHide('lkw-datetime',true); showHide('lkw-unknown',false); sync()">Date/time</button>
+          <button class="toggle-btn" onclick="selectToggle(this,'tg-lkw-type'); showHide('lkw-datetime',false); showHide('lkw-unknown',true); sync()">Unknown</button>
+        </div>
+      </div>
+      <div id="lkw-datetime" class="hidden" style="padding-left:20px; margin-top:4px;">
+        <div class="frow">
+          <div class="frow-label">Date <span class="flo-tag">FLO 3331300602</span></div>
+          <input type="date" class="epic-input date" id="f-lkw-date" onchange="sync()">
+        </div>
+        <div class="frow">
+          <div class="frow-label">Time <span class="flo-tag">FLO 3331300603</span></div>
+          <input type="time" class="epic-input time" id="f-lkw-time" onchange="sync()">
+        </div>
+      </div>
+      <div id="lkw-unknown" class="hidden" style="padding-left:20px; margin-top:4px; font-size:11px; color:var(--muted); font-style:italic;">
+        Last known well time is unknown — will document as "Unknown" in flowsheet.
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Mode of Arrival -->
+  <div class="req-section" data-type="Ischemic">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Mode of Arrival</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">
+          Mode of Arrival
+          <span class="flo-tag">FLO 3331111204</span>
+        </div>
+        <select class="epic-input" id="tg-arrival" style="width:auto; min-width:320px;" onchange="sync()">
+          <option value="">— Select —</option>
+          <option>Private car</option>
+          <option>EMS</option>
+          <option>Unknown</option>
+          <option>In house</option>
+          <option>Transfer from another facility (telemedicine)</option>
+          <option>Transfer from another facility (non-telemedicine)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Pre-Stroke mRS -->
+  <div class="req-section" data-type="Ischemic Non-Stroke">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Pre-Stroke Modified Rankin Scale (mRS)</span>
+    </div>
+    <div class="req-body">
+      <div class="frow-label" style="margin-bottom:6px;">Pre-Stroke mRS <span class="flo-tag">FLO 3331111206</span></div>
+      <div class="toggle-group" id="tg-mrs">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-mrs'); sync()">0</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-mrs'); sync()">1</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-mrs'); sync()">2</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-mrs'); sync()">3</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-mrs'); sync()">4</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-mrs'); sync()">5</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-mrs'); sync()">6</button>
+        <span class="doc-icon"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Complete NIH Stroke Scale -->
+  <div class="req-section" id="sec-nihss" data-type="Ischemic Non-Stroke">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Complete NIH Stroke Scale</span>
+    </div>
+    <div class="req-body" id="nihss-body"></div>
+  </div>
+
+  <!-- (REQ) Coagulopathy — ICH & SAH -->
+  <div class="req-section" data-type="ICH SAH">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Coagulopathy</span>
+    </div>
+    <div class="req-body">
+      <div class="frow-label" style="margin-bottom:6px;">Are they coagulopathic? (e.g. INR ≥ 1.4 or on other anticoagulation) <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-coag">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-coag'); sync()">No</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-coag'); sync()">Yes</button>
+        <span class="doc-icon"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Glasgow Coma Scale — ICH & SAH -->
+  <div class="req-section" data-type="ICH SAH">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Glasgow Coma Scale</span>
+    </div>
+    <div class="req-body">
+      <div class="frow-label" style="margin-bottom:4px;">Eye Opening <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-gcs-eye">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-eye'); calcGCS(); sync()">1</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-eye'); calcGCS(); sync()">2</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-eye'); calcGCS(); sync()">3</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-eye'); calcGCS(); sync()">4</button>
+      </div>
+      <div class="frow-label" style="margin:12px 0 4px;">Best Verbal Response <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-gcs-verbal">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-verbal'); calcGCS(); sync()">1</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-verbal'); calcGCS(); sync()">2</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-verbal'); calcGCS(); sync()">3</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-verbal'); calcGCS(); sync()">4</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-verbal'); calcGCS(); sync()">5</button>
+      </div>
+      <div class="frow-label" style="margin:12px 0 4px;">Best Motor Response <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-gcs-motor">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-motor'); calcGCS(); sync()">1</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-motor'); calcGCS(); sync()">2</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-motor'); calcGCS(); sync()">3</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-motor'); calcGCS(); sync()">4</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-motor'); calcGCS(); sync()">5</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-motor'); calcGCS(); sync()">6</button>
+      </div>
+      <div class="frow-label" style="margin:12px 0 4px;">Patient intubated?</div>
+      <div class="toggle-group" id="tg-gcs-intubated">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-intubated'); sync()">Yes</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-gcs-intubated'); sync()">No</button>
+      </div>
+      <div class="frow" style="margin-top:12px;">
+        <div class="frow-label">Glasgow Coma Scale Score if Intubated</div>
+        <input type="text" class="epic-input" id="f-gcs-intub" style="width:90px;" onchange="sync()">
+      </div>
+      <div class="frow" style="margin-top:6px;">
+        <div class="frow-label">Glasgow Coma Scale Score</div>
+        <input type="text" class="epic-input" id="f-gcs-total" style="width:90px; background:#F4F8F8;" readonly>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) ICH Score (with subcomponents + autocalc) — ICH only -->
+  <div class="req-section" data-type="ICH">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> ICH Score</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">Initial ICH Score Date/Time <span class="flo-tag">FLO 3334600269</span></div>
+        <input type="time" class="epic-input time" id="f-ich-time" onchange="sync()">
+        <input type="date" class="epic-input date" id="f-ich-date" onchange="sync()" style="margin-left:8px;">
+      </div>
+
+      <div class="frow-label" style="margin:12px 0 4px;">GCS Points <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-ich-gcs">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-gcs'); calcICH(); sync()">0=GCS 13-15</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-gcs'); calcICH(); sync()">1=GCS 5-12</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-gcs'); calcICH(); sync()">2=GCS 3-4</button>
+      </div>
+
+      <div class="frow-label" style="margin:12px 0 4px;">ICH Volume ≥ 30 mL <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-ich-vol">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-vol'); calcICH(); sync()">0=No</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-vol'); calcICH(); sync()">1=Yes</button>
+      </div>
+
+      <div class="frow-label" style="margin:12px 0 4px;">Intraventricular Hemorrhage <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-ich-ivh">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-ivh'); calcICH(); sync()">0=No</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-ivh'); calcICH(); sync()">1=Yes</button>
+      </div>
+
+      <div class="frow-label" style="margin:12px 0 4px;">Infratentorial Origin of Hemorrhage <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-ich-infra">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-infra'); calcICH(); sync()">0=No</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-infra'); calcICH(); sync()">1=Yes</button>
+      </div>
+
+      <div class="frow-label" style="margin:12px 0 4px;">Age ≥ 80? <span class="flo-tag" style="background:#EAF0FD; color:#1A44AA; border-color:#BBCCE8;">AUTO</span></div>
+      <div class="toggle-group" id="tg-ich-age">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-age'); calcICH(); sync()">0=No</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-ich-age'); calcICH(); sync()">1=Yes</button>
+      </div>
+
+      <div class="frow" style="margin-top:14px; border-top:1px solid var(--border); padding-top:10px;">
+        <div class="frow-label"><b>Total ICH Score</b> <span style="color:var(--muted); font-weight:400;">(auto-calculated, 0–6)</span> <span class="flo-tag">FLO 3331111301</span></div>
+        <div class="nihss-total-val" id="ich-total" style="font-size:15px;">—</div>
+      </div>
+      <div class="frow" style="margin-top:8px;">
+        <label class="embed-ack" style="display:flex; align-items:center; gap:7px; cursor:pointer;">
+          <input type="checkbox" id="f-ich-verify" onchange="sync()" style="width:15px; height:15px; accent-color:var(--epic-green);">
+          I verify the calculated ICH Score
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Stroke Scoring / Scales — SAH only -->
+  <div class="req-section" data-type="SAH">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Stroke Scoring / Scales</span>
+    </div>
+    <div class="req-body">
+      <div class="frow-label" style="margin-bottom:5px;">Fisher Grading Score on CT Scan <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-fisher" style="flex-direction:column; align-items:stretch; gap:4px;">
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-fisher'); sync()">1 = No hemorrhage evident</button>
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-fisher'); sync()">2 = Less than 1 mm thick</button>
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-fisher'); sync()">3 = More than 1 mm thick</button>
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-fisher'); sync()">4 = Any thickness with IVH or parenchymal extension</button>
+      </div>
+
+      <div class="frow-label" style="margin:14px 0 5px;">Hunt &amp; Hess Score <span class="flo-tag">FLO 3331111300</span></div>
+      <div class="toggle-group" id="tg-hh" style="flex-direction:column; align-items:stretch; gap:4px;">
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-hh'); sync()">1 = Asymptomatic, mild headache, slight nuchal rigidity</button>
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-hh'); sync()">2 = Moderate–severe headache, nuchal rigidity, no deficit other than CN palsy</button>
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-hh'); sync()">3 = Drowsiness / confusion, mild focal neurologic deficit</button>
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-hh'); sync()">4 = Stupor, moderate–severe hemiparesis</button>
+        <button class="toggle-btn" style="text-align:left;" onclick="selectToggle(this,'tg-hh'); sync()">5 = Coma, decerebrate posturing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Hydrocephalus Assessment — SAH only -->
+  <div class="req-section" data-type="SAH">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Hydrocephalus Assessment</span>
+    </div>
+    <div class="req-body">
+      <div class="frow-label" style="margin-bottom:6px;">Hydrocephalus requiring EVD? <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-evd">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-evd'); sync()">No</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-evd'); sync()">Yes</button>
+        <span class="doc-icon"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Nimodipine Prescribed — SAH only -->
+  <div class="req-section" data-type="SAH">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Nimodipine Prescribed</span>
+    </div>
+    <div class="req-body">
+      <div class="frow-label" style="margin-bottom:6px;">Nimodipine prescribed? <span class="flo-tag tbd">FLO TBD</span></div>
+      <div class="toggle-group" id="tg-nimodipine">
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-nimodipine'); sync()">Yes</button>
+        <button class="toggle-btn" onclick="selectToggle(this,'tg-nimodipine'); sync()">No — Contraindicated</button>
+        <span class="doc-icon"></span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- (REQ) ED CT Read -->
+  <div class="req-section" data-type="Ischemic Non-Stroke">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> ED CT Read</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">
+          ED CT Read
+          <span class="flo-tag">FLO 3331111216</span>
+        </div>
+        <div class="toggle-group" id="tg-ct-type">
+          <button class="toggle-btn" onclick="selectToggle(this,'tg-ct-type'); showHide('ct-datetime',true); sync()">Date/Time</button>
+          <button class="toggle-btn" onclick="selectToggle(this,'tg-ct-type'); showHide('ct-datetime',false); sync()">No CT</button>
+        </div>
+      </div>
+      <div id="ct-datetime" class="hidden" style="padding-left:20px; margin-top:4px;">
+        <div class="frow">
+          <div class="frow-label">CT/MRI Read Time <span class="flo-tag">FLO 3331111216</span></div>
+          <input type="time" class="epic-input time" id="f-ct-time" onchange="sync()">
+          <input type="date" class="epic-input date" id="f-ct-date" onchange="sync()" style="margin-left:8px;">
+        </div>
+        <div style="font-size:10px; color:var(--muted); margin-top:3px;">
+          <b>Note:</b>CT/MRI <b>Read</b> time (FLO 3331111216, manual from PACS report). CT/MRI <b>Done</b> time (FLO 3334600310) auto-pulls from Imaging Exam Started.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) IV tPA Administration — Ischemic only -->
+  <div class="req-section" id="sec-tpa" data-type="Ischemic">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> IV TNK Administration</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">
+          IV TNK Administered?
+          <span class="flo-tag">FLO 3334600295</span>
+        </div>
+        <div class="toggle-group" id="tg-tpa">
+          <button class="toggle-btn wide" onclick="selectToggle(this,'tg-tpa'); updateTPA(); sync()">No</button>
+          <button class="toggle-btn wide" onclick="selectToggle(this,'tg-tpa'); updateTPA(); sync()">Yes</button>
+          <button class="toggle-btn wide" onclick="selectToggle(this,'tg-tpa'); updateTPA(); sync()">Yes, outside facility</button>
+        </div>
+      </div>
+      <!-- tPA YES subfields -->
+      <div id="tpa-yes-fields" class="hidden" style="padding-left:20px; margin-top:6px;">
+        <!-- MAR auto-default + certify -->
+        <div id="tnk-mar-block" style="background:#F2FAF6; border:1px solid #BFE3CF; border-radius:4px; padding:8px 10px; margin-bottom:8px;">
+          <div id="tnk-mar-text" style="font-size:10px; color:#1A5E2A; margin-bottom:6px;">
+            Thrombolytic drug name, total dose, bolus dose, and administration time <b>auto-default from the MAR</b>. Review and certify below.
+          </div>
+          <div class="frow">
+            <div class="frow-label">TNK Administered Time
+              <span class="flo-tag">FLO 3331300606</span>
+              <span style="font-size:9px; font-weight:700; background:#DCF4E4; color:#1A5E2A; border:1px solid #9FD6B0; border-radius:3px; padding:1px 5px;">MAR</span>
+            </div>
+            <input type="time" class="epic-input time" id="f-tnk-time" onchange="sync()">
+            <input type="date" class="epic-input date" id="f-tnk-date" onchange="sync()" style="margin-left:8px;">
+          </div>
+          <div class="frow" id="tnk-certify-row" style="margin-top:2px;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:11px; cursor:pointer; color:var(--text);">
+              <input type="checkbox" id="f-tnk-certify" onchange="sync()">
+              I accept / certify the MAR-documented thrombolytic administration
+            </label>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="frow-label">Door to treatment &lt;30 min? <span class="flo-tag tbd">FLO TBD</span></div>
+          <div class="toggle-group" id="tg-dtn30">
+            <button class="toggle-btn" onclick="selectToggle(this,'tg-dtn30'); sync()">Yes</button>
+            <button class="toggle-btn" onclick="selectToggle(this,'tg-dtn30'); sync()">No</button>
+          </div>
+        </div>
+        <div id="tpa-delay-reason" class="hidden" style="margin-top:4px;">
+          <div class="frow">
+            <div class="frow-label">Reason for TNK delay <span class="flo-tag">FLO 3334600274</span></div>
+            <select class="epic-input" id="f-tpa-delay" style="width:auto; min-width:300px;" onchange="updateTPADelay(); sync()">
+              <option value="">— Select —</option>
+              <option>Obtaining last known well</option>
+              <option>BP control</option>
+              <option>Delayed patient/family decision-making</option>
+              <option>Further diagnostic evaluation</option>
+              <option>Glucose control</option>
+              <option>Unstable patient</option>
+              <option>ID workflow (e.g. COVID delay)</option>
+              <option>Other (with comment)</option>
+            </select>
+          </div>
+          <div class="frow hidden" id="tpa-delay-comment-row" style="margin-top:4px;">
+            <div class="frow-label">Comment</div>
+            <input type="text" class="epic-input" style="width:300px;" id="f-tpa-delay-comment" placeholder="Describe reason for delay..." onchange="sync()">
+          </div>
+        </div>
+        <div class="frow" style="margin-top:4px;">
+          <div class="frow-label">TNK Exclusion Reasons <span class="flo-tag">FLO 3334600308</span></div>
+          <span style="font-size:10px; color:var(--muted); font-style:italic;">Checklist — see exclusion section</span>
+        </div>
+      </div>
+      <!-- tPA NO subfields -->
+      <div id="tpa-no-fields" class="hidden" style="padding-left:20px; margin-top:6px;">
+        <div class="frow">
+          <div class="frow-label">Reason not administered <span class="flo-tag">FLO 3334600308</span></div>
+          <select class="epic-input" id="f-tpa-noreason" style="width:auto; min-width:320px;" onchange="updateTPANoReason(); sync()">
+            <option value="">— Select —</option>
+            <option>Delay in patient arrival (&gt;4.5 hrs from LKW)</option>
+            <option>In-house time delay</option>
+            <option>Delay in stroke diagnosis (consult)</option>
+            <option>No IV access</option>
+            <option>Rapid or early improvement</option>
+            <option>Advanced age</option>
+            <option>Stroke too severe</option>
+            <option>Stroke mimic / non-stroke diagnosis</option>
+            <option>Other (include comment)</option>
+          </select>
+        </div>
+        <div class="frow hidden" id="tpa-noreason-comment-row" style="margin-top:4px;">
+          <div class="frow-label">Comment</div>
+          <input type="text" class="epic-input" style="width:320px;" id="f-tpa-noreason-comment" placeholder="Describe reason..." onchange="sync()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) IV TNK Not Administered Reason — Non-Stroke -->
+  <div class="req-section" data-type="Non-Stroke">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> IV TNK Not Administered Reason</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">Reason not administered <span class="flo-tag">FLO 3334600308</span></div>
+        <select class="epic-input" id="f-tnk-noreason" style="width:auto; min-width:320px;" onchange="updateTNKNoReason(); sync()">
+          <option value="">— Select —</option>
+          <option>Delay in patient arrival (&gt;4.5 hrs from LKW)</option>
+          <option>In-house time delay</option>
+          <option>Delay in stroke diagnosis (consult)</option>
+          <option>No IV access</option>
+          <option>Rapid or early improvement</option>
+          <option>Advanced age</option>
+          <option>Stroke too severe</option>
+          <option>Stroke mimic / non-stroke diagnosis</option>
+          <option>Other (include comment)</option>
+        </select>
+      </div>
+      <div class="frow hidden" id="tnk-noreason-comment-row" style="margin-top:4px;">
+        <div class="frow-label">Comment</div>
+        <input type="text" class="epic-input" style="width:320px;" id="f-tnk-noreason-comment" placeholder="Describe reason..." onchange="sync()">
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Intra-arterial Documentation — Ischemic & Non-Stroke -->
+  <div class="req-section" id="sec-nir" data-type="Ischemic Non-Stroke">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Intra-arterial Stroke Documentation</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">Neuro IR Indicated / Contacted?</div>
+        <div class="toggle-group" id="tg-nir">
+          <button class="toggle-btn" onclick="selectToggle(this,'tg-nir'); updateNIR(); sync()">No</button>
+          <button class="toggle-btn" onclick="selectToggle(this,'tg-nir'); updateNIR(); sync()">Yes</button>
+        </div>
+      </div>
+      <div id="nir-yes-fields" class="hidden" style="padding-left:20px; margin-top:6px;">
+        <div class="frow">
+          <div class="frow-label">Time of Neuro IR Contact <span class="flo-tag">FLO 3334600248</span></div>
+          <input type="time" class="epic-input time" id="f-nir-contact" onchange="sync()">
+        </div>
+        <div class="frow">
+          <div class="frow-label">Time of Neuro IR Decision <span class="flo-tag">FLO 3334600320</span></div>
+          <input type="time" class="epic-input time" id="f-nir-decision" onchange="sync()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- (REQ) Antithrombotic — Ischemic only -->
+  <div class="req-section" id="sec-antithromb" data-type="Ischemic">
+    <div class="req-header" onclick="toggleReq(this)">
+      <span class="req-chevron">▾</span>
+      <span class="req-label"><b>(REQ)</b> Antithrombotic Therapy Prescribed</span>
+    </div>
+    <div class="req-body">
+      <div class="frow">
+        <div class="frow-label">
+          Antithrombotic by end of hospital day 2
+          <span class="flo-tag">FLO 10733</span>
+        </div>
+        <select class="epic-input" id="tg-antithromb" style="width:auto; min-width:320px;" onchange="sync()">
+          <option value="">— Select —</option>
+          <option>Aspirin</option>
+          <option>Clopidogrel</option>
+          <option>Extended-release aspirin plus dipyridamole</option>
+          <option>Cilostazol</option>
+          <option>Full-dose oral anticoagulant</option>
+          <option>Full-dose injectable anticoagulation</option>
+          <option>Other</option>
+          <option>Contraindicated</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Embedded flowsheet sections (mirror real Epic Navigator) ══ -->
+  <div class="embed-section" id="emb-antithromb-checkoff" data-type="Ischemic">
+    <div class="embed-header">
+      <span class="embed-icon">▦</span>
+      <span class="embed-title">Antithrombotic Check Off</span>
+      <span class="embed-refresh">&#8635;</span>
+    </div>
+    <div class="embed-body">
+      <div style="font-size:11px; color:var(--epic-teal); font-weight:600; margin-bottom:6px;">Antithrombotic Therapy Prescribed</div>
+      <label class="embed-ack">
+        <input type="checkbox" id="f-antithromb-ack" onchange="sync()">
+        I acknowledge that the patient must receive an antiplatelet by HD2
+      </label>
+      <div style="text-align:right; margin-top:-16px;"><span class="embed-link">Flowsheets ↗</span></div>
+    </div>
+  </div>
+
+  <div class="embed-section" id="emb-antithromb-admin" data-type="Ischemic">
+    <div class="embed-header">
+      <span class="embed-icon">▦</span>
+      <span class="embed-title">Antithrombotic Administered</span>
+      <span class="embed-refresh">&#8635;</span>
+    </div>
+    <div class="embed-body">
+      <span class="embed-add">+New Reading</span>
+      <div style="margin-top:6px; color:#8A9A9A;">No data found. <span class="embed-link" style="float:right;">Flowsheets ↗</span></div>
+    </div>
+  </div>
+
+  <div class="embed-section" id="emb-nimodipine-admin" data-type="SAH">
+    <div class="embed-header">
+      <span class="embed-icon">▦</span>
+      <span class="embed-title">Nimodipine Administered</span>
+      <span class="embed-refresh">&#8635;</span>
+    </div>
+    <div class="embed-body">
+      <span class="embed-add">+ New Reading</span>
+      <div style="margin-top:6px; color:#8A9A9A;">No data found.</div>
+    </div>
+  </div>
+
+  <div class="embed-section" id="emb-neuro-hp" data-type="all">
+    <div class="embed-header">
+      <span class="embed-icon">▦</span>
+      <span class="embed-title">Neuro Admission H&amp;P</span>
+      <span class="embed-refresh">&#8635;</span>
+    </div>
+    <div class="embed-body">
+      <span class="embed-add">+Create Note</span>
+      <div style="margin-top:6px; color:#8A9A9A;">No H&amp;P Notes have been filed for this patient within the last 23 hours. <span class="embed-link" style="float:right;">Notes Activity</span></div>
+    </div>
+  </div>
+
+  <div class="embed-section" id="emb-ischemic-dc" data-type="Ischemic">
+    <div class="embed-header">
+      <span class="embed-icon">▦</span>
+      <span class="embed-title">Ischemic Discharge Information</span>
+      <span class="embed-refresh">&#8635;</span>
+    </div>
+    <div class="embed-body">
+      <span class="embed-add">+New Reading</span>
+      <div style="margin-top:6px; color:#8A9A9A;">No data found.</div>
+    </div>
+  </div>
+
+  <div class="embed-section" id="emb-ich-dc" data-type="ICH">
+    <div class="embed-header">
+      <span class="embed-icon">▦</span>
+      <span class="embed-title">ICH Discharge Information</span>
+      <span class="embed-refresh">&#8635;</span>
+    </div>
+    <div class="embed-body">
+      <span class="embed-add">+New Reading</span>
+      <div style="margin-top:6px; color:#8A9A9A;">No data found.</div>
+    </div>
+  </div>
+
+  <div class="embed-section" id="emb-sah-dc" data-type="SAH">
+    <div class="embed-header">
+      <span class="embed-icon">▦</span>
+      <span class="embed-title">SAH Discharge Assessment</span>
+      <span class="embed-refresh">&#8635;</span>
+    </div>
+    <div class="embed-body">
+      <span class="embed-add">+New Reading</span>
+      <div style="margin-top:6px; color:#8A9A9A;">No data found.</div>
+    </div>
+  </div>
+
+  <!-- ══ Notes for Kim ══ -->
+  <div class="kim-notes">
+    <div class="kim-notes-head">Notes for Kim</div>
+    <div class="kim-notes-body">
+      <h4>Flowsheet Row IDs to confirm (currently marked FLO TBD)</h4>
+      <ul>
+        <li>GCS components — Eye Opening, Best Verbal, Best Motor (ICH &amp; SAH)</li>
+        <li>ICH Score subcomponents — GCS Points, ICH Volume ≥30 mL, Intraventricular Hemorrhage, Infratentorial Origin</li>
+        <li>Fisher Grading Score (SAH)</li>
+        <li>Coagulopathy (ICH &amp; SAH)</li>
+        <li>Hydrocephalus requiring EVD (SAH)</li>
+        <li>Nimodipine prescribed (SAH)</li>
+        <li>Door-to-treatment ≤30 min indicator (currently calculated, not a stored row)</li>
+        <li>Discharge mRS &amp; Rehab Assessed (Discharge Measures)</li>
+      </ul>
+
+      <h4>Row ID to verify</h4>
+      <ul>
+        <li>Time Stroke Provider at Bedside is <code>33311112214</code>.</li>
+      </ul>
+
+      <h4>Source consistency (sim badge vs where Rose abstracts)</h4>
+      <ul>
+        <li>CT/MRI Read — sim shows <code>NAV → 3331111216</code>; Rose takes the <b>earliest of the stroke-flowsheet read time vs. the radiology/PACS report</b>. Flowsheet should reconcile with PACS.</li>
+        <li>Antithrombotic by HD2 &amp; discharge meds (STK-1…5) — the <b>medication</b> comes from the <b>MAR / discharge order set</b>; flowsheet row <code>10733</code> is the attestation only.</li>
+        <li>Thrombolytic drug name, total dose, bolus dose, and administration time — sim shows <b>MAR</b>; matches Rose (MAR / Medication History, earliest documented medication administration).</li>
+      </ul>
+
+      <h4>Data elements Rose still needs (not yet captured)</h4>
+      <ul>
+        <li>Vascular / perfusion imaging (CTA / MRA / CTP) performed + reported date/time</li>
+        <li>Symptom-discovery time (distinct from Last Known Well)</li>
+        <li>Stroke etiology (TOAST) — ischemic</li>
+        <li>Pre-admission antiplatelet / anticoagulant + last anticoagulant dose</li>
+        <li>Discharge bundle — discharge mRS, VTE prophylaxis (STK-1), Afib med at discharge (STK-3), antithrombotic at discharge, dysphagia/swallow screen</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /view-navigator -->
+
+<!-- ──────── VIEW 2: NIR ──────── -->
+<div class="content-view" id="view-nir">
+  <div class="section-bar">
+    <span style="font-size:14px;">▦</span> <span>NIR Stroke Tracking</span>
+  </div>
+
+  <div class="nir-wrap">
+    <div class="nir-grid">
+      <div class="nir-panel">
+        <div class="req-section" id="sec-evt" data-type="Ischemic">
+          <div class="req-header" onclick="toggleReq(this)">
+            <span class="req-chevron">▾</span>
+            <span class="req-label"><b>(REQ)</b> Endovascular Therapy (EVT) Documentation</span>
+          </div>
+          <div class="req-body">
+            <div class="frow">
+              <div class="frow-label">EVT / Mechanical Thrombectomy Performed? <span class="flo-tag">FLO 3334600296</span></div>
+              <div class="toggle-group" id="tg-evt">
+                <button class="toggle-btn" onclick="selectToggle(this,'tg-evt'); updateEVT(); sync()">No</button>
+                <button class="toggle-btn" onclick="selectToggle(this,'tg-evt'); updateEVT(); sync()">Yes</button>
+              </div>
+            </div>
+            <div id="evt-yes-fields" class="hidden" style="padding-left:20px; margin-top:6px;">
+              <div class="frow">
+                <div class="frow-label">Type of Endovascular Treatment <span class="flo-tag">FLO 3334600276</span></div>
+                <input type="text" class="epic-input" style="width:260px;" id="f-evt-type" placeholder="e.g. mechanical thrombectomy" onchange="sync()">
+              </div>
+              <div class="frow">
+                <div class="frow-label">Time of Angio Team Activation <span class="flo-tag">FLO 3334600321</span></div>
+                <input type="time" class="epic-input time" id="f-angio-time" onchange="sync()">
+              </div>
+              <div class="frow">
+                <div class="frow-label">Arterial Access (Groin/Skin Puncture) Date <span class="flo-tag">FLO 3334600419</span></div>
+                <input type="date" class="epic-input date" id="f-groin-date" onchange="sync()">
+              </div>
+              <div class="frow">
+                <div class="frow-label">Arterial Access (Groin/Skin Puncture) Time <span class="flo-tag">FLO 3331111312</span></div>
+                <input type="time" class="epic-input time" id="f-groin-time" onchange="sync()">
+              </div>
+              <div class="frow">
+                <div class="frow-label">Time of 1st Deployment / Intervention <span class="flo-tag">FLO 3331111345</span></div>
+                <input type="time" class="epic-input time" id="f-deploy-time" onchange="sync()">
+              </div>
+              <div class="frow">
+                <div class="frow-label">Revascularization Time <span class="flo-tag">FLO 3331111447</span></div>
+                <input type="time" class="epic-input time" id="f-revasc-time" onchange="sync()">
+              </div>
+              <div class="frow">
+                <div class="frow-label">Post-TICI Score <span class="flo-tag">FLO 3335600457</span></div>
+                <div class="toggle-group" id="tg-tici">
+                  <button class="toggle-btn" onclick="selectToggle(this,'tg-tici'); sync()">0</button>
+                  <button class="toggle-btn" onclick="selectToggle(this,'tg-tici'); sync()">1</button>
+                  <button class="toggle-btn" onclick="selectToggle(this,'tg-tici'); sync()">2a</button>
+                  <button class="toggle-btn" onclick="selectToggle(this,'tg-tici'); sync()">2b</button>
+                  <button class="toggle-btn" onclick="selectToggle(this,'tg-tici'); sync()">2c</button>
+                  <button class="toggle-btn" onclick="selectToggle(this,'tg-tici'); sync()">3</button>
+                </div>
+              </div>
+              <div class="frow">
+                <div class="frow-label">Door-to-Device Delay (&gt;60 BEMI / &gt;90 DALVO) <span class="flo-tag">FLO 3334600309</span></div>
+                <input type="text" class="epic-input" style="width:260px;" id="f-d2device-delay" placeholder="Reason for delay..." onchange="sync()">
+              </div>
+              <div class="frow">
+                <div class="frow-label">EVT Exclusion Reasons <span class="flo-tag">FLO 3334600251</span></div>
+                <span style="font-size:10px; color:var(--muted); font-style:italic;">Checklist — documented if EVT not performed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nir-panel">
+        <div class="sum-section">
+          <div class="sum-section-head">NIR / EVT Flowsheet Rows</div>
+          <div class="sum-section-body">
+            <table class="nir-table">
+              <tr><th>Flowsheet Item</th><th>Epic Row Name</th><th>FLO Row ID</th></tr>
+              <tr><td>Time of Angio Team Activation (IR)</td><td>UCSD IP R STROKE TIME OF ANGIO ACTIVATION</td><td><span class="flo-tag">3334600321</span></td></tr>
+              <tr><td>In Room Time</td><td>UC IP R IA IN ROOM TIME</td><td><span class="flo-tag">3335600453</span></td></tr>
+              <tr><td>Date of Groin/Skin Puncture</td><td>UCSD R STROKE DATE OF GROIN/SKIN PUNCTURE</td><td><span class="flo-tag">3334600419</span></td></tr>
+              <tr><td>Groin/Skin Puncture Time</td><td>UC IP R GROIN PUNC TIME</td><td><span class="flo-tag">3331111312</span></td></tr>
+              <tr><td>Type of Endovascular Treatment</td><td>UCSD IP IA TYPE OF PROCEDURE</td><td><span class="flo-tag">3334600276</span></td></tr>
+              <tr><td>Date of 1st Deployment</td><td>UCSD R STROKE DATE OF 1ST DEPLOYMENT</td><td><span class="flo-tag">3334600420</span></td></tr>
+              <tr><td>Time of 1st Deployment / Intervention</td><td>UCSD IP R IA DEPLOYMENT</td><td><span class="flo-tag">3331111345</span></td></tr>
+              <tr><td>Time of 2nd Deployment / Intervention</td><td>UCSD IP R IA DEPLOYMENT 2</td><td><span class="flo-tag">3331111361</span></td></tr>
+              <tr><td>Time of 3rd Deployment / Intervention</td><td>UCSD IP R IA DEPLOYMENT 3</td><td><span class="flo-tag">3331111362</span></td></tr>
+              <tr><td>Door-to-Device Delay: &gt;60 BEMI / &gt;90 DALVO</td><td>UCSD IP R STROKE DOOR TO DEVICE DELAY</td><td><span class="flo-tag">3334600309</span></td></tr>
+              <tr><td>Target Vessel(s)</td><td>UCSD IO R IA TARGET VESSEL</td><td><span class="flo-tag">3335600456</span></td></tr>
+              <tr><td>Revascularization Time</td><td>UC IP R IA REVASCULAR</td><td><span class="flo-tag">3331111447</span></td></tr>
+              <tr><td>Post TICI</td><td>UC IP R IA POST TICA</td><td><span class="flo-tag">3335600457</span></td></tr>
+              <tr><td>Time Sheath Pulled</td><td>UC IP R IA TIME SHEATH PULLED</td><td><span class="flo-tag">3335101651</span></td></tr>
+              <tr><td>Time of Hemostasis (IR)</td><td>UC IP R IA IR HEMOSTASIS TIME</td><td><span class="flo-tag">3335600460</span></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-nir -->
+
+<!-- ──────── VIEW 2: STROKE SUMMARY ──────── -->
+<div class="content-view" id="view-summary">
+
+  <!-- Epic Summary toolbar -->
+  <div class="rpt-toolbar">
+    <span class="rpt-tab">Summary</span>
+    <span class="rpt-tool-icon" title="Home">&#8962;</span>
+    <span class="rpt-tool-icon" title="Refresh">&#8635;</span>
+    <span class="rpt-maintitle">Stroke Summary</span>
+    <span class="rpt-actions">
+      <button class="rpt-btn">Print</button>
+      <button class="rpt-btn">Export</button>
+      <select class="rpt-select"><option>Stroke Summary</option></select>
+      <span class="rpt-help">?</span>
+    </span>
+  </div>
+  <div class="rpt-timerange">
+    <span>Time Range:</span>
+    <select class="rpt-tr-select">
+      <option>All Available Data</option>
+      <option>This Admission</option>
+      <option>Last 24 Hours</option>
+    </select>
+  </div>
+
+  <!-- Source key -->
+  <div class="src-key-bar">
+    <strong>Source key:</strong>
+    <span><span class="sb sb-nav">NAV</span> Navigator → Flowsheet Row → Clarity</span>
+    <span><span class="sb sb-adt">ADT</span> ADT system event</span>
+    <span><span class="sb sb-calc">CALC</span> Calculated</span>
+    <span><span class="sb sb-mar">MAR</span> MAR / order set</span>
+    <span><span class="sb sb-tbd">TBD</span> Row ID to confirm</span>
+    <span><span class="sb sb-unknown">Unknown</span> Source unknown</span>
+  </div>
+
+  <div class="summary-grid" id="summary-grid">
+    <!-- Populated by JS -->
+  </div>
+
+  <div class="rpt-footer">
+    <span><b>Patient:</b> JOHN DOE &nbsp;&nbsp; <b>MRN:</b> 12345678 &nbsp;&nbsp; <b>CSN:</b> 876543210</span>
+    <span>© 2024 Epic Systems Corporation.</span>
+    <span>Page 1 of 1 &nbsp;&nbsp; 05/17/2024 14:02</span>
+  </div>
+
+</div><!-- /view-summary -->
+
+</div><!-- /content-area -->
+</div><!-- /main-wrap -->
+
+<!-- BOTTOM BAR -->
+<div class="bottombar">
+  <div class="bb-left">
+    <button class="bb-btn addorder">+ ADD ORDER</button>
+    <button class="bb-btn close-btn">✓ Close</button>
+    <button class="bb-btn cancel-btn">✕ Cancel</button>
+    <span class="bb-copyright">© 2018 Epic Systems Corporation. Used with permission.</span>
+  </div>
+  <div class="bb-right">
+    <button class="bb-btn">↑ Previous</button>
+    <button class="bb-btn">↓ Next</button>
+  </div>
+</div>
+
+<script>
+// ═══ NIHSS items with FLO row IDs ═══
+const NIHSS = [
+  { id:'q1a', label:'Level of Consciousness', max:3,  flo:'312100' },
+  { id:'q1b', label:'LOC Questions',          max:2,  flo:'312101' },
+  { id:'q1c', label:'LOC Commands',           max:2,  flo:'312102' },
+  { id:'q2',  label:'Best Gaze',              max:2,  flo:'312116' },
+  { id:'q3',  label:'Visual',                 max:3,  flo:'312103' },
+  { id:'q4',  label:'Facial Palsy',           max:3,  flo:'312104' },
+  { id:'q5a', label:'Motor Arm - Left',       max:4,  flo:'312105', hasX:true },
+  { id:'q5b', label:'Motor Arm - Right',      max:4,  flo:'312106', hasX:true },
+  { id:'q6a', label:'Motor Leg - Left',       max:4,  flo:'312107', hasX:true },
+  { id:'q6b', label:'Motor Leg - Right',      max:4,  flo:'312108', hasX:true },
+  { id:'q7',  label:'Limb Ataxia',            max:2,  flo:'312109' },
+  { id:'q8',  label:'Sensory',                max:2,  flo:'312110' },
+  { id:'q9',  label:'Best Language',          max:3,  flo:'312111' },
+  { id:'q10', label:'Dysarthria',             max:2,  flo:'312112', hasX:true },
+  { id:'q11', label:'Extinction / Inattention', max:2, flo:'312113' },
+];
+const nihssVals = {};
+
+function buildNIHSS() {
+  const body = document.getElementById('nihss-body');
+  let html = `<div style="font-size:10px; color:var(--muted); padding:4px 0 6px;">
+    NIHSS Time → <span class="flo-tag" style="font-size:9px;">FLO 3334600294</span> &nbsp;|&nbsp;
+    Individual item rows → <span class="flo-tag" style="font-size:9px;">FLO 312100–312116</span> &nbsp;|&nbsp;
+    Total → <span class="flo-tag" style="font-size:9px;">FLO 312114</span>
+  </div>`;
+
+  for (const item of NIHSS) {
+    html += `<div class="nihss-row">
+      <div class="nihss-label">${item.label}</div>
+      <div class="nihss-btns">`;
+    for (let i = 0; i <= item.max; i++) {
+      html += `<button class="nihss-btn" id="n-${item.id}-${i}" onclick="pickNIHSS('${item.id}',${i})">${i}</button>`;
+    }
+    if (item.hasX) {
+      html += `<button class="nihss-btn" id="n-${item.id}-X" onclick="pickNIHSS('${item.id}','X')" style="font-size:10px;">X</button>`;
+    }
+    html += `</div>
+      <span class="nihss-florow">${item.flo === 'TBD' ? 'FLO TBD' : 'FLO '+item.flo}</span>
+    </div>`;
+  }
+
+  html += `<div class="nihss-total">
+    <div class="nihss-total-label">Total Score <span class="flo-tag" style="font-size:9px;">FLO 312114</span></div>
+    <div class="nihss-total-val" id="nihss-total">—</div>
+  </div>`;
+  body.innerHTML = html;
+}
+
+function pickNIHSS(id, val) {
+  const item = NIHSS.find(n => n.id === id);
+  for (let i = 0; i <= item.max; i++) document.getElementById(`n-${id}-${i}`).classList.remove('selected');
+  if (item.hasX) document.getElementById(`n-${id}-X`).classList.remove('selected');
+  document.getElementById(`n-${id}-${val}`).classList.add('selected');
+  nihssVals[id] = val;
+  let total = 0;
+  for (const v of Object.values(nihssVals)) { if (typeof v === 'number') total += v; }
+  document.getElementById('nihss-total').textContent = total;
+  sync();
+}
+
+// ═══ TOGGLE HELPERS ═══
+function selectToggle(btn, groupId) {
+  document.getElementById(groupId).querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function getToggle(groupId) {
+  const sel = document.getElementById(groupId)?.querySelector('.toggle-btn.selected');
+  return sel ? sel.textContent.trim() : '';
+}
+
+// ═══ COLLAPSE ═══
+function toggleReq(header) {
+  const body = header.nextElementSibling;
+  const chev = header.querySelector('.req-chevron');
+  body.classList.toggle('collapsed');
+  chev.classList.toggle('collapsed');
+}
+
+// ═══ SHOW/HIDE ═══
+function showHide(id, show) {
+  const el = document.getElementById(id);
+  if (el) { show ? el.classList.remove('hidden') : el.classList.add('hidden'); }
+}
+
+// ═══ STROKE TYPE ═══
+const TYPE_TAB_ID = {
+  'Ischemic':'typetab-ischemic', 'ICH':'typetab-ich', 'SAH':'typetab-sah',
+  'Non-Stroke':'typetab-nonstroke'
+};
+// Click handler for the Type of Stroke checkboxes (single-select like Epic)
+function pickStrokeType(el, type) {
+  document.querySelectorAll('#tg-stroke-type input[type=checkbox]').forEach(c => { c.checked = (c === el); });
+  el.checked = true;
+  setStrokeType(type);
+}
+function getStrokeType() {
+  const c = document.querySelector('#tg-stroke-type input[type=checkbox]:checked');
+  return c ? c.parentElement.textContent.trim() : 'Ischemic';
+}
+function setStrokeType(type) {
+  document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-navigator').classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  const initialSidebar = document.getElementById('nav-link-initial');
+  if (initialSidebar) initialSidebar.classList.add('active');
+  document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById(TYPE_TAB_ID[type]);
+  if (tab) tab.classList.add('active');
+  // green header + sidebar label
+  const hdText = (type === 'Ischemic') ? 'Initial Assessments — Ischemic' : type + ' Initial Assessment';
+  document.getElementById('section-type-label').textContent = hdText;
+  const navLink = document.getElementById('nav-link-initial');
+  if (navLink) navLink.textContent = (type === 'Ischemic' ? 'Initial Assessments' : type + ' Initial Assessment');
+  // sync the Type of Stroke checkboxes
+  const map = { 'Ischemic':'chk-ischemic', 'ICH':'chk-ich', 'SAH':'chk-sah' };
+  document.querySelectorAll('#tg-stroke-type input[type=checkbox]').forEach(c => { c.checked = false; });
+  if (map[type]) { const cb = document.getElementById(map[type]); if (cb) cb.checked = true; }
+  // Show/hide sections by data-type ("all" or matching type)
+  document.querySelectorAll('[data-type]').forEach(el => {
+    const types = el.getAttribute('data-type').split(/\s+/);
+    el.classList.toggle('hidden', !(types.includes('all') || types.includes(type)));
+  });
+  sync();
+}
+
+// ═══ GCS auto-calc (ICH & SAH) ═══
+function calcGCS() {
+  const e = parseInt(getToggle('tg-gcs-eye'), 10);
+  const v = parseInt(getToggle('tg-gcs-verbal'), 10);
+  const m = parseInt(getToggle('tg-gcs-motor'), 10);
+  const out = document.getElementById('f-gcs-total');
+  if (!out) return;
+  if (!isNaN(e) && !isNaN(v) && !isNaN(m)) {
+    const total = e + v + m;
+    out.value = total;
+    // auto-derive ICH GCS Points bucket from the total
+    let bucket = null;
+    if (total >= 13) bucket = '0=GCS 13-15';
+    else if (total >= 5) bucket = '1=GCS 5-12';
+    else bucket = '2=GCS 3-4';
+    const grp = document.getElementById('tg-ich-gcs');
+    if (grp) {
+      grp.querySelectorAll('.toggle-btn').forEach(b => b.classList.toggle('selected', b.textContent.trim() === bucket));
+      calcICH();
+    }
+  } else {
+    out.value = '';
+  }
+}
+
+// ═══ ICH Score auto-calc (sum of leading digits) ═══
+function leadInt(txt) { const m = (txt || '').match(/^\d/); return m ? parseInt(m[0], 10) : 0; }
+function calcICH() {
+  const ids = ['tg-ich-gcs','tg-ich-vol','tg-ich-ivh','tg-ich-infra','tg-ich-age'];
+  let any = false, total = 0;
+  ids.forEach(id => { const v = getToggle(id); if (v) { any = true; total += leadInt(v); } });
+  const out = document.getElementById('ich-total');
+  if (out) out.textContent = any ? total : '—';
+}
+
+// ═══ tPA / NIR CONDITIONALS ═══
+// Simulated MAR-charted tenecteplase administration time (in real Epic this pulls from the MAR)
+const MAR_TNK_TIME = '08:42';
+const MAR_THROMBOLYTIC_DRUG = 'Tenecteplase';
+const MAR_THROMBOLYTIC_TOTAL_DOSE = '25 mg';
+const MAR_THROMBOLYTIC_BOLUS_DOSE = '25 mg';
+function updateTPA() {
+  const val = getToggle('tg-tpa');
+  const isYes = val === 'Yes';
+  const isOutside = val === 'Yes, outside facility';
+  showHide('tpa-yes-fields', isYes || isOutside);
+  showHide('tpa-no-fields',  val === 'No');
+  showHide('tpa-delay-reason', getToggle('tg-dtn30') === 'No');
+
+  // MAR auto-default: when TNK is given at THIS facility, the administration
+  // time defaults from the MAR and the resident must certify it.
+  const marBlock = document.getElementById('tnk-mar-block');
+  const note = document.getElementById('tnk-mar-text');
+  const certifyRow = document.getElementById('tnk-certify-row');
+  if (marBlock) {
+    if (isYes) {
+      const t = document.getElementById('f-tnk-time');
+      const d = document.getElementById('f-tnk-date');
+      if (t && !t.value) t.value = MAR_TNK_TIME;
+      if (d && !d.value) d.value = (document.getElementById('f-assessed-date').value || new Date().toISOString().split('T')[0]);
+      if (note) note.innerHTML = 'Thrombolytic drug name, total dose, bolus dose, and administration time <b>auto-default from the MAR</b>. Review and certify below.';
+      if (certifyRow) certifyRow.style.display = '';
+    } else if (isOutside) {
+      // Given at an outside facility — no local MAR; entered manually, no certify needed.
+      if (note) note.innerHTML = 'Administered at an <b>outside facility</b> — no local MAR entry. Enter the documented time manually.';
+      if (certifyRow) certifyRow.style.display = 'none';
+    }
+  }
+}
+function updateTPADelay() {
+  const v = document.getElementById('f-tpa-delay')?.value || '';
+  showHide('tpa-delay-comment-row', v === 'Other (with comment)');
+}
+function updateTPANoReason() {
+  showHide('tpa-noreason-comment-row', (document.getElementById('f-tpa-noreason')?.value || '') === 'Other (include comment)');
+}
+function updateTNKNoReason() {
+  showHide('tnk-noreason-comment-row', (document.getElementById('f-tnk-noreason')?.value || '') === 'Other (include comment)');
+}
+function updateNIR() {
+  showHide('nir-yes-fields', getToggle('tg-nir') === 'Yes');
+}
+function updateEVT() {
+  showHide('evt-yes-fields', getToggle('tg-evt') === 'Yes');
+}
+
+// ═══ VIEW SWITCH ═══
+function showView(view, event) {
+  document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
+  if (view === 'navigator') {
+    const typeTab = document.getElementById(TYPE_TAB_ID[getStrokeType()]);
+    if (typeTab) typeTab.classList.add('active');
+  }
+  if (view === 'nir') document.getElementById('viewtab-nir')?.classList.add('active');
+  if (view === 'summary') document.getElementById('viewtab-summary')?.classList.add('active');
+  if (view === 'summary') buildSummary();
+}
+
+// ═══ SOURCE BADGE helpers ═══
+function sbNav(floId) {
+  if (floId === 'TBD') return `<span class="sb sb-tbd">NAV → FLO TBD</span>`;
+  return `<span class="sb sb-nav">NAV → FLO ${floId}</span>`;
+}
+function sbAdt(label) { return `<span class="sb sb-adt">ADT: ${label}</span>`; }
+function sbCalc(label) { return `<span class="sb sb-calc">CALC: ${label}</span>`; }
+function sbMar() { return `<span class="sb sb-mar">MAR</span>`; }
+function sbUnknown() { return `<span class="sb sb-unknown">Unknown</span>`; }
+
+// sum-row with source badge
+function sr(label, val, srcBadge) {
+  const valClass = val ? '' : ' empty';
+  const badge = srcBadge ? `<span class="sum-src">${srcBadge}</span>` : '';
+  return `<div class="sum-row">
+    <span class="sum-label">${label}</span>
+    <span class="sum-val${valClass}">${val || '—'}</span>
+    ${badge}
+  </div>`;
+}
+
+// table row with source cell
+function tr3(row, src, val) {
+  return `<tr>
+    <td>${row}</td>
+    <td>${val || '—'}</td>
+    <td class="src-cell">${src}</td>
+  </tr>`;
+}
+
+function calcMin(d1, t1, d2, t2) {
+  if (!d1 || !t1 || !d2 || !t2) return null;
+  return Math.round((new Date(d2+'T'+t2) - new Date(d1+'T'+t1)) / 60000);
+}
+
+// ═══ BUILD STROKE SUMMARY ═══
+function buildSummary() {
+  const grid = document.getElementById('summary-grid');
+  const type        = getStrokeType();
+  const assessedDate = document.getElementById('f-assessed-date').value;
+  const assessedTime = document.getElementById('f-assessed-time').value;
+  const lkwDate     = document.getElementById('f-lkw-date').value;
+  const lkwTime     = document.getElementById('f-lkw-time').value;
+  const lkwType     = getToggle('tg-lkw-type');
+  const arrivalMode = document.getElementById('tg-arrival')?.value || '';
+  const mrs         = getToggle('tg-mrs');
+  const ctDate      = document.getElementById('f-ct-date')?.value || '';
+  const ctTime      = document.getElementById('f-ct-time')?.value || '';
+  const tpa         = getToggle('tg-tpa');
+  const tnkDate     = document.getElementById('f-tnk-date')?.value || '';
+  const tnkTime     = document.getElementById('f-tnk-time')?.value || '';
+  const nir         = getToggle('tg-nir');
+  const nirContact  = document.getElementById('f-nir-contact')?.value || '';
+  const nirDecision = document.getElementById('f-nir-decision')?.value || '';
+  const evt         = getToggle('tg-evt');
+  const groinDate   = document.getElementById('f-groin-date')?.value || '';
+  const groinTime   = document.getElementById('f-groin-time')?.value || '';
+  const revascTime  = document.getElementById('f-revasc-time')?.value || '';
+  const tici        = getToggle('tg-tici');
+  const antithromb    = document.getElementById('tg-antithromb')?.value || '';
+  const encounterType = getToggle('tg-encounter') || 'Stroke Code';
+  const codeCalled      = document.getElementById('f-code-called')?.value || '';
+  const providerCallback = document.getElementById('f-provider-callback')?.value || '';
+  const providerBedside  = document.getElementById('f-provider-bedside')?.value || '';
+
+  function fmt(d, t) {
+    if (d && t) return `${d} ${t}`;
+    if (d) return d;
+    if (t) return `Unknown date ${t}`;
+    return '';
+  }
+  function sourceText(src) { return src || sbUnknown(); }
+
+  // Code-to-bedside interval (same-day assumption using today's date as placeholder)
+  const today = assessedDate || new Date().toISOString().split('T')[0];
+  const codeToBedside = calcMin(today, codeCalled, today, providerBedside);
+
+  const dtn = calcMin(assessedDate, assessedTime, tnkDate, tnkTime);
+  const dtp = calcMin(assessedDate, assessedTime, groinDate, groinTime);
+
+  let nihssTotal = null;
+  if (Object.keys(nihssVals).length > 0) {
+    nihssTotal = 0;
+    for (const v of Object.values(nihssVals)) { if (typeof v === 'number') nihssTotal += v; }
+  }
+
+  // Epic "print group" box helper
+  function pg(title, body) {
+    return `<div class="sum-section"><div class="sum-section-head">${title}</div><div class="sum-section-body">${body}</div></div>`;
+  }
+  function table(headers, rows) {
+    return `<table class="sum-table"><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>${rows.join('')}</table>`;
+  }
+  function row(label, val, src) {
+    return tr3(label, sourceText(src), val);
+  }
+  function row3(a, b, c, src) {
+    return `<tr><td>${a}</td><td>${b || '—'}</td><td>${c || '—'}</td><td class="src-cell">${sourceText(src)}</td></tr>`;
+  }
+
+  const lkwValue = lkwType === 'Unknown' ? 'Unknown' : fmt(lkwDate, lkwTime);
+  const lkwSummaryValue = lkwValue;
+  const nihssDisplay = nihssTotal === null ? '' : nihssTotal;
+  const tnkGivenHere = tpa === 'Yes';
+  const tnkGivenOutside = tpa === 'Yes, outside facility';
+  const tnkAdminValue = (tnkGivenHere || tnkGivenOutside) ? fmt(tnkDate, tnkTime) : '';
+  const doorToNeedleValue = dtn !== null ? `${dtn} min` : '';
+  const tnkAdminDisplay = tnkAdminValue && doorToNeedleValue ? `${tnkAdminValue} (Door to Needle: ${doorToNeedleValue})` : tnkAdminValue;
+  const doorToPunctureValue = dtp !== null ? `${dtp} min` : '';
+  const dtn30 = getToggle('tg-dtn30');
+  let tnkNoReason = document.getElementById('f-tpa-noreason')?.value || document.getElementById('f-tnk-noreason')?.value || '';
+  if (tnkNoReason === 'Other (include comment)') {
+    const c = document.getElementById('f-tpa-noreason-comment')?.value || document.getElementById('f-tnk-noreason-comment')?.value;
+    tnkNoReason = c ? `Other: ${c}` : 'Other';
+  }
+  let tnkDelayReason = document.getElementById('f-tpa-delay')?.value || '';
+  if (tnkDelayReason === 'Other (with comment)') {
+    const c = document.getElementById('f-tpa-delay-comment')?.value;
+    tnkDelayReason = c ? `Other: ${c}` : 'Other';
+  }
+  const ctType = getToggle('tg-ct-type');
+  const ctReadDateTime = fmt(ctDate, ctTime);
+  const evtType = document.getElementById('f-evt-type')?.value || '';
+  const angioTime = document.getElementById('f-angio-time')?.value || '';
+  const deployTime = document.getElementById('f-deploy-time')?.value || '';
+  const accessDateTime = fmt(groinDate, groinTime);
+  const firstDeployDateTime = groinDate && deployTime ? fmt(groinDate, deployTime) : (deployTime ? `Unknown date ${deployTime}` : '');
+  const revascDateTime = groinDate && revascTime ? fmt(groinDate, revascTime) : (revascTime ? `Unknown date ${revascTime}` : '');
+  const doorToReperfusion = calcMin(assessedDate, assessedTime, groinDate, revascTime);
+  const doorToReperfusionValue = doorToReperfusion !== null ? `${doorToReperfusion} min` : '';
+  const irArrivalDateTime = groinDate && document.getElementById('f-angio-time')?.value
+    ? fmt(groinDate, document.getElementById('f-angio-time').value)
+    : '';
+
+  // ── LEFT COLUMN ──
+  let left = `<div class="rpt-bighead">Stroke Arrival Measurements</div>`;
+  left += pg('Admission Information — Hospital Account / Patient Record',
+    table(['Measure','Value','Source'], [
+      row('Arrival Date/Time', fmt(assessedDate, assessedTime), sbAdt('ED Registration')),
+      row('Admission Date/Time', '', sbAdt('Admission Event')),
+      row('Point of Origin', '', sbAdt('Patient Record')),
+      row('Service', '', sbAdt('Hospital Service')),
+      row('Attending Provider', '', sbAdt('Treatment Team')),
+      row('Unit', '', sbAdt('Patient Location')),
+      row('Discharge Date/Time', '', sbAdt('Discharge Event'))
+    ]));
+
+  left += pg('Stroke Arrival Measures',
+    table(['Measure','Value','Source'], [
+      row('Stroke Type', type, sbNav('3331111225')),
+      row('Arrival Date/Time', fmt(assessedDate, assessedTime), sbAdt('ED Registration')),
+      row('Last Known Well', lkwSummaryValue, sbNav('3331300602 / 3331300603')),
+      row('Time Patient Assessed', fmt(assessedDate, assessedTime), sbNav('3334600294')),
+      row('Initial NIHSS', nihssDisplay, sbNav('312114')),
+      row('Pre-stroke mRS', mrs, sbNav('3331111206')),
+      row('Arrival Mode', arrivalMode, sbNav('3331111204')),
+      row('CT Done Date/Time', ctType === 'No CT' ? 'No CT' : ctReadDateTime, sbNav('3334600310')),
+      row('CT Read Date/Time', ctReadDateTime, sbNav('3331111216')),
+      row('IV TNK/TPA Administered?', tpa, sbNav('3334600295')),
+      row('TNK/TPA Date/Time', tnkAdminValue, sbMar()),
+      row('Door-to-Needle Time', doorToNeedleValue, sbCalc('Arrival → TNK')),
+      row('TNK Not Given Reason', tnkNoReason, sbNav('3334600308'))
+    ]));
+
+  left += pg('NIR Stroke Tracking',
+    table(['Measure','Value','Source'], [
+      row('Neuro IR Indicated?', nir, sbNav('3334600296')),
+      row('EVT Performed?', evt, sbNav('3334600296')),
+      row('Occlusion Location', '', sbUnknown()),
+      row('Angio Team Activation', angioTime ? (groinDate ? fmt(groinDate, angioTime) : `Unknown date ${angioTime}`) : '', sbNav('3334600321')),
+      row('IR Suite Arrival', irArrivalDateTime, sbNav('3335600453')),
+      row('Groin Puncture Date/Time', accessDateTime, sbNav('3334600419 / 3331111312')),
+      row('First Device Deployment', firstDeployDateTime, sbNav('3331111345')),
+      row('Reperfusion Date/Time', revascDateTime, sbNav('3331111447')),
+      row('Door-to-Groin Time', doorToPunctureValue, sbCalc('Arrival → Groin')),
+      row('Door-to-Reperfusion Time', doorToReperfusionValue, sbCalc('Arrival → Reperfusion')),
+      row('EVT Delay Reason', document.getElementById('f-d2device-delay')?.value || '', sbNav('3334600309')),
+      row('Final TICI Score', tici, sbNav('3335600457')),
+      row('Number of Passes', '', sbUnknown())
+    ]));
+
+  // ── RIGHT COLUMN ──
+  let right = `<div class="rpt-bighead">Nursing Assessment</div>`;
+  right += pg('Nursing Assessment',
+    table(['Flowsheet Item','Value','Source'], [
+      row('Last Known Well', lkwSummaryValue, sbNav('3331300602 / 3331300603')),
+      row('Symptom Onset Date/Time', '', sbUnknown()),
+      row('NIHSS Filed At', fmt(assessedDate, assessedTime), sbNav('3334600294')),
+      row('Smoking Cessation', '', sbUnknown())
+    ]));
+
+  right += pg('Swallow Screen',
+    table(['Measure','Value','Source'], [
+      row('Bedside swallow screen completed on', '', sbUnknown()),
+      row('Result', '', sbUnknown())
+    ]));
+
+  right += pg('Nursing Assessment - Latest Values',
+    table(['Flowsheet Item','Most Recent Value','Source'], [
+      row('GCS Total Score', document.getElementById('f-gcs-total')?.value || '', sbUnknown()),
+      row('Pain (0-10)', '', sbUnknown()),
+      row('Last Language Screen', '', sbUnknown()),
+      row('Delirium Type', '', sbUnknown()),
+      row('Depression Screen Score (PHQ-2)', '', sbUnknown())
+    ]));
+
+  right += `<div class="rpt-bighead">Therapy Assessment</div>`;
+  right += pg('Therapy Assessment',
+    table(['Therapy Discipline','Seen/Not Seen','Most Recent Value','Source'], [
+      row3('Physical Therapy', '', '', sbUnknown()),
+      row3('Occupational Therapy', '', '', sbUnknown()),
+      row3('Speech Therapy - Swallow', '', '', sbUnknown()),
+      row3('Speech Therapy - Language', '', '', sbUnknown()),
+      row3('Cognitive Screening (MoCA)', '', '', sbUnknown())
+    ]));
+
+  right += `<div class="rpt-bighead">Discharge Measurements</div>`;
+  right += pg('Discharge Measurements',
+    table(['Measure','Value','Source'], [
+      row('mRS Score at Discharge', '', sbNav('TBD')),
+      row('Rehab assessed?', '', sbNav('TBD')),
+      row('Antiplatelet prescribed?', antithromb ? 'Yes' : '', antithromb ? sbNav('10733') : sbMar()),
+      row('Medication', antithromb, antithromb ? sbMar() : sbMar()),
+      row('Not prescribed reason', '', sbUnknown()),
+      row('Antithrombotic prescribed?', antithromb ? 'Yes' : '', antithromb ? sbNav('10733') : sbMar()),
+      row('Not prescribed reason', '', sbUnknown()),
+      row('Statin prescribed?', '', sbMar()),
+      row('Medication', '', sbMar()),
+      row('Not prescribed reason', '', sbUnknown()),
+      row('Stroke education given?', '', sbUnknown()),
+      row('DVT prophylaxis', '', sbNav('10718')),
+      row('Smoking cessation counseling', '', sbUnknown())
+    ]));
+
+  right += pg('Discharge Disposition',
+    table(['Field','Value','Source'], [
+      row('Discharge Date/Time', '', sbAdt('Discharge Event')),
+      row('Disposition', '', sbAdt('Discharge Event')),
+      row('Destination', '', sbAdt('Discharge Event')),
+      row('Patient Transport', '', sbUnknown()),
+      row('Destination Phone', '', sbUnknown())
+    ]));
+
+  grid.innerHTML = `
+    <div class="summary-col">${left}</div>
+    <div class="summary-col">${right}</div>`;
+}
+
+// ═══ SYNC ═══
+function sync() {
+  if (document.getElementById('view-summary').classList.contains('active')) buildSummary();
+}
+
+// ═══ CLICK WATCHER for dtn30 sub-question ═══
+document.addEventListener('click', function() {
+  const dtn = getToggle('tg-dtn30');
+  showHide('tpa-delay-reason', dtn === 'No');
+});
+
+// ═══ FLO ID TOGGLE ═══
+let floIdsVisible = true;
+function toggleFloIds() {
+  floIdsVisible = !floIdsVisible;
+  const btn = document.getElementById('flo-toggle-btn');
+  if (floIdsVisible) {
+    document.body.classList.remove('flo-hidden');
+    btn.textContent = 'Hide FLO IDs';
+    btn.classList.remove('off');
+  } else {
+    document.body.classList.add('flo-hidden');
+    btn.textContent = 'Show FLO IDs';
+    btn.classList.add('off');
+  }
+}
+
+// ═══ ENCOUNTER TYPE ═══
+function setEncounterType(type) {
+  const badge = document.getElementById('encounter-badge');
+  const label = document.getElementById('section-encounter-label');
+  if (type === 'Stroke Code') {
+    badge.textContent = 'STROKE CODE';
+    badge.style.background = '#FDECEA';
+    badge.style.color = '#AA2020';
+    badge.style.borderColor = '#E8BBBB';
+  } else {
+    badge.textContent = 'CONSULT';
+    badge.style.background = '#EAF0FD';
+    badge.style.color = '#1A44AA';
+    badge.style.borderColor = '#BBCCE8';
+  }
+  label.textContent = type;
+  sync();
+}
+
+// ═══ INIT ═══
+buildNIHSS();
+setStrokeType('Ischemic');
+</script>
+</body>
+</html>
