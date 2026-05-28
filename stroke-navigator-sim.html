@@ -521,6 +521,136 @@ body { background:#FFFFFF; color:#263238; }
   .summary-grid { grid-template-columns:1fr; }
   .nir-grid { grid-template-columns:1fr; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   RESEARCH — Trial Screening
+   ═══════════════════════════════════════════════════════════ */
+#view-research { background:#FFFFFF; }
+.rs-toolbar { padding:10px 16px; font-size:11.5px; color:#4A5A66;
+  border-bottom:1px solid var(--epic-line); background:#FAFBFC;
+  display:flex; align-items:center; gap:14px; }
+.rs-toolbar .rs-author { margin-left:auto; color:#5A6470; }
+.rs-toolbar .rs-author b { color:var(--epic-navy); }
+
+.rs-list { padding:12px 16px 24px; }
+.rs-cat { font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--epic-hd); margin:18px 0 6px; padding-bottom:4px; border-bottom:1px solid var(--epic-line); }
+.rs-cat:first-child { margin-top:0; }
+
+.rs-row { display:flex; align-items:center; gap:12px; padding:11px 14px;
+  background:#fff; border:1px solid var(--epic-line2); border-radius:6px; margin-bottom:6px;
+  transition: border-color 0.15s, background 0.15s; }
+.rs-row:hover { border-color:#A7C5DB; background:#F8FBFD; }
+.rs-row.na { opacity:0.55; background:#FAFAFA; }
+.rs-row.na .rs-na-tag { display:inline-block; }
+
+.rs-trial-name { font-size:14px; font-weight:600; color:var(--epic-navy); min-width:120px; }
+.rs-trial-desc { font-size:11.5px; color:#5A6E7A; flex:1; line-height:1.4; }
+.rs-trial-desc .rs-na-tag { display:none; font-size:10px; font-weight:700;
+  background:#EEE; color:#7A8590; padding:1px 7px; border-radius:3px; margin-left:8px; }
+
+.rs-status-pill { font-size:11px; font-weight:700; padding:4px 12px; border-radius:14px;
+  border:1px solid transparent; cursor:pointer; min-width:140px; text-align:center;
+  user-select:none; transition: filter 0.1s; }
+.rs-status-pill:hover { filter:brightness(0.95); }
+.rs-st-notscreened   { background:#E8ECEF; color:#4A5560; border-color:#CCD3D9; }
+.rs-st-pending       { background:#FFF3D0; color:#7A5E1A; border-color:#E6D6A8; }
+.rs-st-excluded      { background:#FCE0E0; color:#933;   border-color:#F0BCBC; }
+.rs-st-declined      { background:#FCE7D0; color:#8A4A1A; border-color:#F0CFA8; }
+.rs-st-enrolled      { background:#D8EFD8; color:#1B5E2A; border-color:#B0D8B0; }
+
+.rs-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.rs-link { font-size:11.5px; color:var(--epic-teal); cursor:pointer; font-weight:500;
+  white-space:nowrap; padding:3px 8px; border-radius:3px; }
+.rs-link:hover { background:var(--epic-line); text-decoration:underline; }
+
+.rs-history-toggle { font-size:11px; color:#6A7A86; cursor:pointer; padding:3px 8px;
+  border-radius:3px; user-select:none; }
+.rs-history-toggle:hover { background:var(--epic-line); }
+
+.rs-history { display:none; margin:0 0 12px 0; padding:8px 14px;
+  background:#F8FAFA; border:1px solid var(--epic-line); border-radius:6px; }
+.rs-history.open { display:block; }
+.rs-history-head { font-size:10px; font-weight:700; letter-spacing:0.05em;
+  text-transform:uppercase; color:#7A8590; margin-bottom:6px; }
+.rs-history-entry { font-size:11.5px; padding:4px 0; border-bottom:1px solid var(--epic-line);
+  display:flex; gap:10px; line-height:1.4; }
+.rs-history-entry:last-child { border-bottom:none; }
+.rs-hist-ts { color:#7A8590; font-family:'Courier New',monospace; font-size:10.5px;
+  white-space:nowrap; flex-shrink:0; min-width:130px; }
+.rs-hist-state { font-weight:600; }
+.rs-hist-author { color:#5A6E7A; font-size:10.5px; margin-left:6px; }
+.rs-hist-reason { color:#4A5560; font-style:italic; }
+
+/* Slide-out criteria panel */
+.rs-criteria-panel { position:fixed; top:0; right:-440px; bottom:0; width:420px;
+  background:#fff; border-left:1px solid var(--epic-line2); box-shadow:-4px 0 16px rgba(0,0,0,0.08);
+  z-index:200; transition: right 0.2s ease; display:flex; flex-direction:column; }
+.rs-criteria-panel.open { right:0; }
+.rs-cp-head { padding:14px 16px; border-bottom:1px solid var(--epic-line);
+  display:flex; align-items:center; justify-content:space-between; background:#F4F8FC; }
+.rs-cp-title { font-size:14px; font-weight:700; color:var(--epic-navy); }
+.rs-cp-close { font-size:14px; color:#5A6E7A; cursor:pointer; padding:4px 8px; }
+.rs-cp-close:hover { color:var(--epic-navy); }
+.rs-cp-body { padding:16px; overflow-y:auto; flex:1; font-size:12px; color:#2A2E33; line-height:1.55; }
+.rs-cp-fullname { font-size:11.5px; color:#5A6E7A; font-style:italic; margin-bottom:14px; }
+.rs-cp-section { font-size:11px; font-weight:700; letter-spacing:0.06em;
+  text-transform:uppercase; color:var(--epic-hd); margin:14px 0 6px; padding-bottom:3px;
+  border-bottom:1px solid var(--epic-line); }
+.rs-cp-list { list-style:none; padding:0; margin:0; }
+.rs-cp-list li { padding:4px 0 4px 16px; position:relative; font-size:12px; color:#2A2E33; }
+.rs-cp-list li::before { content:'•'; position:absolute; left:4px; color:var(--epic-teal); font-weight:700; }
+
+/* Modal overlay */
+.rs-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.25); z-index:150; }
+.rs-overlay.open { display:block; }
+
+/* State-change modal */
+.rs-modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:420px; background:#fff; border-radius:8px; box-shadow:0 12px 40px rgba(0,0,0,0.18);
+  z-index:200; }
+.rs-modal.open { display:block; }
+.rs-modal-head { padding:14px 18px; border-bottom:1px solid var(--epic-line);
+  display:flex; align-items:center; justify-content:space-between; background:#F4F8FC; }
+.rs-modal-title { font-size:14px; font-weight:700; color:var(--epic-navy); }
+.rs-modal-body { padding:16px 18px; }
+.rs-modal-label { font-size:11px; font-weight:700; color:var(--epic-teal); margin-bottom:6px;
+  text-transform:uppercase; letter-spacing:0.04em; }
+.rs-state-options { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.rs-state-opt { font-size:12.5px; color:#2A2E33; padding:5px 8px; border-radius:4px;
+  cursor:pointer; display:flex; align-items:center; gap:8px; }
+.rs-state-opt:hover { background:#F0F5F8; }
+.rs-state-opt input { accent-color:var(--epic-green); }
+.rs-modal-reason-wrap { display:none; }
+.rs-modal-reason-wrap.open { display:block; }
+.rs-modal-reason { width:100%; font-family:inherit; font-size:12px; padding:8px 10px;
+  border:1px solid var(--epic-line2); border-radius:4px; resize:vertical; }
+.rs-modal-foot { padding:12px 18px; border-top:1px solid var(--epic-line);
+  display:flex; justify-content:flex-end; gap:8px; }
+.rs-btn { font-family:inherit; font-size:12px; padding:6px 16px; border-radius:4px;
+  border:1px solid #B8C2CC; cursor:pointer; }
+.rs-btn-secondary { background:#fff; color:#2A2E33; }
+.rs-btn-secondary:hover { background:#F0F4F8; }
+.rs-btn-primary { background:var(--epic-green); color:#fff; border-color:var(--epic-green); }
+.rs-btn-primary:hover { filter:brightness(0.93); }
+
+/* View Consent button — appears on Enrolled trials */
+.rs-consent-btn { font-size:11px; font-weight:600; padding:4px 10px; border-radius:3px;
+  background:#1B5E2A; color:#fff; cursor:pointer; border:1px solid #1B5E2A;
+  white-space:nowrap; transition:filter 0.1s; }
+.rs-consent-btn:hover { filter:brightness(1.1); }
+
+/* Consent viewer modal (wider) */
+.rs-consent-modal { width:560px; }
+.rs-consent-meta { background:#F4F8FC; border:1px solid var(--epic-line); border-radius:4px;
+  padding:10px 14px; font-size:12px; line-height:1.7; color:#2A2E33; margin-bottom:14px; }
+.rs-consent-meta b { color:var(--epic-navy); }
+.rs-consent-meta code { font-family:'Courier New',monospace; font-size:11px; background:#E9EFF6;
+  padding:1px 5px; border-radius:3px; }
+.rs-consent-pdf { border:1px dashed #B8C2CC; border-radius:6px; padding:32px 18px;
+  background:#FAFBFC; text-align:center; }
+.rs-consent-pdf-stub code { font-family:'Courier New',monospace; font-size:11px;
+  background:#F0F0EB; padding:2px 6px; border-radius:3px; }
 </style>
 </head>
 <body>
@@ -561,6 +691,9 @@ body { background:#FFFFFF; color:#263238; }
   <a class="sidebar-link">Time Stamp</a>
   <a class="sidebar-link active" id="nav-link-initial" onclick="showView('navigator', event)">Initial Assessments</a>
   <a class="sidebar-link" onclick="showView('navigator'); document.getElementById('emb-neuro-hp').scrollIntoView({block:'start'})">Neuro Admission H&amp;P</a>
+
+  <div class="sb-group">Research</div>
+  <a class="sidebar-link" id="nav-link-research" onclick="showView('research', event)">Trial Screening</a>
 
   <div class="sb-group">Discharge</div>
   <a class="sidebar-link" onclick="showView('summary', event)">Scores / Summary</a>
@@ -1267,6 +1400,7 @@ body { background:#FFFFFF; color:#263238; }
         <li>CT/MRI Read — sim shows <code>NAV → 3331111216</code>; Rose takes the <b>earliest of the stroke-flowsheet read time vs. the radiology/PACS report</b>. Flowsheet should reconcile with PACS.</li>
         <li>Antithrombotic by HD2 &amp; discharge meds (STK-1…5) — the <b>medication</b> comes from the <b>MAR / discharge order set</b>; flowsheet row <code>10733</code> is the attestation only.</li>
         <li>Thrombolytic drug name, total dose, bolus dose, and administration time — sim shows <b>MAR</b>; matches Rose (MAR / Medication History, earliest documented medication administration).</li>
+        <li>Confirm <code>3334600294</code> ("NIHSS Time Performed") is the intended GWTG "Time Patient Assessed."</li>
       </ul>
 
       <h4>Data elements Rose still needs (not yet captured)</h4>
@@ -1381,6 +1515,67 @@ body { background:#FFFFFF; color:#263238; }
     </div>
   </div>
 </div><!-- /view-nir -->
+
+<!-- ──────── VIEW: RESEARCH TRIAL SCREENING ──────── -->
+<div class="content-view" id="view-research">
+  <div class="section-bar">
+    <span style="font-size:14px;">▦</span> Trial Screening
+  </div>
+  <div class="rs-toolbar">
+    Active stroke trials at UCSD. Click status to update. Greyed rows are not applicable for the currently selected stroke type — you can still screen them.
+    <span class="rs-author">Logged in: <b>Marissa D'Souza, MD</b></span>
+  </div>
+  <div class="rs-list" id="rs-list"><!-- populated by JS --></div>
+</div>
+
+<!-- ──────── Criteria slide-out panel ──────── -->
+<div class="rs-criteria-panel" id="rs-criteria-panel">
+  <div class="rs-cp-head">
+    <span class="rs-cp-title" id="rs-cp-title">Trial criteria</span>
+    <span class="rs-cp-close" onclick="closeCriteria()">&#10005;</span>
+  </div>
+  <div class="rs-cp-body" id="rs-cp-body"></div>
+</div>
+<div class="rs-overlay" id="rs-overlay" onclick="closeCriteria(); closeStateModal(); closeConsent();"></div>
+
+<!-- ──────── Consent viewer modal ──────── -->
+<div class="rs-modal rs-consent-modal" id="rs-consent-modal">
+  <div class="rs-modal-head">
+    <span class="rs-modal-title" id="rs-consent-title">Consent</span>
+    <span class="rs-cp-close" onclick="closeConsent()">&#10005;</span>
+  </div>
+  <div class="rs-modal-body" id="rs-consent-body"></div>
+  <div class="rs-modal-foot">
+    <button class="rs-btn rs-btn-secondary" onclick="closeConsent()">Close</button>
+    <button class="rs-btn rs-btn-primary" onclick="alert('Would open consent PDF in Epic Media Manager.')">Open in Media Manager</button>
+  </div>
+</div>
+
+<!-- ──────── State-change modal ──────── -->
+<div class="rs-modal" id="rs-state-modal">
+  <div class="rs-modal-head">
+    <span class="rs-modal-title" id="rs-modal-title">Update screening status</span>
+    <span class="rs-cp-close" onclick="closeStateModal()">&#10005;</span>
+  </div>
+  <div class="rs-modal-body">
+    <div class="rs-modal-label">Status</div>
+    <div class="rs-state-options" id="rs-state-options">
+      <label class="rs-state-opt"><input type="radio" name="rs-state" value="Not Screened" onchange="onStateChoose()"> Not Screened</label>
+      <label class="rs-state-opt"><input type="radio" name="rs-state" value="Pending" onchange="onStateChoose()"> Pending</label>
+      <label class="rs-state-opt"><input type="radio" name="rs-state" value="Excluded" onchange="onStateChoose()"> Excluded</label>
+      <label class="rs-state-opt"><input type="radio" name="rs-state" value="Declined Consent" onchange="onStateChoose()"> Declined Consent</label>
+      <label class="rs-state-opt"><input type="radio" name="rs-state" value="Enrolled" onchange="onStateChoose()"> Enrolled</label>
+    </div>
+    <div class="rs-modal-reason-wrap" id="rs-modal-reason-wrap">
+      <div class="rs-modal-label" id="rs-modal-reason-label">Reason</div>
+      <textarea class="rs-modal-reason" id="rs-modal-reason" rows="3" placeholder="Enter reason..."></textarea>
+    </div>
+  </div>
+  <div class="rs-modal-foot">
+    <button class="rs-btn rs-btn-secondary" onclick="closeStateModal()">Cancel</button>
+    <button class="rs-btn rs-btn-primary" onclick="saveState()">Save</button>
+  </div>
+</div>
 
 <!-- ──────── VIEW 2: STROKE SUMMARY ──────── -->
 <div class="content-view" id="view-summary">
@@ -1675,6 +1870,328 @@ function showView(view, event) {
   if (view === 'nir') document.getElementById('viewtab-nir')?.classList.add('active');
   if (view === 'summary') document.getElementById('viewtab-summary')?.classList.add('active');
   if (view === 'summary') buildSummary();
+  if (view === 'research') { renderResearch(); document.getElementById('nav-link-research')?.classList.add('active'); }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RESEARCH — Trial Screening
+// ═══════════════════════════════════════════════════════════
+// Single configurable trial table. To add/remove a trial, edit this list.
+const TRIALS = [
+  // ── ACUTE ANTERIOR CIRCULATION STROKE ───────────────────────────
+  {
+    id: 'step-lvo', name: 'STEP LVO', category: 'Acute Stroke',
+    fullName: 'STEP — Large Vessel Occlusion arm',
+    applicable: ['Ischemic'],
+    short: 'ICA/M1 complete occlusion, NIHSS 0–5, ≤24h LKW, pre-stroke mRS 0–2, puncture ≤2h from qualifying imaging',
+    inclusion: [
+      'LVO of ICA or M1 with complete occlusion',
+      'NIHSS 0–5',
+      'Last known well within 24 hours',
+      'Pre-stroke mRS 0–2',
+      'Arterial puncture ≤ 2 hours from qualifying imaging'
+    ],
+    exclusion: ['Refer to full study protocol for exclusion criteria']
+  },
+  {
+    id: 'step-mevo', name: 'STEP MeVO', category: 'Acute Stroke',
+    fullName: 'STEP — Medium Vessel Occlusion arm',
+    applicable: ['Ischemic'],
+    short: 'Non-dominant/co-dominant M2 or M3 occlusion/perfusion deficit, NIHSS ≥8, ≤24h LKW, pre-stroke mRS 0–2; if >6h, core <50% of supplied territory',
+    inclusion: [
+      'Non-dominant or co-dominant M2 or M3 occlusion or perfusion deficit',
+      'NIHSS ≥ 8',
+      'Last known well within 24 hours',
+      'Pre-stroke mRS 0–2',
+      'If >6 h from LKW, core volume <50% of supplied territory'
+    ],
+    exclusion: ['Refer to full study protocol for exclusion criteria']
+  },
+  {
+    id: 'sister', name: 'SISTER', category: 'Acute Stroke',
+    fullName: 'SISTER — late-window ischemic stroke',
+    applicable: ['Ischemic'],
+    short: 'Anterior circulation AIS, NIHSS ≥4 (disabling if 4–5), 4.5–24h LKW, salvageable tissue, not planned for EVT or standard IVT',
+    inclusion: [
+      'Anterior circulation acute ischemic stroke',
+      'NIHSS ≥ 4 (must be disabling if 4–5)',
+      '4.5–24 hours from LKW',
+      'Salvageable tissue / favorable imaging',
+      'Not a candidate for standard IVT and not planned for EVT'
+    ],
+    exclusion: ['Refer to full study protocol for exclusion criteria']
+  },
+  {
+    id: 'tested', name: 'TESTED', category: 'Acute Stroke',
+    fullName: 'TESTED — EVT in patients with pre-existing disability',
+    applicable: ['Ischemic'],
+    short: 'ICA/M1/dominant M2 LVO, NIHSS ≥6, ≤24h LKW, pre-stroke mRS 3–4 for ≥3 mo, ASPECTS ≥3 CT or ≥4 MRI',
+    inclusion: [
+      'LVO of ICA, M1, or dominant M2',
+      'NIHSS ≥ 6',
+      'Last known well within 24 hours',
+      'Pre-stroke mRS 3–4 documented for ≥ 3 months',
+      'ASPECTS ≥ 3 on CT or ≥ 4 on MRI'
+    ],
+    exclusion: ['Refer to full study protocol for exclusion criteria']
+  },
+  {
+    id: 'discovery', name: 'DISCOVERY', category: 'Acute Stroke',
+    fullName: 'DISCOVERY — multicenter cognitive outcomes cohort',
+    applicable: ['Ischemic', 'ICH', 'SAH'],
+    short: 'AIS / ICH / aSAH, age ≥18, radiographic confirmation, baseline visit ≤6 weeks, English or Spanish, no pre-stroke dementia',
+    inclusion: [
+      'Acute ischemic stroke, ICH, or aneurysmal SAH',
+      'Age ≥ 18',
+      'Radiographically confirmed stroke',
+      'Baseline visit within 6 weeks',
+      'English- or Spanish-speaking'
+    ],
+    exclusion: [
+      'Pre-stroke dementia',
+      'Refer to full study protocol for additional exclusion criteria'
+    ]
+  },
+
+  // ── ACUTE ICH ───────────────────────────────────────────────────
+  {
+    id: 'fastest', name: 'FASTEST', category: 'ICH',
+    fullName: 'FASTEST — Factor VIIa for Acute Hemorrhagic Stroke Treatment',
+    applicable: ['ICH'],
+    short: 'Spontaneous ICH, age 18–80, GCS ≥8, ICH 2–<60 cc, small/no IVH; treat ≤90 min regardless of spot sign OR ≤120 min with CTA spot sign',
+    inclusion: [
+      'Spontaneous (non-traumatic) intracerebral hemorrhage',
+      'Age 18–80',
+      'GCS ≥ 8',
+      'ICH volume 2–<60 cc',
+      'Small or no significant IVH',
+      'Treatment ≤ 90 min from onset (regardless of spot sign) OR ≤ 120 min with CTA spot sign positive'
+    ],
+    exclusion: ['Refer to full study protocol for exclusion criteria']
+  },
+  {
+    id: 'saturn', name: 'SATURN', category: 'ICH',
+    fullName: 'SATURN — statin use after lobar ICH',
+    applicable: ['ICH'],
+    short: 'Spontaneous lobar ICH, age ≥50, taking statin at ICH onset, randomize ≤7 days',
+    inclusion: [
+      'Spontaneous lobar ICH',
+      'Age ≥ 50',
+      'Taking a statin at the time of ICH onset',
+      'Randomization within 7 days'
+    ],
+    exclusion: ['Refer to full study protocol for exclusion criteria']
+  },
+
+  // ── REHABILITATION ──────────────────────────────────────────────
+  {
+    id: 'tr2', name: 'TR-2', category: 'Rehabilitation',
+    fullName: 'TELEREHAB-2 — home telerehab vs in-clinic for UE recovery',
+    applicable: ['Ischemic', 'ICH', 'SAH'],
+    short: 'Stroke with UE motor deficit, 90–150 days post-stroke (≈ 4 ± 1 mo), English or Spanish, able to participate in home telerehab',
+    inclusion: [
+      'Stroke with upper-extremity motor deficit',
+      '90–150 days post-stroke (≈ 4 ± 1 month)',
+      'English- or Spanish-speaking',
+      'Able to participate in home telerehab'
+    ],
+    exclusion: ['Refer to full study protocol for exclusion criteria']
+  },
+  {
+    id: 'grasp', name: 'GRASP', category: 'Rehabilitation',
+    fullName: 'GRASP — graded repetitive arm supplementary program',
+    applicable: ['Ischemic', 'ICH', 'SAH'],
+    short: 'Stroke with UE hemiparesis and some voluntary affected arm/hand movement; able to follow 2-step commands',
+    inclusion: [
+      'Stroke with upper-extremity hemiparesis',
+      'Some voluntary movement in the affected arm or hand',
+      'Able to follow 2-step commands'
+    ],
+    exclusion: ['Refer to full study protocol for exclusion criteria']
+  }
+];
+
+// Per-trial screening state: { trialId: { current, history: [{ts, author, state, reason}] } }
+const trialState = {};
+TRIALS.forEach(t => trialState[t.id] = { current: 'Not Screened', history: [] });
+const RS_AUTHOR = "Marissa D'Souza, MD";
+
+let modalTrialId = null;
+
+function rsStateClass(s) {
+  return ({
+    'Not Screened':   'rs-st-notscreened',
+    'Pending':        'rs-st-pending',
+    'Excluded':       'rs-st-excluded',
+    'Declined Consent':'rs-st-declined',
+    'Enrolled':       'rs-st-enrolled'
+  })[s] || 'rs-st-notscreened';
+}
+
+function renderResearch() {
+  const host = document.getElementById('rs-list');
+  if (!host) return;
+  const currentType = getStrokeType();
+  // group by category, preserving fixed order
+  const cats = [];
+  const seen = new Set();
+  TRIALS.forEach(t => { if (!seen.has(t.category)) { cats.push(t.category); seen.add(t.category); } });
+
+  let html = '';
+  cats.forEach(cat => {
+    html += `<div class="rs-cat">${cat}</div>`;
+    TRIALS.filter(t => t.category === cat).forEach(t => {
+      const st = trialState[t.id];
+      const na = !t.applicable.includes(currentType);
+      const histN = st.history.length;
+      const consentBtn = (st.current === 'Enrolled')
+        ? `<span class="rs-consent-btn" onclick="openConsent('${t.id}')">View Consent</span>`
+        : '';
+      html += `<div class="rs-row ${na ? 'na' : ''}">
+        <div class="rs-trial-name">${t.name}</div>
+        <div class="rs-trial-desc" title="${t.short}">${t.short} <span class="rs-na-tag">N/A for ${currentType}</span></div>
+        <span class="rs-status-pill ${rsStateClass(st.current)}" onclick="openStateModal('${t.id}')">${st.current}</span>
+        <div class="rs-actions">
+          ${consentBtn}
+          <span class="rs-link" onclick="openCriteria('${t.id}')">Criteria</span>
+          <span class="rs-history-toggle" onclick="toggleHistory('${t.id}')">History (${histN}) &#9662;</span>
+        </div>
+      </div>
+      <div class="rs-history" id="rs-hist-${t.id}">
+        <div class="rs-history-head">Screening history</div>
+        ${histN === 0 ? '<div style="font-size:11px; color:#7A8590; font-style:italic;">No prior screening entries.</div>' :
+          st.history.slice().reverse().map(e => `<div class="rs-history-entry">
+            <span class="rs-hist-ts">${e.ts}</span>
+            <span><span class="rs-hist-state">${e.state}</span><span class="rs-hist-author">— ${e.author}</span>
+              ${e.reason ? `<div class="rs-hist-reason">${e.reason}</div>` : ''}
+            </span>
+          </div>`).join('')}
+      </div>`;
+    });
+  });
+  host.innerHTML = html;
+}
+
+function toggleHistory(id) {
+  document.getElementById('rs-hist-' + id)?.classList.toggle('open');
+}
+
+function openCriteria(id) {
+  const t = TRIALS.find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('rs-cp-title').textContent = t.name + ' — Eligibility';
+  document.getElementById('rs-cp-body').innerHTML = `
+    <div class="rs-cp-fullname">${t.fullName}</div>
+    <div><b>Applicable stroke types:</b> ${t.applicable.join(', ')}</div>
+    <div class="rs-cp-section">Inclusion Criteria</div>
+    <ul class="rs-cp-list">${t.inclusion.map(c => `<li>${c}</li>`).join('')}</ul>
+    <div class="rs-cp-section">Exclusion Criteria</div>
+    <ul class="rs-cp-list">${t.exclusion.map(c => `<li>${c}</li>`).join('')}</ul>
+  `;
+  document.getElementById('rs-criteria-panel').classList.add('open');
+  document.getElementById('rs-overlay').classList.add('open');
+}
+function closeCriteria() {
+  document.getElementById('rs-criteria-panel')?.classList.remove('open');
+  if (!document.getElementById('rs-state-modal').classList.contains('open'))
+    document.getElementById('rs-overlay')?.classList.remove('open');
+}
+
+function openStateModal(id) {
+  const t = TRIALS.find(x => x.id === id);
+  if (!t) return;
+  modalTrialId = id;
+  document.getElementById('rs-modal-title').textContent = 'Update screening status — ' + t.name;
+  // pre-check current state
+  const cur = trialState[id].current;
+  document.querySelectorAll('input[name="rs-state"]').forEach(r => { r.checked = (r.value === cur); });
+  document.getElementById('rs-modal-reason').value = '';
+  onStateChoose();
+  document.getElementById('rs-state-modal').classList.add('open');
+  document.getElementById('rs-overlay').classList.add('open');
+}
+function openConsent(id) {
+  const t = TRIALS.find(x => x.id === id);
+  if (!t) return;
+  const st = trialState[id];
+  const enrollEntry = st.history.slice().reverse().find(e => e.state === 'Enrolled');
+  const enrollDate = enrollEntry ? enrollEntry.ts : '—';
+  const enrollNotes = enrollEntry && enrollEntry.reason ? enrollEntry.reason : '(no notes captured)';
+  document.getElementById('rs-consent-title').textContent = 'Consent — ' + t.name;
+  document.getElementById('rs-consent-body').innerHTML = `
+    <div class="rs-consent-meta">
+      <div><b>Trial:</b> ${t.fullName}</div>
+      <div><b>Patient:</b> JOHN DOE &nbsp; <b>MRN:</b> 12345678</div>
+      <div><b>Enrolled:</b> ${enrollDate} &nbsp; <b>By:</b> ${RS_AUTHOR}</div>
+      <div><b>Notes at enrollment:</b> ${enrollNotes}</div>
+    </div>
+    <div class="rs-consent-pdf">
+      <div class="rs-consent-pdf-stub">
+        <div style="font-size:14px; font-weight:700; color:#0F3D57; margin-bottom:8px;">[Consent document preview]</div>
+        <div style="font-size:11.5px; color:#4A5560;">In production, this opens the consent PDF from Epic Media Manager.</div>
+        <div style="font-size:11px; color:#7A8590; margin-top:14px;">Filename pattern: <code>${t.id.toUpperCase()}_Consent_${'12345678'}.pdf</code></div>
+      </div>
+    </div>
+  `;
+  document.getElementById('rs-consent-modal').classList.add('open');
+  document.getElementById('rs-overlay').classList.add('open');
+}
+function closeConsent() {
+  document.getElementById('rs-consent-modal')?.classList.remove('open');
+  if (!document.getElementById('rs-criteria-panel').classList.contains('open')
+   && !document.getElementById('rs-state-modal').classList.contains('open'))
+    document.getElementById('rs-overlay')?.classList.remove('open');
+}
+
+function closeStateModal() {
+  document.getElementById('rs-state-modal')?.classList.remove('open');
+  modalTrialId = null;
+  if (!document.getElementById('rs-criteria-panel').classList.contains('open'))
+    document.getElementById('rs-overlay')?.classList.remove('open');
+}
+function onStateChoose() {
+  const sel = document.querySelector('input[name="rs-state"]:checked')?.value;
+  const wrap = document.getElementById('rs-modal-reason-wrap');
+  const label = document.getElementById('rs-modal-reason-label');
+  const reason = document.getElementById('rs-modal-reason');
+  if (!sel || sel === 'Not Screened') {
+    wrap.classList.remove('open');
+    return;
+  }
+  wrap.classList.add('open');
+  if (sel === 'Pending') {
+    label.textContent = 'Pending on';
+    reason.placeholder = 'e.g. MRI, consent discussion, family meeting, additional labs...';
+  } else if (sel === 'Excluded') {
+    label.textContent = 'Exclusion reason';
+    reason.placeholder = 'Free text — what disqualified the patient...';
+  } else if (sel === 'Declined Consent') {
+    label.textContent = 'Notes (optional)';
+    reason.placeholder = 'Any context on the patient/family decision...';
+  } else if (sel === 'Enrolled') {
+    label.textContent = 'Notes (optional)';
+    reason.placeholder = 'Date/time of consent, MRN, study ID...';
+  }
+}
+function saveState() {
+  if (!modalTrialId) return;
+  const sel = document.querySelector('input[name="rs-state"]:checked')?.value;
+  if (!sel) return;
+  const reason = document.getElementById('rs-modal-reason').value.trim();
+  // require reason for Pending and Excluded
+  if ((sel === 'Pending' || sel === 'Excluded') && !reason) {
+    alert(sel === 'Pending'
+      ? 'Please specify what this screening is pending on.'
+      : 'Please enter an exclusion reason.');
+    return;
+  }
+  const now = new Date();
+  const ts = now.toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+  trialState[modalTrialId].current = sel;
+  trialState[modalTrialId].history.push({ ts, author: RS_AUTHOR, state: sel, reason });
+  closeStateModal();
+  renderResearch();
+  sync();
 }
 
 // ═══ SOURCE BADGE helpers ═══
@@ -1919,6 +2436,22 @@ function buildSummary() {
       row('Patient Transport', '', sbUnknown()),
       row('Destination Phone', '', sbUnknown())
     ]));
+
+  // Research Screening (only show trials with a non-default state)
+  const screened = TRIALS.filter(t => trialState[t.id].current !== 'Not Screened');
+  const rsRows = screened.map(t => {
+    const st = trialState[t.id];
+    const last = st.history[st.history.length - 1];
+    const reasonOrLink = (st.current === 'Enrolled')
+      ? `${last ? last.ts : ''} — <a href="#" onclick="openConsent('${t.id}'); return false;" style="color:#1B5E2A; font-weight:600;">View consent</a>`
+      : (last ? `${last.ts} — ${last.reason || ''}` : '');
+    return row3(t.name, st.current, reasonOrLink, sbNav('Research'));
+  });
+  if (rsRows.length === 0) {
+    rsRows.push(`<tr><td colspan="4" style="color:#7A8590; font-style:italic; padding:6px;">No trials screened yet for this encounter.</td></tr>`);
+  }
+  right += pg('Research Screening',
+    `<table class="sum-table"><tr><th>Trial</th><th>Status</th><th>Last action</th><th>Source</th></tr>${rsRows.join('')}</table>`);
 
   grid.innerHTML = `
     <div class="summary-col">${left}</div>
